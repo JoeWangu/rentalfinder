@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">rentalfinder</string>
+    <string name="app_name_2">RFA</string>
+    <string name="app_name_3">Rental Finder</string>
+    <string name="back_button">go back</string>
+    <string name="close_icon">close icon</string>
+    <string name="search_icon">search icon</string>
+    <string name="menu_icon">menu icon</string>
+    <string name="add_favourite">add to favourite</string>
+    <string name="home">home</string>
+    <string name="favourite">favourite</string>
+    <string name="explore"> explore</string>
+    <string name="account">account</string>
+    <string name="profile">profile</string>
+    <string name="categories">categories</string>
+    <string name="bedsitter">bedsitter</string>
+    <string name="single">single</string>
+    <string name="double_room">double</string>
+    <string name="bedroom1">1 bedroom</string>
+    <string name="bedroom2">2 bedroom</string>
+    <string name="popular_near">popular nearest you</string>
+    <string name="recommended">recommended for you</string>
+    <string name="see_all">see all</string>
+</resources>
