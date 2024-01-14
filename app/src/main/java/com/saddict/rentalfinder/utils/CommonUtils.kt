@@ -18,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import com.saddict.rentalfinder.R
 
@@ -43,5 +45,24 @@ fun FavButton(modifier: Modifier = Modifier) {
     }
 }
 
-fun Context.toastUtil(message: CharSequence){ Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
-fun Context.toastUtilLong(message: CharSequence){ Toast.makeText(this, message, Toast.LENGTH_LONG).show() }
+fun Context.toastUtil(message: CharSequence) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.toastUtilLong(message: CharSequence) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+fun everyFirstLetterCapitalize(str: String): String {
+    val words = str.split(" ").toMutableList()
+    var output = ""
+    for (word in words) {
+        output += word.capitalize(Locale.current) + " "
+    }
+    output = output.trim()
+    return output
+}
+
+//fun everyFirstLetterCapitalize2(str: String): String {
+//    return "\\b[a-z]".toRegex().replace(str) { it.value.uppercase() }
+//}

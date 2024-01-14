@@ -62,8 +62,8 @@ object ExploreDestination: NavigationDestination{
 @Composable
 fun ExploreScreen(
     navigateToHome: () -> Unit,
-//    navigateToFavourites: () -> Unit,
-//    navigateToAccount: () -> Unit,
+    navigateToFavourites: () -> Unit,
+    navigateToProfile: () -> Unit,
     selectedBottomItem: Int,
     onItemSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -82,8 +82,8 @@ fun ExploreScreen(
             RFABottomBar(
                 navigateToHome = { navigateToHome() },
                 navigateToExplore = {},
-                navigateToFavourites = {},
-                navigateToAccount = {},
+                navigateToFavourites = { navigateToFavourites() },
+                navigateToProfile = { navigateToProfile() },
                 selectedItem = selectedBottomItem,
                 onItemSelected = onItemSelected
             )

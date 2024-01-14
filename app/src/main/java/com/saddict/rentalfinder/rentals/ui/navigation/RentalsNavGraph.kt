@@ -14,10 +14,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.saddict.rentalfinder.rentals.ui.explore.ExploreDestination
 import com.saddict.rentalfinder.rentals.ui.explore.ExploreScreen
+import com.saddict.rentalfinder.rentals.ui.favourites.FavouritesDestination
+import com.saddict.rentalfinder.rentals.ui.favourites.FavouritesScreen
 import com.saddict.rentalfinder.rentals.ui.home.HomeDestination
 import com.saddict.rentalfinder.rentals.ui.home.HomeScreen
+import com.saddict.rentalfinder.rentals.ui.profile.ProfileDestination
+import com.saddict.rentalfinder.rentals.ui.profile.ProfileScreen
 import com.saddict.rentalfinder.utils.toastUtil
-import kotlin.system.exitProcess
 
 @Composable
 fun RentalsNavGraph(
@@ -46,6 +49,8 @@ fun RentalsNavGraph(
             }
             HomeScreen(
                 navigateToExplore = { navController.navigate(ExploreDestination.route) },
+                navigateToFavourites = { navController.navigate(FavouritesDestination.route) },
+                navigateToProfile = { navController.navigate(ProfileDestination.route) },
 //                selectedBottomItem = selectedBottomItem,
 //                onItemSelected = onItemSelected
                 selectedBottomItem = selectedItem,
@@ -56,18 +61,57 @@ fun RentalsNavGraph(
 //             Handle back button press
             BackHandler(onBack = {
                 if (selectedItem > 0) {
-                    selectedItem = 0
+//                    selectedItem = 0
+                    selectedItem -= 1
                     navController.navigate(HomeDestination.route)
                 } else {
                     // Exit the app if already on the first item
-                    exitProcess(0)
+                    activity?.finish()
                 }
             })
             ExploreScreen(
                 navigateToHome = { navController.navigate(HomeDestination.route) },
+                navigateToFavourites = { navController.navigate(FavouritesDestination.route) },
+                navigateToProfile = { navController.navigate(ProfileDestination.route) },
 //                selectedBottomItem = selectedBottomItem,
 //                onItemSelected = onItemSelected
                 selectedBottomItem = selectedItem,
+                onItemSelected = { selectedItem = it }
+            )
+        }
+        composable(route = FavouritesDestination.route) {
+            BackHandler(onBack = {
+                if (selectedItem > 0) {
+                    selectedItem = 0
+                    navController.navigate(HomeDestination.route)
+                } else {
+                    // Exit the app if already on the first item
+                    activity?.finish()
+                }
+            })
+            FavouritesScreen(
+                navigateToHome = { navController.navigate(HomeDestination.route) },
+                navigateToExplore = { navController.navigate(ExploreDestination.route) },
+                navigateToProfile = { navController.navigate(ProfileDestination.route) },
+                selectedBottomItem = selectedItem,
+                onItemSelected = { selectedItem = it }
+            )
+        }
+        composable(route = ProfileDestination.route) {
+            BackHandler(onBack = {
+                if (selectedItem > 0) {
+                    selectedItem = 0
+                    navController.navigate(HomeDestination.route)
+                } else {
+                    // Exit the app if already on the first item
+                    activity?.finish()
+                }
+            })
+            ProfileScreen(
+                navigateToHome = { navController.navigate(HomeDestination.route) },
+                navigateToExplore = { navController.navigate(ExploreDestination.route) },
+                navigateToFavourites = { navController.navigate(FavouritesDestination.route) },
+                selectedItem = selectedItem,
                 onItemSelected = { selectedItem = it }
             )
         }

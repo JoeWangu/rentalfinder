@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.intl.Locale
 import com.saddict.rentalfinder.R
 
 @Composable
@@ -21,7 +23,7 @@ fun RFABottomBar(
     navigateToHome: () -> Unit,
     navigateToExplore: () -> Unit,
     navigateToFavourites: () -> Unit,
-    navigateToAccount: () -> Unit,
+    navigateToProfile: () -> Unit,
     selectedItem: Int,
     onItemSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -31,21 +33,19 @@ fun RFABottomBar(
         Log.d("MyComposable", "Selected item changed to: $selectedItem")
     }
     val menuTitle = listOf(
-        R.string.home,
-        R.string.explore,
-        R.string.favourite,
-        R.string.profile
+        stringResource(id = R.string.home),
+        stringResource(id = R.string.explore),
+        stringResource(id = R.string.favourites),
+        stringResource(id = R.string.profile),
     )
     val menuIcons = listOf(
         Icons.Default.Home,
         Icons.Default.Place,
         Icons.Default.FavoriteBorder,
-        Icons.Default.Person
-
-        //        ToDo
-        //         change place to "explore icon"
-
+        Icons.Default.Person,
     )
+    //        ToDo
+    //         change place to "explore icon"
     NavigationBar(modifier = modifier) {
         menuIcons.forEachIndexed { index, imageVector ->
             NavigationBarItem(
@@ -67,7 +67,11 @@ fun RFABottomBar(
                         }
 
                         3 -> {
-                            navigateToAccount()
+                            navigateToProfile()
+                        }
+
+                        else -> {
+                            navigateToHome()
                         }
                     }
                 },
@@ -77,10 +81,15 @@ fun RFABottomBar(
                         contentDescription = null
                     )
                 },
-                label = if (selectedItem == index) {
-                    { Text(text = stringResource(id = menuTitle[index])) }
-                } else {
-                    null
+//                label = if (selectedItem == index) {
+//                    { Text(text = stringResource(id = menuTitle[index])) }
+//                } else {
+//                    null
+//                }
+                label = {
+                    Text(
+                        text = menuTitle[index].capitalize(Locale.current)
+                    )
                 }
             )
         }

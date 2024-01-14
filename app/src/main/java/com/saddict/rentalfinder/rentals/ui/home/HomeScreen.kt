@@ -5,35 +5,30 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -46,9 +41,11 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saddict.rentalfinder.R
+import com.saddict.rentalfinder.rentals.data.remote.RentalDataSource
 import com.saddict.rentalfinder.rentals.model.remote.Rental
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.FavButton
+import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
 
@@ -61,13 +58,13 @@ object HomeDestination : NavigationDestination {
 @Composable
 fun HomeScreen(
     navigateToExplore: () -> Unit,
-//    navigateToFavourites: () -> Unit,
-//    navigateToAccount: () -> Unit,
+    navigateToFavourites: () -> Unit,
+    navigateToProfile: () -> Unit,
     selectedBottomItem: Int,
     onItemSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -81,8 +78,8 @@ fun HomeScreen(
             RFABottomBar(
                 navigateToHome = {},
                 navigateToExplore = { navigateToExplore() },
-                navigateToFavourites = {},
-                navigateToAccount = {},
+                navigateToFavourites = { navigateToFavourites() },
+                navigateToProfile = { navigateToProfile() },
                 selectedItem = selectedBottomItem,
                 onItemSelected = onItemSelected
             )
@@ -99,9 +96,6 @@ fun HomeScreen(
 @Composable
 fun HomeBody(modifier: Modifier = Modifier) {
     val state = rememberScrollState()
-    var searchtext by remember { mutableStateOf("") }
-    var active by remember { mutableStateOf(false) }
-    val searchItems = remember { mutableStateListOf("first text", "second text") }
     val imageList = listOf(
         R.drawable.proxy_image_1,
         R.drawable.proxy_image_2,
@@ -119,67 +113,6 @@ fun HomeBody(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .verticalScroll(state)
     ) {
-        SearchBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 16.dp, start = 16.dp),
-            query = searchtext,
-            onQueryChange = { searchtext = it },
-            onSearch = {
-                searchItems.add(searchtext)
-                active = false
-                searchtext = ""
-            },
-            active = active,
-            onActiveChange = { active = it },
-            placeholder = {
-                Text(
-                    text = "Search",
-                    style = MaterialTheme.typography.labelSmall
-                )
-            },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = stringResource(id = R.string.search_icon)
-                )
-            },
-            trailingIcon = {
-                if (active) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(id = R.string.close_icon),
-                        modifier = Modifier
-                            .clickable {
-                                if (searchtext.isNotEmpty()) {
-                                    searchtext = ""
-                                } else {
-                                    active = false
-                                }
-                            }
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = stringResource(id = R.string.menu_icon),
-                        modifier = Modifier
-                            .clickable { }
-                    )
-                }
-            },
-        ) {
-            searchItems.forEach {
-                Row(modifier = Modifier.padding(14.dp)) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = null,
-                        modifier = Modifier.padding(end = 10.dp)
-                    )
-                    Text(text = it)
-                }
-            }
-        }
-// --------------------------- end of search start of rest of column --------------------- //
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -204,6 +137,86 @@ fun HomeBody(modifier: Modifier = Modifier) {
                     )
                 }
             }
+// --------------------------- end of categories start of popular  --------------------- //
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.popular_near).capitalize(Locale.current),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                )
+
+                Spacer(modifier = Modifier.weight(1F))
+
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(
+                        text = everyFirstLetterCapitalize(stringResource(id = R.string.see_all))
+                    )
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowRight,
+                        contentDescription = stringResource(id = R.string.see_all)
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                LazyRow(
+                    modifier = Modifier,
+                ) {
+                    items(RentalDataSource.rentals.take(4)) { rental ->
+                        PopularCard(rental = rental)
+                    }
+                }
+            }
+// --------------------------- end of popular start of recommended  --------------------- //
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.recommended).capitalize(Locale.current),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                )
+
+                Spacer(modifier = Modifier.weight(1F))
+
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(
+                        text = everyFirstLetterCapitalize(stringResource(id = R.string.see_all))
+                    )
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowRight,
+                        contentDescription = stringResource(id = R.string.see_all)
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                LazyRow(
+                    modifier = Modifier,
+                ) {
+                    items(RentalDataSource.rentals.take(4).reversed()) { rental ->
+                        PopularCard(rental = rental)
+                    }
+                }
+            }
         }
     }
 }
@@ -220,7 +233,7 @@ fun CategoryCard(
     ) {
         Card(
             modifier = Modifier
-                .size(80.dp),
+                .size(width = 80.dp, height = 60.dp),
             shape = MaterialTheme.shapes.extraSmall
         ) {
             Image(
@@ -235,16 +248,19 @@ fun CategoryCard(
             text = text.capitalize(Locale.current),
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold
-//            textAlign = TextAlign.Center
         )
     }
 }
 
 @Composable
-fun HomeCard(rental: Rental, modifier: Modifier = Modifier) {
+fun PopularCard(
+    rental: Rental,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier
-            .padding(8.dp),
+            .padding(8.dp)
+            .size(180.dp),
         shape = MaterialTheme.shapes.extraSmall
     ) {
         Box(modifier = Modifier) {
