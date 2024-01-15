@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
@@ -120,14 +119,14 @@ fun AccountBody(
                     modifier = Modifier
                         .size(25.dp)
                         .offset(x = (-5).dp, y = (-5).dp),
-                    shape = RoundedCornerShape(11.dp),
+                    shape = MaterialTheme.shapes.medium,
                 ) {
                     Box(modifier = Modifier) {
                         Surface(
                             modifier = Modifier
                                 .size(24.dp)
                                 .offset(x = 1.5.dp, y = 1.5.dp),
-                            shape = MaterialTheme.shapes.small,
+                            shape = MaterialTheme.shapes.medium,
                             color = MaterialTheme.colorScheme.background
                         ) {
                             Box(
