@@ -92,7 +92,6 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeBody(modifier: Modifier = Modifier) {
     val state = rememberScrollState()

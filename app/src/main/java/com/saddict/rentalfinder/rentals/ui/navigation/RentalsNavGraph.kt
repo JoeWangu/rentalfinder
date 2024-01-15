@@ -20,6 +20,8 @@ import com.saddict.rentalfinder.rentals.ui.home.HomeDestination
 import com.saddict.rentalfinder.rentals.ui.home.HomeScreen
 import com.saddict.rentalfinder.rentals.ui.profile.ProfileDestination
 import com.saddict.rentalfinder.rentals.ui.profile.ProfileScreen
+import com.saddict.rentalfinder.rentals.ui.profile.account.AccountDestination
+import com.saddict.rentalfinder.rentals.ui.profile.account.AccountScreen
 import com.saddict.rentalfinder.utils.toastUtil
 
 @Composable
@@ -112,7 +114,17 @@ fun RentalsNavGraph(
                 navigateToExplore = { navController.navigate(ExploreDestination.route) },
                 navigateToFavourites = { navController.navigate(FavouritesDestination.route) },
                 selectedItem = selectedItem,
-                onItemSelected = { selectedItem = it }
+                onItemSelected = { selectedItem = it },
+                navigateToMyAccount = { navController.navigate(AccountDestination.route) },
+                navigateToAddress = {},
+                navigateToSettings = {},
+                navigateToHelpCenter = {},
+                navigateToContact = {}
+            )
+        }
+        composable(route = AccountDestination.route) {
+            AccountScreen(
+                navigateUp = { navController.popBackStack() }
             )
         }
     }

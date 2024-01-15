@@ -55,6 +55,11 @@ fun ProfileScreen(
     navigateToFavourites: () -> Unit,
     selectedItem: Int,
     onItemSelected: (Int) -> Unit,
+    navigateToMyAccount: () -> Unit,
+    navigateToAddress: () -> Unit,
+    navigateToSettings: () -> Unit,
+    navigateToHelpCenter: () -> Unit,
+    navigateToContact: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -78,12 +83,27 @@ fun ProfileScreen(
             )
         }
     ) { innerPadding ->
-        ProfileBody(modifier = Modifier.padding(innerPadding))
+        ProfileBody(
+            navigateToMyAccount = { navigateToMyAccount() },
+            navigateToAddress = { navigateToAddress() },
+            navigateToSettings = { navigateToSettings() },
+            navigateToHelpCenter = { navigateToHelpCenter() },
+            navigateToContact = { navigateToContact() },
+            modifier = Modifier
+                .padding(innerPadding)
+        )
     }
 }
 
 @Composable
-fun ProfileBody(modifier: Modifier = Modifier) {
+fun ProfileBody(
+    navigateToMyAccount: () -> Unit,
+    navigateToAddress: () -> Unit,
+    navigateToSettings: () -> Unit,
+    navigateToHelpCenter: () -> Unit,
+    navigateToContact: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val profileMenu = listOf(
         R.string.my_account,
         R.string.address,
@@ -150,7 +170,29 @@ fun ProfileBody(modifier: Modifier = Modifier) {
                 profileIcon = profileIcons[index],
                 profileText = stringResource(id = profileItem),
                 trailingProfileIcon = Icons.Default.KeyboardArrowRight,
-                onClickProfileRow = {},
+                onClickProfileRow = {
+                    when (index) {
+                        0 -> {
+                            navigateToMyAccount()
+                        }
+
+                        1 -> {
+                            navigateToAddress()
+                        }
+
+                        2 -> {
+                            navigateToSettings()
+                        }
+
+                        3 -> {
+                            navigateToHelpCenter()
+                        }
+
+                        4 -> {
+                            navigateToContact()
+                        }
+                    }
+                },
                 modifier = Modifier
             )
         }
@@ -175,7 +217,7 @@ fun ProfileRow(
         Icon(
             imageVector = profileIcon,
             contentDescription = null,
-            tint = Color.Unspecified,
+//            tint = Color.Unspecified,
             modifier = Modifier
                 .padding(end = 8.dp)
         )

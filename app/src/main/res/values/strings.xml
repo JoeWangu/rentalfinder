@@ -30,4 +30,10 @@
     <string name="popular_near">popular nearest you</string>
     <string name="recommended">recommended for you</string>
     <string name="see_all">see all</string>
+    <string name="change_picture">change picture</string>
+    <string name="name">full name</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="phone_number">phone number</string>
+    <string name="save_changes">save changes</string>
 </resources>
