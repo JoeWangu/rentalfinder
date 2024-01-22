@@ -201,7 +201,7 @@ fun ProfileBody(
 
 @Composable
 fun ProfileRow(
-    profileIcon: ImageVector,
+    profileIcon: ImageVector?,
     profileText: String,
     trailingProfileIcon: ImageVector,
     onClickProfileRow: () -> Unit,
@@ -214,13 +214,15 @@ fun ProfileRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Icon(
-            imageVector = profileIcon,
-            contentDescription = null,
-//            tint = Color.Unspecified,
-            modifier = Modifier
-                .padding(end = 8.dp)
-        )
+        if (profileIcon != null) {
+            Icon(
+                imageVector = profileIcon,
+                contentDescription = null,
+                //            tint = Color.Unspecified,
+                modifier = Modifier
+                    .padding(end = 8.dp)
+            )
+        }
         Text(
             text = everyFirstLetterCapitalize(profileText),
             style = MaterialTheme.typography.bodyLarge

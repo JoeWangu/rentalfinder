@@ -36,4 +36,7 @@
     <string name="password">password</string>
     <string name="phone_number">phone number</string>
     <string name="save_changes">save changes</string>
+    <string name="general">general</string>
+    <string name="security">security</string>
+    <string name="biometric">biometric</string>
 </resources>
