@@ -4,10 +4,9 @@ import androidx.annotation.Keep
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @Keep
-data class CreateUserResponse(
-    @JsonProperty("user")
-    val user: UserCreateResponse,
-    @JsonProperty("token")
-    val token: String,
+data class UserCreateResponse(
+    @JsonProperty("email")
+    val email: String,
+    @JsonProperty("username")
+    val username: String
 )
-
