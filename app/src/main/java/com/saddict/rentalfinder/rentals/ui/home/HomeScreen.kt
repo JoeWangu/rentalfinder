@@ -41,8 +41,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.data.remote.RentalDataSource
-import com.saddict.rentalfinder.rentals.model.remote.Rental
+import com.saddict.rentalfinder.rentals.model.remote.GetRental
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.FavButton
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
@@ -171,9 +170,9 @@ fun HomeBody(modifier: Modifier = Modifier) {
                 LazyRow(
                     modifier = Modifier,
                 ) {
-                    items(RentalDataSource.rentals.take(4)) { rental ->
-                        PopularCard(rental = rental)
-                    }
+//                    items(RentalDataSource.rentals.take(4)) { rental ->
+//                        PopularCard(rental = rental)
+//                    }
                 }
             }
 // --------------------------- end of popular start of recommended  --------------------- //
@@ -211,9 +210,9 @@ fun HomeBody(modifier: Modifier = Modifier) {
                 LazyRow(
                     modifier = Modifier,
                 ) {
-                    items(RentalDataSource.rentals.take(4).reversed()) { rental ->
-                        PopularCard(rental = rental)
-                    }
+//                    items(RentalDataSource.rentals.take(4).reversed()) { rental ->
+//                        PopularCard(rental = rental)
+//                    }
                 }
             }
         }
@@ -253,7 +252,7 @@ fun CategoryCard(
 
 @Composable
 fun PopularCard(
-    rental: Rental,
+    rental: GetRental,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -264,7 +263,7 @@ fun PopularCard(
     ) {
         Box(modifier = Modifier) {
             Image(
-                painter = painterResource(id = rental.image),
+                painter = painterResource(id = rental.id),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

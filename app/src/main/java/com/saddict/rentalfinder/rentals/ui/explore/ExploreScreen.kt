@@ -44,8 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.data.remote.RentalDataSource
-import com.saddict.rentalfinder.rentals.model.remote.Rental
+import com.saddict.rentalfinder.rentals.model.remote.GetRental
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.FavButton
 import com.saddict.rentalfinder.utils.header
@@ -53,7 +52,7 @@ import com.saddict.rentalfinder.utils.utilscreens.CarouselSlider
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
 
-object ExploreDestination: NavigationDestination{
+object ExploreDestination : NavigationDestination {
     override val route: String = "explore"
     override val titleRes: Int = R.string.explore
 }
@@ -172,19 +171,19 @@ fun ExploreBody(modifier: Modifier = Modifier) {
                 }
             }
         }
-        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-            header {
-                CarouselSlider(imageList = imageList)
-            }
-            items(RentalDataSource.rentals) { items ->
-                ExploreCard(items, modifier = Modifier)
-            }
-        }
+//        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+//            header {
+//                CarouselSlider(imageList = imageList)
+//            }
+//            items(RentalDataSource.rentals) { items ->
+//                ExploreCard(items, modifier = Modifier)
+//            }
+//        }
     }
 }
 
 @Composable
-fun ExploreCard(rental: Rental, modifier: Modifier = Modifier) {
+fun ExploreCard(rental: GetRental, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
             .padding(8.dp),
@@ -192,7 +191,7 @@ fun ExploreCard(rental: Rental, modifier: Modifier = Modifier) {
     ) {
         Box(modifier = Modifier) {
             Image(
-                painter = painterResource(id = rental.image),
+                painter = painterResource(id = rental.id),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

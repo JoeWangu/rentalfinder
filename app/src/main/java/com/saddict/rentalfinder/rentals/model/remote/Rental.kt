@@ -1,15 +1,16 @@
 package com.saddict.rentalfinder.rentals.model.remote
 
+import androidx.annotation.Keep
+import com.fasterxml.jackson.annotation.JsonProperty
+
+@Keep
 data class Rental(
-    val name: String,
-    val image: Int,
-    val price: String,
-//    val description: String,
-    val type: String,
-    val location: String,
-//    val available: Boolean,
-//    val rating: Int,
-//    val total_units: Int,
-//    val date_posted: String,
-//    val date_modified: String
+    @JsonProperty("count")
+    val count: Int,
+    @JsonProperty("next")
+    val next: String?,
+    @JsonProperty("previous")
+    val previous: String?,
+    @JsonProperty("results")
+    val results: List<GetRental>
 )

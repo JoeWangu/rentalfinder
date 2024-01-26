@@ -33,8 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.data.remote.RentalDataSource
-import com.saddict.rentalfinder.rentals.model.remote.Rental
+import com.saddict.rentalfinder.rentals.model.remote.GetRental
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.FavButton
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
@@ -56,46 +55,46 @@ fun FavouritesScreen(
     modifier: Modifier = Modifier
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    Scaffold(
-        modifier = modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            RFATopBar(
-                title = stringResource(id = R.string.favourites),
-                canNavigateBack = false,
-                scrollBehavior = scrollBehavior
-            )
-        },
-        bottomBar = {
-            RFABottomBar(
-                navigateToHome = { navigateToHome() },
-                navigateToExplore = { navigateToExplore() },
-                navigateToFavourites = {},
-                navigateToProfile = { navigateToProfile() },
-                selectedItem = selectedBottomItem,
-                onItemSelected = onItemSelected
-            )
-        }
-    ) { innerPadding ->
-        FavouritesBody(
-            modifier = Modifier
-                .padding(innerPadding)
-        )
-    }
+//    Scaffold(
+//        modifier = modifier
+//            .nestedScroll(scrollBehavior.nestedScrollConnection),
+//        topBar = {
+//            RFATopBar(
+//                title = stringResource(id = R.string.favourites),
+//                canNavigateBack = false,
+//                scrollBehavior = scrollBehavior
+//            )
+//        },
+//        bottomBar = {
+//            RFABottomBar(
+//                navigateToHome = { navigateToHome() },
+//                navigateToExplore = { navigateToExplore() },
+//                navigateToFavourites = {},
+//                navigateToProfile = { navigateToProfile() },
+//                selectedItem = selectedBottomItem,
+//                onItemSelected = onItemSelected
+//            )
+//        }
+//    ) { innerPadding ->
+////        FavouritesBody(
+////            modifier = Modifier
+////                .padding(innerPadding)
+////        )
+//    }
 }
 
-@Composable
-fun FavouritesBody(modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier) {
-        items(RentalDataSource.rentals.take(10)) { rental ->
-            FavouritesCard(rental = rental)
-        }
-    }
-}
+//@Composable
+//fun FavouritesBody(modifier: Modifier = Modifier) {
+//    LazyColumn(modifier = modifier) {
+//        items(RentalDataSource.rentals.take(10)) { rental ->
+//            FavouritesCard(rental = rental)
+//        }
+//    }
+//}
 
 @Composable
 fun FavouritesCard(
-    rental: Rental,
+    rental: GetRental,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -109,7 +108,7 @@ fun FavouritesCard(
         Row(modifier = Modifier) {
             Box(modifier = Modifier) {
                 Image(
-                    painter = painterResource(id = rental.image),
+                    painter = painterResource(id = rental.id),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -138,7 +137,7 @@ fun FavouritesCard(
                 Text(
                     text = "${rental.type} in ${rental.location}",
                     style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier
+                    modifier = Modifier
 //                            .padding(bottom = 8.dp)
                 )
             }

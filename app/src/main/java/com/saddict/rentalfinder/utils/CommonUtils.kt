@@ -21,7 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.preferencesDataStore
 import com.saddict.rentalfinder.R
+import com.saddict.rentalfinder.utils.Constants.TOKEN
 
 @Composable
 fun FavButton(modifier: Modifier = Modifier) {
@@ -63,6 +65,7 @@ fun everyFirstLetterCapitalize(str: String): String {
     return output
 }
 
+val Context.tokenDataStore by preferencesDataStore(TOKEN)
 //fun everyFirstLetterCapitalize2(str: String): String {
 //    return "\\b[a-z]".toRegex().replace(str) { it.value.uppercase() }
 //}
