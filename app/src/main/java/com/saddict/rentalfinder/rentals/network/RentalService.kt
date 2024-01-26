@@ -3,7 +3,7 @@ package com.saddict.rentalfinder.rentals.network
 import com.saddict.rentalfinder.rentals.model.remote.CreateRental
 import com.saddict.rentalfinder.rentals.model.remote.CreateUser
 import com.saddict.rentalfinder.rentals.model.remote.CreateUserResponse
-import com.saddict.rentalfinder.rentals.model.remote.GetRental
+import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.rentals.model.remote.GetUser
 import com.saddict.rentalfinder.rentals.model.remote.LoginUser
 import com.saddict.rentalfinder.rentals.model.remote.Rental
@@ -32,14 +32,14 @@ interface RentalService {
     ): Rental
 
     @GET(SINGLE_RENTAL_URL)
-    suspend fun getSingleRental(@Path("id") id: Int): GetRental
+    suspend fun getSingleRental(@Path("id") id: Int): RentalResults
 
     @POST(RENTAL_URL)
-    suspend fun postRental(@Body body: CreateRental): Response<GetRental>
+    suspend fun postRental(@Body body: CreateRental): Response<RentalResults>
 
     @PUT(SINGLE_RENTAL_URL)
     suspend fun updateRental(
         @Path("id") id: Int,
         @Body body: CreateRental
-    ): Response<GetRental>
+    ): Response<RentalResults>
 }

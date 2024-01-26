@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @Keep
-data class GetRental(
+data class RentalResults(
     @JsonProperty("id")
     val id: Int,
     @JsonProperty("name")

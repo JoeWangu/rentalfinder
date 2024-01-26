@@ -103,9 +103,9 @@ dependencies {
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
 
 //    PAGING
-//    val pagingVersion = "3.2.1"
-//    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
-//    implementation("androidx.paging:paging-compose:3.2.1")
+    val pagingVersion = "3.2.1"
+    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
+    implementation("androidx.paging:paging-compose:$pagingVersion")
 
 //    LOCAL UNIT TESTS
     testImplementation("junit:junit:4.13.2")

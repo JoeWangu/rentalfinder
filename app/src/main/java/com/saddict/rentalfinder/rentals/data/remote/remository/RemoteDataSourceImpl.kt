@@ -3,7 +3,7 @@ package com.saddict.rentalfinder.rentals.data.remote.remository
 import com.saddict.rentalfinder.rentals.model.remote.CreateRental
 import com.saddict.rentalfinder.rentals.model.remote.CreateUser
 import com.saddict.rentalfinder.rentals.model.remote.CreateUserResponse
-import com.saddict.rentalfinder.rentals.model.remote.GetRental
+import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.rentals.model.remote.GetUser
 import com.saddict.rentalfinder.rentals.model.remote.LoginUser
 import com.saddict.rentalfinder.rentals.model.remote.Rental
@@ -26,15 +26,15 @@ class RemoteDataSourceImpl @Inject constructor(
         return rentalService.getRentals("json", page)
     }
 
-    override suspend fun getSingleRental(id: Int): GetRental {
+    override suspend fun getSingleRental(id: Int): RentalResults {
         return rentalService.getSingleRental(id)
     }
 
-    override suspend fun postRental(body: CreateRental): Response<GetRental> {
+    override suspend fun postRental(body: CreateRental): Response<RentalResults> {
         return rentalService.postRental(body)
     }
 
-    override suspend fun updateRental(id: Int, body: CreateRental): Response<GetRental> {
+    override suspend fun updateRental(id: Int, body: CreateRental): Response<RentalResults> {
         return rentalService.updateRental(id, body)
     }
 }

@@ -12,5 +12,5 @@ data class Rental(
     @JsonProperty("previous")
     val previous: String?,
     @JsonProperty("results")
-    val results: List<GetRental>
+    val results: List<RentalResults>
 )

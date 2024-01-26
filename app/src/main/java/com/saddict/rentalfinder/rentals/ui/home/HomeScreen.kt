@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -41,7 +40,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.model.remote.GetRental
+import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.FavButton
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
@@ -252,7 +251,7 @@ fun CategoryCard(
 
 @Composable
 fun PopularCard(
-    rental: GetRental,
+    rental: RentalResults,
     modifier: Modifier = Modifier
 ) {
     Card(

@@ -14,30 +14,23 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.model.remote.GetRental
+import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.FavButton
-import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
-import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
 
 object FavouritesDestination : NavigationDestination {
     override val route: String = "favourite"
@@ -94,7 +87,7 @@ fun FavouritesScreen(
 
 @Composable
 fun FavouritesCard(
-    rental: GetRental,
+    rental: RentalResults,
     modifier: Modifier = Modifier
 ) {
     Card(
