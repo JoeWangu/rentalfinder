@@ -1,7 +1,7 @@
 package com.saddict.rentalfinder.utils
 
 import com.saddict.rentalfinder.rentals.model.local.RentalEntity
-import com.saddict.rentalfinder.rentals.model.remote.Rental
+import com.saddict.rentalfinder.rentals.model.remote.RentalImage
 import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 
 fun RentalEntity.mapToResults(): RentalResults{
@@ -17,7 +17,8 @@ fun RentalEntity.mapToResults(): RentalResults{
         rating,
         totalUnits,
         datePosted,
-        dateModified
+        dateModified,
+        imageDetail = RentalImage(image ?: 1, imageUrl)
     )
 }
 fun RentalResults.mapToEntity(): RentalEntity{
@@ -33,6 +34,7 @@ fun RentalResults.mapToEntity(): RentalEntity{
         rating,
         totalUnits,
         datePosted,
-        dateModified
+        dateModified,
+        imageUrl = imageDetail.image
     )
 }

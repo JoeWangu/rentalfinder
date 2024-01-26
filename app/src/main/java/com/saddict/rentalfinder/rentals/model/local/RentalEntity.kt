@@ -23,5 +23,7 @@ data class RentalEntity(
     @ColumnInfo(name = "date_posted")
     val datePosted: String,
     @ColumnInfo(name = "date_modified")
-    val dateModified: String
+    val dateModified: String,
+    @ColumnInfo(name = "image_detail")
+    val imageUrl: String,
 )

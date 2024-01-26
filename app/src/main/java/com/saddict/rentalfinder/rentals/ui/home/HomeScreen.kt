@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -39,6 +40,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
@@ -60,7 +65,7 @@ fun HomeScreen(
     navigateToProfile: () -> Unit,
     selectedBottomItem: Int,
     onItemSelected: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -91,7 +96,11 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomeBody(modifier: Modifier = Modifier) {
+fun HomeBody(
+    modifier: Modifier = Modifier,
+    homeViewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
+    rentalItems: LazyPagingItems<RentalResults> = homeViewModel.rentalItemsPagedFlow.collectAsLazyPagingItems()
+) {
     val state = rememberScrollState()
     val imageList = listOf(
         R.drawable.proxy_image_1,
@@ -212,6 +221,12 @@ fun HomeBody(modifier: Modifier = Modifier) {
 //                    items(RentalDataSource.rentals.take(4).reversed()) { rental ->
 //                        PopularCard(rental = rental)
 //                    }
+                    items(count = rentalItems.itemCount, key = rentalItems.itemKey { it.id }) { index ->
+                        val rentalItem = rentalItems[index]
+                        if (rentalItem != null) {
+                            PopularCard(rental = rentalItem)
+                        }
+                    }
                 }
             }
         }

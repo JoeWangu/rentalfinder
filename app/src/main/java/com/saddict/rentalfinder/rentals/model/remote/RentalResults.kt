@@ -28,5 +28,7 @@ data class RentalResults(
     @JsonProperty("date_posted")
     val datePosted: String,
     @JsonProperty("date_modified")
-    val dateModified: String
+    val dateModified: String,
+    @JsonProperty("image_detail")
+    val imageDetail : RentalImage,
 )
