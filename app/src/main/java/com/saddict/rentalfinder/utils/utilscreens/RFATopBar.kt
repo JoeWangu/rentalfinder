@@ -19,7 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import com.saddict.rentalfinder.R
+import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,8 +46,9 @@ fun RFATopBar(
                         .padding(dimensionResource(id = R.dimen.padding_small))
                 )
                 Text(
-                    text = title,
-                    style = MaterialTheme.typography.displayLarge
+                    text = everyFirstLetterCapitalize(title),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontSize = 50.sp,
                 )
             }
         },

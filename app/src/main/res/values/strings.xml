@@ -39,4 +39,11 @@
     <string name="general">general</string>
     <string name="security">security</string>
     <string name="biometric">biometric</string>
+    <string name="first_name">first name</string>
+    <string name="last_name">last name</string>
+    <string name="username">username</string>
+    <string name="dob">dob</string>
+    <string name="date_of_birth">date of birth</string>
+    <string name="gender">gender</string>
+    <string name="phone">phone</string>
 </resources>

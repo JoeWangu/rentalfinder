@@ -21,8 +21,8 @@ class CustomPagingSource @Inject constructor(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RentalEntity> {
-        return try {
             val page = params.key ?: INITIAL_PAGE
+        return try {
             val response = remoteDataSource.getRentals(page).results
             val entities = response.map { it.mapToEntity() }
             rentalDatabase.rentalDao().upsertAllRentals(entities)
@@ -32,8 +32,18 @@ class CustomPagingSource @Inject constructor(
                 prevKey = if (page == INITIAL_PAGE) null else page - 1,
                 nextKey = if (response.isEmpty()) null else page + 1
             )
-        }catch (e: Exception){
-            LoadResult.Error(e)
+        } catch (e: Exception) {
+            val dataFromDb = rentalDatabase.rentalDao().getAllPaged()
+            if (dataFromDb.isEmpty()) {
+                LoadResult.Error(e)
+            } else {
+                val numberOfPages = dataFromDb.size / 10
+                LoadResult.Page(
+                    data = dataFromDb,
+                    prevKey = if (page == INITIAL_PAGE) null else page - 1,
+                    nextKey = if (page > numberOfPages) null else page + 1
+                )
+            }
         }
     }
 }

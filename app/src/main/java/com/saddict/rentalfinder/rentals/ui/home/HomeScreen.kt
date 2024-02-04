@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -44,6 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
@@ -176,11 +176,20 @@ fun HomeBody(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 LazyRow(
+//                    reverseLayout = true,
                     modifier = Modifier,
                 ) {
 //                    items(RentalDataSource.rentals.take(4)) { rental ->
 //                        PopularCard(rental = rental)
 //                    }
+                    items(
+                        count = rentalItems.itemCount,
+                        key = rentalItems.itemKey { it.id }) { index ->
+                        val rentalItem = rentalItems[index]
+                        if (rentalItem != null) {
+                            PopularCard(rental = rentalItem)
+                        }
+                    }
                 }
             }
 // --------------------------- end of popular start of recommended  --------------------- //
@@ -221,12 +230,16 @@ fun HomeBody(
 //                    items(RentalDataSource.rentals.take(4).reversed()) { rental ->
 //                        PopularCard(rental = rental)
 //                    }
-                    items(count = rentalItems.itemCount, key = rentalItems.itemKey { it.id }) { index ->
-                        val rentalItem = rentalItems[index]
-                        if (rentalItem != null) {
-                            PopularCard(rental = rentalItem)
-                        }
-                    }
+//                    items(
+//                        count = rentalItems.itemCount,
+//                        key = rentalItems.itemKey { it.id.plus(4) }) { index ->
+//                        if (index in 4..8) {
+//                            val rentalItem = rentalItems[index]
+//                            if (rentalItem != null) {
+//                                PopularCard(rental = rentalItem)
+//                            }
+//                        }
+//                    }
                 }
             }
         }
@@ -276,10 +289,23 @@ fun PopularCard(
         shape = MaterialTheme.shapes.extraSmall
     ) {
         Box(modifier = Modifier) {
-            Image(
-                painter = painterResource(id = rental.id),
+//            Image(
+//                painter = rental.image,
+//                contentDescription = null,
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier
+//                    .height(100.dp)
+//            )
+            AsyncImage(
+                model = rental.imageDetail.image,
+//                model = ImageRequest.Builder(context = LocalContext.current)
+//                    .data(rental.imageDetail.image)
+//                    .crossfade(true)
+//                    .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
+                error = painterResource(id = R.drawable.ic_broken_image),
+                placeholder = painterResource(id = R.drawable.loading_img),
                 modifier = Modifier
                     .height(100.dp)
             )

@@ -25,10 +25,11 @@ object ApiModule {
     @Singleton
     fun provideNetworkService(preferenceDataStore: PreferenceDataStore): RentalService {
         val loggingInterceptor =
-            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
         val requestInterceptor = Interceptor.invoke { chain ->
             val request = chain.request()
-            val token = preferenceDataStore.getToken()
+            val tokens = preferenceDataStore.getToken()
+            val token = "54deeb647c1f09a95fa7694f3a4248876ff07e3e"
             println("Outgoing request to ${request.url}")
             println("Token is $token")
             return@invoke if (
@@ -36,8 +37,9 @@ object ApiModule {
                 !request.url.encodedPath.contains(CREATE_USER_URL)
             ) {
                 val requestBuild = request.newBuilder()
+//                    .addHeader("Authorization", "Token $token")
                     .addHeader("Authorization", "Token $token")
-                    .addHeader("Content-Type", "application/json")
+                    .header("Content-Type", "application/json")
                     .build()
                 chain.proceed(requestBuild)
             } else {

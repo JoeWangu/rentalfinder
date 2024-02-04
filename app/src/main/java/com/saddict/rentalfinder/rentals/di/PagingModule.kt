@@ -7,7 +7,6 @@ import com.saddict.rentalfinder.rentals.data.local.RentalDatabase
 import com.saddict.rentalfinder.rentals.data.manager.CustomPagingSource
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
 import com.saddict.rentalfinder.rentals.model.local.RentalEntity
-import com.saddict.rentalfinder.rentals.network.RentalService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,7 +27,7 @@ object PagingModule {
             config = PagingConfig(
                 pageSize = 10,
                 prefetchDistance = 1,
-                enablePlaceholders = false
+                enablePlaceholders = true
             ),
             remoteMediator = null,
             pagingSourceFactory = { CustomPagingSource(

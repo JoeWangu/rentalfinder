@@ -203,7 +203,7 @@ fun AccountBody(
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                placeholder = { Text(text = "Email") },
+                placeholder = { Text(text = stringResource(id = R.string.email)) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.MailOutline,
