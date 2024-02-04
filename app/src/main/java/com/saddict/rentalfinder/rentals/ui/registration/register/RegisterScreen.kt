@@ -1,5 +1,6 @@
 package com.saddict.rentalfinder.rentals.ui.registration.register
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,12 +34,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.saddict.rentalfinder.R
@@ -53,23 +57,32 @@ object RegisterDestination : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
-    modifier: Modifier = Modifier
+    navigateUp: () -> Unit,
+    modifier: Modifier = Modifier,
+    navigateToLogin: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
             RFATopBar(
                 title = stringResource(id = R.string.register),
-                canNavigateBack = false,
+                canNavigateBack = true,
+                navigateUp = navigateUp
             )
         }
     ) {
-        RegisterBody(modifier = Modifier.padding(it))
+        RegisterBody(
+            navigateToLogin = navigateToLogin,
+            modifier = Modifier.padding(it)
+        )
     }
 }
 
 @Composable
-fun RegisterBody(modifier: Modifier = Modifier) {
+fun RegisterBody(
+    navigateToLogin: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -334,11 +347,28 @@ fun RegisterBody(modifier: Modifier = Modifier) {
         ) {
             Text(text = stringResource(id = R.string.register))
         }
+        Spacer(modifier = Modifier.padding(top = 32.dp))
+        Row {
+            Text(
+                text = stringResource(id = R.string.have_account),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+            )
+            Text(
+                text = stringResource(id = R.string.login_here),
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold,
+                textDecoration = TextDecoration.Underline,
+                color = Color.Cyan,
+                modifier = Modifier
+                    .clickable { navigateToLogin() }
+            )
+        }
     }
 }
 
 @Preview
 @Composable
 fun RegisterPreview() {
-    RegisterScreen()
+    RegisterScreen(navigateToLogin = {}, navigateUp = {})
 }

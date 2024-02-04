@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.saddict.rentalfinder.rentals.data.manager.PreferenceDataStoreImpl
 import com.saddict.rentalfinder.rentals.ui.explore.ExploreDestination
 import com.saddict.rentalfinder.rentals.ui.explore.ExploreScreen
 import com.saddict.rentalfinder.rentals.ui.favourites.FavouritesDestination
@@ -24,6 +25,10 @@ import com.saddict.rentalfinder.rentals.ui.profile.account.AccountDestination
 import com.saddict.rentalfinder.rentals.ui.profile.account.AccountScreen
 import com.saddict.rentalfinder.rentals.ui.profile.settings.SettingsDestination
 import com.saddict.rentalfinder.rentals.ui.profile.settings.SettingsScreen
+import com.saddict.rentalfinder.rentals.ui.registration.login.LoginDestination
+import com.saddict.rentalfinder.rentals.ui.registration.login.LoginScreen
+import com.saddict.rentalfinder.rentals.ui.registration.register.RegisterDestination
+import com.saddict.rentalfinder.rentals.ui.registration.register.RegisterScreen
 import com.saddict.rentalfinder.utils.toastUtil
 
 @Composable
@@ -37,9 +42,10 @@ fun RentalsNavGraph(
     var pressedTime: Long = 0
     val ctx = LocalContext.current
     val activity = LocalContext.current as? Activity
+    val token = PreferenceDataStoreImpl(ctx).getToken()
     NavHost(
         navController = navController,
-        startDestination = HomeDestination.route,
+        startDestination = if (token.isEmpty()) LoginDestination.route else HomeDestination.route,
         modifier = modifier
     ) {
         composable(route = HomeDestination.route) {
@@ -52,6 +58,7 @@ fun RentalsNavGraph(
                 pressedTime = System.currentTimeMillis()
             }
             HomeScreen(
+                navigateUp = { navController.navigate(LoginDestination.route) },
                 navigateToExplore = { navController.navigate(ExploreDestination.route) },
                 navigateToFavourites = { navController.navigate(FavouritesDestination.route) },
                 navigateToProfile = { navController.navigate(ProfileDestination.route) },
@@ -134,5 +141,19 @@ fun RentalsNavGraph(
                 navigateUp = { navController.popBackStack() }
             )
         }
+        composable(route = LoginDestination.route) {
+            LoginScreen(
+//                navigateUp = { navController.popBackStack() }
+                navigateToRegister = { navController.navigate(RegisterDestination.route) },
+                navigateToHome = { navController.navigate(HomeDestination.route) },
+            )
+        }
+        composable(route = RegisterDestination.route) {
+            RegisterScreen(
+                navigateUp = { navController.popBackStack() },
+                navigateToLogin = { navController.navigate(LoginDestination.route) }
+            )
+        }
+
     }
 }

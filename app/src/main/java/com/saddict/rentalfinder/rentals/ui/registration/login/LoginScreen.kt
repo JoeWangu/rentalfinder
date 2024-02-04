@@ -1,8 +1,10 @@
 package com.saddict.rentalfinder.rentals.ui.registration.login
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -27,12 +29,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.saddict.rentalfinder.R
@@ -47,6 +52,8 @@ object LoginDestination : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
+    navigateToRegister: () -> Unit,
+    navigateToHome: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -58,12 +65,20 @@ fun LoginScreen(
             )
         }
     ) {
-        LoginBody(modifier = Modifier.padding(it))
+        LoginBody(
+            navigateToRegister = navigateToRegister,
+            navigateToHome = navigateToHome,
+            modifier = Modifier.padding(it)
+        )
     }
 }
 
 @Composable
-fun LoginBody(modifier: Modifier = Modifier) {
+fun LoginBody(
+    navigateToRegister: () -> Unit,
+    navigateToHome: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
@@ -132,10 +147,27 @@ fun LoginBody(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.padding(8.dp))
         OutlinedButton(
-            onClick = { /*TODO*/ },
+            onClick = { /*TODO*/ navigateToHome() },
             contentPadding = PaddingValues(start = 64.dp, end = 64.dp)
         ) {
             Text(text = stringResource(id = R.string.login))
+        }
+        Spacer(modifier = Modifier.padding(top = 32.dp))
+        Row {
+            Text(
+                text = stringResource(id = R.string.no_account),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+            )
+            Text(
+                text = stringResource(id = R.string.reg_here),
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold,
+                textDecoration = TextDecoration.Underline,
+                color = Color.Cyan,
+                modifier = Modifier
+                    .clickable { navigateToRegister() }
+            )
         }
 //    }
     }
@@ -144,5 +176,5 @@ fun LoginBody(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun LoginPreview() {
-    LoginScreen()
+    LoginScreen(navigateToRegister = {}, navigateToHome = {})
 }

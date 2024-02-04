@@ -60,6 +60,7 @@ object HomeDestination : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    navigateUp: () -> Unit,
     navigateToExplore: () -> Unit,
     navigateToFavourites: () -> Unit,
     navigateToProfile: () -> Unit,
@@ -73,7 +74,8 @@ fun HomeScreen(
         topBar = {
             RFATopBar(
                 title = stringResource(id = R.string.app_name_2),
-                canNavigateBack = false,
+                canNavigateBack = true,
+                navigateUp = navigateUp,
                 scrollBehavior = scrollBehavior
             )
         },
