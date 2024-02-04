@@ -26,10 +26,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -40,9 +42,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
+import com.saddict.rentalfinder.utils.toastUtil
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 object LoginDestination : NavigationDestination {
     override val route: String = "login"
@@ -77,21 +83,19 @@ fun LoginScreen(
 fun LoginBody(
     navigateToRegister: () -> Unit,
     navigateToHome: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
+    val ctx = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-//        Column(
-//            modifier = modifier,
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -147,7 +151,28 @@ fun LoginBody(
         )
         Spacer(modifier = Modifier.padding(8.dp))
         OutlinedButton(
-            onClick = { /*TODO*/ navigateToHome() },
+            onClick = {
+                coroutineScope.launch {
+                    loginViewModel.loginUser(email = email, password = password)
+                    loginViewModel.uiState.collect { state ->
+                        when (state) {
+                            LoginUiState.Error -> {
+                                ctx.toastUtil("Incorrect username or password")
+                            }
+
+                            LoginUiState.Loading -> {
+                                ctx.toastUtil("Waiting for response")
+                            }
+
+                            is LoginUiState.Success -> {
+                                ctx.toastUtil("Login Success")
+                                delay(2_000L)
+                                navigateToHome()
+                            }
+                        }
+                    }
+                }
+            },
             contentPadding = PaddingValues(start = 64.dp, end = 64.dp)
         ) {
             Text(text = stringResource(id = R.string.login))
@@ -169,7 +194,6 @@ fun LoginBody(
                     .clickable { navigateToRegister() }
             )
         }
-//    }
     }
 }
 
