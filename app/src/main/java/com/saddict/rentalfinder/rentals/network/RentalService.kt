@@ -3,10 +3,10 @@ package com.saddict.rentalfinder.rentals.network
 import com.saddict.rentalfinder.rentals.model.remote.CreateRental
 import com.saddict.rentalfinder.rentals.model.remote.CreateUser
 import com.saddict.rentalfinder.rentals.model.remote.CreateUserResponse
-import com.saddict.rentalfinder.rentals.model.remote.RentalResults
-import com.saddict.rentalfinder.rentals.model.remote.GetUser
 import com.saddict.rentalfinder.rentals.model.remote.LoginUser
+import com.saddict.rentalfinder.rentals.model.remote.LoginUserResponse
 import com.saddict.rentalfinder.rentals.model.remote.Rental
+import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.utils.Constants.CREATE_USER_URL
 import com.saddict.rentalfinder.utils.Constants.RENTAL_URL
 import com.saddict.rentalfinder.utils.Constants.SINGLE_RENTAL_URL
@@ -20,7 +20,7 @@ import retrofit2.http.Query
 
 interface RentalService {
     @POST
-    suspend fun loginUser(@Body user: LoginUser): Response<GetUser>
+    suspend fun loginUser(@Body user: LoginUser): Response<LoginUserResponse>
 
     @POST(CREATE_USER_URL)
     suspend fun registerUser(@Body user: CreateUser): Response<CreateUserResponse>
