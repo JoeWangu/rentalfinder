@@ -17,10 +17,14 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface RentalService {
     @POST
-    suspend fun loginUser(@Body user: LoginUser): Response<LoginUserResponse>
+    suspend fun loginUser(
+        @Body user: LoginUser,
+        @Url url: String
+    ): Response<LoginUserResponse>
 
     @POST(CREATE_USER_URL)
     suspend fun registerUser(@Body user: CreateUser): Response<CreateUserResponse>
