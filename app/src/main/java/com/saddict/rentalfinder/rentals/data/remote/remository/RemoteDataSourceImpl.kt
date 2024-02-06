@@ -15,7 +15,7 @@ class RemoteDataSourceImpl @Inject constructor(
     private val rentalService: RentalService
 ) : RemoteDataSource {
     override suspend fun loginUser(user: LoginUser): Response<LoginUserResponse> {
-        return rentalService.loginUser(user)
+        return rentalService.loginUser(user, "/")
     }
 
     override suspend fun registerUser(user: CreateUser): Response<CreateUserResponse> {
