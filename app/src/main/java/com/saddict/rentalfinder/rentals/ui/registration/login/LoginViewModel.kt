@@ -53,7 +53,7 @@ class LoginViewModel @Inject constructor(
                     }
                 } catch (e: IOException) {
                     Log.d("Login Failure", "cannot login the user: $e")
-                    _uiState.emit(LoginUiState.Error)
+//                    _uiState.emit(LoginUiState.Error)
                 }
             }
         }
