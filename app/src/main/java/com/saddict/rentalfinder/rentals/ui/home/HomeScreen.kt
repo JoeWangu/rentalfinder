@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -28,6 +29,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -40,6 +45,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
@@ -47,7 +53,9 @@ import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
+import com.saddict.rentalfinder.utils.ErrorPlaceholderCardItem
 import com.saddict.rentalfinder.utils.FavButton
+import com.saddict.rentalfinder.utils.LoadingPlaceholderCardItem
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
@@ -103,6 +111,8 @@ fun HomeBody(
     homeViewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
     rentalItems: LazyPagingItems<RentalResults> = homeViewModel.rentalItemsPagedFlow.collectAsLazyPagingItems()
 ) {
+//    val ctx = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     val state = rememberScrollState()
     val imageList = listOf(
         R.drawable.proxy_image_1,
@@ -184,14 +194,23 @@ fun HomeBody(
 //                    items(RentalDataSource.rentals.take(4)) { rental ->
 //                        PopularCard(rental = rental)
 //                    }
-                    items(
-                        count = rentalItems.itemCount,
-                        key = rentalItems.itemKey { it.id }) { index ->
-                        val rentalItem = rentalItems[index]
-                        if (rentalItem != null) {
-                            PopularCard(rental = rentalItem)
+                    when (rentalItems.loadState.refresh) {
+                        is LoadState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
+                        is LoadState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
+                        else -> items(
+                            count = rentalItems.itemCount,
+                            key = rentalItems.itemKey { it.id }) { index ->
+                            val rentalItem = rentalItems[index]
+                            if (rentalItem != null) {
+                                PopularCard(rental = rentalItem)
+                            } else {
+                                ErrorPlaceholderCardItem()
+                            }
                         }
                     }
+//                    if (rentalItems.loadState.refresh is LoadState.Loading){
+//                    }else if (rentalItems.loadState.refresh is LoadState.Error){
+//                    }else{}
                 }
             }
 // --------------------------- end of popular start of recommended  --------------------- //
@@ -226,9 +245,28 @@ fun HomeBody(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                LaunchedEffect(Unit) {
+                    homeViewModel.recommendedItems()
+                }
+                val uiState by homeViewModel.uiState.collectAsState(Unit)
                 LazyRow(
                     modifier = Modifier,
                 ) {
+                    when (uiState) {
+                        HomeUiState.Loading -> {
+                            items(count = 4) { LoadingPlaceholderCardItem() }
+                        }
+
+                        HomeUiState.Error -> {
+                            items(count = 4) { ErrorPlaceholderCardItem() }
+                        }
+
+                        is HomeUiState.Success -> {
+                            items((uiState as HomeUiState.Success).rentalResults) { rental ->
+                                PopularCard(rental = rental)
+                            }
+                        }
+                    }
 //                    items(RentalDataSource.rentals.take(4).reversed()) { rental ->
 //                        PopularCard(rental = rental)
 //                    }
@@ -239,6 +277,26 @@ fun HomeBody(
 //                            val rentalItem = rentalItems[index]
 //                            if (rentalItem != null) {
 //                                PopularCard(rental = rentalItem)
+//                            }
+//                        }
+//                    }
+//                    coroutineScope.launch {
+//                        homeViewModel.recommendedItems()
+//                        homeViewModel.uiState.collect { state ->
+//                            when (state) {
+//                                HomeUiState.Loading -> {
+//                                    items(count = 4) { LoadingPlaceholderCardItem() }
+//                                }
+//
+//                                HomeUiState.Error -> {
+//                                    items(count = 4) { ErrorPlaceholderCardItem() }
+//                                }
+//
+//                                is HomeUiState.Success -> {
+//                                    items(state.rentalResults) { rental ->
+//                                        PopularCard(rental = rental)
+//                                    }
+//                                }
 //                            }
 //                        }
 //                    }
