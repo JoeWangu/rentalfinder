@@ -16,9 +16,12 @@ object Constants {
     const val ANIM_TIME_LONG: Int = 800
     const val CREATE_USER_URL = "create-user-api/"
 
-    const val LOGIN_URL = "login-user-api/"
+    const val LOGIN_URL = ""
+
+    //    const val LOGIN_URL = "login-user-api/"
     const val RENTAL_URL = "rentals/api/rentals/"
     const val SINGLE_RENTAL_URL = "rentals/api/rentals/{id}/"
+
     //    const val LOGOUT_URL = "logout-api/"
     const val INITIAL_PAGE = 1
     const val TOKEN = "user_token"
