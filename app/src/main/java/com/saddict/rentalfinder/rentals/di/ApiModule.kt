@@ -6,7 +6,6 @@ import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSourceImpl
 import com.saddict.rentalfinder.rentals.network.RentalService
 import com.saddict.rentalfinder.utils.Constants.CREATE_USER_URL
-import com.saddict.rentalfinder.utils.Constants.LOGIN_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,16 +27,15 @@ object ApiModule {
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
         val requestInterceptor = Interceptor.invoke { chain ->
             val request = chain.request()
-            val tokens = preferenceDataStore.getToken()
-            val token = "54deeb647c1f09a95fa7694f3a4248876ff07e3e"
+            val token = preferenceDataStore.getToken()
+//            val token = "54deeb647c1f09a95fa7694f3a4248876ff07e3e"
             println("Outgoing request to ${request.url}")
             println("Token is $token")
             return@invoke if (
-                !request.url.encodedPath.contains(LOGIN_URL) &&
+//                !request.url.encodedPath.contains(LOGIN_URL) &&
                 !request.url.encodedPath.contains(CREATE_USER_URL)
             ) {
                 val requestBuild = request.newBuilder()
-//                    .addHeader("Authorization", "Token $token")
                     .addHeader("Authorization", "Token $token")
                     .header("Content-Type", "application/json")
                     .build()
