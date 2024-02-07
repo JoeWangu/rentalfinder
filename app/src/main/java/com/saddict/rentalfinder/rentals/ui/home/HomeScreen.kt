@@ -32,11 +32,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
@@ -48,7 +48,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.model.remote.RentalResults
@@ -57,6 +56,7 @@ import com.saddict.rentalfinder.utils.ErrorPlaceholderCardItem
 import com.saddict.rentalfinder.utils.FavButton
 import com.saddict.rentalfinder.utils.LoadingPlaceholderCardItem
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
+import com.saddict.rentalfinder.utils.toastUtilLong
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
 
@@ -111,8 +111,16 @@ fun HomeBody(
     homeViewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
     rentalItems: LazyPagingItems<RentalResults> = homeViewModel.rentalItemsPagedFlow.collectAsLazyPagingItems()
 ) {
-//    val ctx = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
+    val ctx = LocalContext.current
+//    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(key1 = rentalItems.loadState) {
+        if (rentalItems.loadState.refresh is LoadState.Error) {
+            ctx.toastUtilLong("Error: " + (rentalItems.loadState.refresh as LoadState.Error).error.message)
+        }
+    }
+    LaunchedEffect(Unit) {
+        homeViewModel.recommendedItems()
+    }
     val state = rememberScrollState()
     val imageList = listOf(
         R.drawable.proxy_image_1,
@@ -199,7 +207,9 @@ fun HomeBody(
                         is LoadState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
                         else -> items(
                             count = rentalItems.itemCount,
-                            key = rentalItems.itemKey { it.id }) { index ->
+                            key = { index ->
+                                rentalItems[index]?.id ?: index.toString()
+                            }) { index ->
                             val rentalItem = rentalItems[index]
                             if (rentalItem != null) {
                                 PopularCard(rental = rentalItem)
@@ -245,9 +255,6 @@ fun HomeBody(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                LaunchedEffect(Unit) {
-                    homeViewModel.recommendedItems()
-                }
                 val uiState by homeViewModel.uiState.collectAsState(Unit)
                 LazyRow(
                     modifier = Modifier,
@@ -262,7 +269,7 @@ fun HomeBody(
                         }
 
                         is HomeUiState.Success -> {
-                            items((uiState as HomeUiState.Success).rentalResults) { rental ->
+                            items((uiState as HomeUiState.Success).rentalResults.reversed()) { rental ->
                                 PopularCard(rental = rental)
                             }
                         }
