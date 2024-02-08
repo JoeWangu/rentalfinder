@@ -30,11 +30,11 @@ object ApiModule {
             val token = preferenceDataStore.getToken()
 //            val token = "54deeb647c1f09a95fa7694f3a4248876ff07e3e"
             println("Outgoing request to ${request.url}")
-            println("Token is $token")
             return@invoke if (
 //                !request.url.encodedPath.contains(LOGIN_URL) &&
                 !request.url.encodedPath.contains(CREATE_USER_URL)
             ) {
+                println("Token is $token")
                 val requestBuild = request.newBuilder()
                     .addHeader("Authorization", "Token $token")
                     .header("Content-Type", "application/json")
