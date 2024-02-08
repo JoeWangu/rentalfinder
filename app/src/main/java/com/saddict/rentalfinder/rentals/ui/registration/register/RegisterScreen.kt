@@ -31,10 +31,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -45,9 +47,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
+import com.saddict.rentalfinder.utils.toastUtil
+import com.saddict.rentalfinder.utils.toastUtilLong
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 object RegisterDestination : NavigationDestination {
     override val route: String = "register"
@@ -58,8 +65,9 @@ object RegisterDestination : NavigationDestination {
 @Composable
 fun RegisterScreen(
     navigateUp: () -> Unit,
-    modifier: Modifier = Modifier,
     navigateToLogin: () -> Unit,
+    navigateToHome: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
@@ -73,6 +81,7 @@ fun RegisterScreen(
     ) {
         RegisterBody(
             navigateToLogin = navigateToLogin,
+            navigateToHome = navigateToHome,
             modifier = Modifier.padding(it)
         )
     }
@@ -81,18 +90,25 @@ fun RegisterScreen(
 @Composable
 fun RegisterBody(
     navigateToLogin: () -> Unit,
-    modifier: Modifier = Modifier
+    navigateToHome: () -> Unit,
+    modifier: Modifier = Modifier,
+    registerViewModel: RegisterViewModel = hiltViewModel(),
+    registerDetails: RegisterDetails = registerViewModel.registerEntryUiState.registerDetails,
+    onValueChange: (RegisterDetails) -> Unit = registerViewModel::updateUiState,
+    enabled: Boolean = true
 ) {
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var username by remember { mutableStateOf("") }
-    var phoneNumber by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var dob by remember { mutableStateOf("") }
-    var gender by remember { mutableStateOf("") }
+//    var firstName by remember { mutableStateOf("") }
+//    var lastName by remember { mutableStateOf("") }
+//    var email by remember { mutableStateOf("") }
+//    var password by remember { mutableStateOf("") }
+//    var username by remember { mutableStateOf("") }
+//    var phoneNumber by remember { mutableStateOf("") }
+//    var address by remember { mutableStateOf("") }
+//    var dob by remember { mutableStateOf("") }
+//    var gender by remember { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
+    val ctx = LocalContext.current
+    val coroutine = rememberCoroutineScope()
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
@@ -107,9 +123,9 @@ fun RegisterBody(
                 modifier = Modifier,
             ) {
                 OutlinedTextField(
-                    value = firstName,
-                    onValueChange = { firstName = it },
-//            label = { Text(text = stringResource(id = R.string.first_name)) },
+                    value = registerDetails.firstName,
+                    onValueChange = { onValueChange(registerDetails.copy(firstName = it)) },
+                    label = { Text(text = stringResource(id = R.string.first_name)) },
                     placeholder = { Text(text = stringResource(id = R.string.first_name)) },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
@@ -128,11 +144,12 @@ fun RegisterBody(
                     modifier = Modifier
                         .weight(1F)
                         .padding(start = 8.dp, end = 4.dp),
+                    enabled = enabled
                 )
                 OutlinedTextField(
-                    value = lastName,
-                    onValueChange = { lastName = it },
-//            label = { Text(text = stringResource(id = R.string.last_name)) },
+                    value = registerDetails.lastName,
+                    onValueChange = { onValueChange(registerDetails.copy(lastName = it)) },
+                    label = { Text(text = stringResource(id = R.string.last_name)) },
                     placeholder = { Text(text = stringResource(id = R.string.last_name)) },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
@@ -150,16 +167,17 @@ fun RegisterBody(
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier
                         .weight(1F)
-                        .padding(start = 4.dp, end = 8.dp)
+                        .padding(start = 4.dp, end = 8.dp),
+                    enabled = enabled
                 )
             }
             Row(
                 modifier = Modifier,
             ) {
                 OutlinedTextField(
-                    value = email,
-                    onValueChange = { email = it },
-//            label = { Text(text = stringResource(id = R.string.email)) },
+                    value = registerDetails.email,
+                    onValueChange = { onValueChange(registerDetails.copy(email = it)) },
+                    label = { Text(text = stringResource(id = R.string.email)) },
                     placeholder = { Text(text = stringResource(id = R.string.email)) },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
@@ -177,12 +195,13 @@ fun RegisterBody(
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier
                         .weight(1F)
-                        .padding(start = 8.dp, end = 4.dp)
+                        .padding(start = 8.dp, end = 4.dp),
+                    enabled = enabled
                 )
                 OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-//            label = { Text(text = stringResource(id = R.string.password)) },
+                    value = registerDetails.password,
+                    onValueChange = { onValueChange(registerDetails.copy(password = it)) },
+                    label = { Text(text = stringResource(id = R.string.password)) },
                     placeholder = { Text(text = stringResource(id = R.string.password)) },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
@@ -210,16 +229,17 @@ fun RegisterBody(
                     else PasswordVisualTransformation(),
                     modifier = Modifier
                         .weight(1F)
-                        .padding(start = 8.dp, end = 4.dp)
+                        .padding(start = 8.dp, end = 4.dp),
+                    enabled = enabled
                 )
             }
             Row(
                 modifier = Modifier,
             ) {
                 OutlinedTextField(
-                    value = username,
-                    onValueChange = { username = it },
-//            label = { Text(text = stringResource(id = R.string.username)) },
+                    value = registerDetails.username,
+                    onValueChange = { onValueChange(registerDetails.copy(username = it)) },
+                    label = { Text(text = stringResource(id = R.string.username)) },
                     placeholder = { Text(text = stringResource(id = R.string.username)) },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
@@ -237,12 +257,13 @@ fun RegisterBody(
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier
                         .weight(1F)
-                        .padding(start = 8.dp, end = 4.dp)
+                        .padding(start = 8.dp, end = 4.dp),
+                    enabled = enabled
                 )
                 OutlinedTextField(
-                    value = phoneNumber,
-                    onValueChange = { phoneNumber = it },
-//            label = { Text(text = stringResource(id = R.string.phone_number)) },
+                    value = registerDetails.phoneNumber,
+                    onValueChange = { onValueChange(registerDetails.copy(phoneNumber = it)) },
+                    label = { Text(text = stringResource(id = R.string.phone_number)) },
                     placeholder = { Text(text = stringResource(id = R.string.phone)) },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
@@ -261,16 +282,17 @@ fun RegisterBody(
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier
                         .weight(1F)
-                        .padding(start = 8.dp, end = 4.dp)
+                        .padding(start = 8.dp, end = 4.dp),
+                    enabled = enabled
                 )
             }
             Row(
                 modifier = Modifier,
             ) {
                 OutlinedTextField(
-                    value = address,
-                    onValueChange = { address = it },
-//            label = { Text(text = stringResource(id = R.string.address)) },
+                    value = registerDetails.address,
+                    onValueChange = { onValueChange(registerDetails.copy(address = it)) },
+                    label = { Text(text = stringResource(id = R.string.address)) },
                     placeholder = { Text(text = stringResource(id = R.string.address)) },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
@@ -288,12 +310,13 @@ fun RegisterBody(
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier
                         .weight(1F)
-                        .padding(start = 8.dp, end = 4.dp)
+                        .padding(start = 8.dp, end = 4.dp),
+                    enabled = enabled
                 )
                 OutlinedTextField(
-                    value = dob,
-                    onValueChange = { dob = it },
-//            label = { Text(text = stringResource(id = R.string.dob)) },
+                    value = registerDetails.dob.toString(),
+                    onValueChange = { onValueChange(registerDetails.copy(dob = it)) },
+                    label = { Text(text = stringResource(id = R.string.dob)) },
                     placeholder = { Text(text = stringResource(id = R.string.dob)) },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
@@ -318,9 +341,9 @@ fun RegisterBody(
 //        RadioButton(selected = , onClick = { /*TODO*/ })
         Spacer(modifier = Modifier.padding(8.dp))
         OutlinedTextField(
-            value = gender,
-            onValueChange = { gender = it },
-//            label = { Text(text = stringResource(id = R.string.gender)) },
+            value = registerDetails.gender.toString(),
+            onValueChange = { onValueChange(registerDetails.copy(gender = it)) },
+            label = { Text(text = stringResource(id = R.string.gender)) },
             placeholder = { Text(text = stringResource(id = R.string.gender)) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,
@@ -342,8 +365,41 @@ fun RegisterBody(
         )
         Spacer(modifier = Modifier.padding(8.dp))
         OutlinedButton(
-            onClick = { /*TODO*/ },
-            contentPadding = PaddingValues(start = 64.dp, end = 64.dp)
+            onClick = {
+                coroutine.launch {
+//                    registerViewModel.registerUser(
+//                        firstName = firstName,
+//                        lastName = lastName,
+//                        email = email,
+//                        password = password,
+//                        username = username,
+//                        phoneNumber = phoneNumber,
+//                        address = address,
+//                        dob = dob,
+//                        gender = gender
+//                    )
+                    registerViewModel.registerUser()
+                    registerViewModel.uiState.collect { state ->
+                        when (state) {
+                            RegisterUiState.Loading -> {
+                                ctx.toastUtil("please wait! registering user")
+                            }
+
+                            RegisterUiState.Error -> {
+                                ctx.toastUtil("sorry could not register user")
+                            }
+
+                            is RegisterUiState.Success -> {
+                                ctx.toastUtilLong("successfully registered")
+                                delay(2_000L)
+                                navigateToHome()
+                            }
+                        }
+                    }
+                }
+            },
+            contentPadding = PaddingValues(start = 64.dp, end = 64.dp),
+            enabled = registerViewModel.registerEntryUiState.isRegisterValid
         ) {
             Text(text = stringResource(id = R.string.register))
         }
@@ -364,11 +420,17 @@ fun RegisterBody(
                     .clickable { navigateToLogin() }
             )
         }
+//        if (enabled){
+//            Text(
+//                text = stringResource(R.string.required_fields),
+//                modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_medium))
+//            )
+//        }
     }
 }
 
 @Preview
 @Composable
 fun RegisterPreview() {
-    RegisterScreen(navigateToLogin = {}, navigateUp = {})
+    RegisterScreen(navigateToLogin = {}, navigateUp = {}, navigateToHome = {})
 }
