@@ -151,7 +151,8 @@ fun RentalsNavGraph(
         composable(route = RegisterDestination.route) {
             RegisterScreen(
                 navigateUp = { navController.popBackStack() },
-                navigateToLogin = { navController.navigate(LoginDestination.route) }
+                navigateToLogin = { navController.navigate(LoginDestination.route) },
+                navigateToHome = { navController.navigate(HomeDestination.route) },
             )
         }
 
