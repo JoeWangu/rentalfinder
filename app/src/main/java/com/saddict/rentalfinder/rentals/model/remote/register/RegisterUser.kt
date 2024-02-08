@@ -1,9 +1,9 @@
-package com.saddict.rentalfinder.rentals.model.remote
+package com.saddict.rentalfinder.rentals.model.remote.register
 
 import androidx.annotation.Keep
 
 @Keep
-data class CreateUser(
+data class RegisterUser(
     @Suppress("PropertyName")
     val first_name: String,
     @Suppress("PropertyName")
@@ -14,6 +14,6 @@ data class CreateUser(
     @Suppress("PropertyName")
     val phone_number: String,
     val address: String,
-    val dob: String,
-    val gender: String
+    val dob: String?,
+    val gender: String?
 )
