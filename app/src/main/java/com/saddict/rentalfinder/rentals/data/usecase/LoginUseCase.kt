@@ -1,8 +1,8 @@
 package com.saddict.rentalfinder.rentals.data.usecase
 
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
-import com.saddict.rentalfinder.rentals.model.remote.LoginUser
-import com.saddict.rentalfinder.rentals.model.remote.LoginUserResponse
+import com.saddict.rentalfinder.rentals.model.remote.register.LoginUser
+import com.saddict.rentalfinder.rentals.model.remote.register.LoginUserResponse
 import retrofit2.Response
 import javax.inject.Inject
 
