@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.saddict.rentalfinder.rentals.data.manager.PreferenceDataStore
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
 import com.saddict.rentalfinder.rentals.data.usecase.LoginUseCase
-import com.saddict.rentalfinder.rentals.model.remote.LoginUser
-import com.saddict.rentalfinder.rentals.model.remote.LoginUserResponse
+import com.saddict.rentalfinder.rentals.model.remote.register.LoginUser
+import com.saddict.rentalfinder.rentals.model.remote.register.LoginUserResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow

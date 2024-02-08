@@ -1,4 +1,4 @@
-package com.saddict.rentalfinder.rentals.model.remote
+package com.saddict.rentalfinder.rentals.model.remote.register
 
 import androidx.annotation.Keep
 
