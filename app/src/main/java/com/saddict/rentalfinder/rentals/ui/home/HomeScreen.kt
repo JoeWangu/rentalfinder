@@ -68,7 +68,7 @@ object HomeDestination : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navigateUp: () -> Unit,
+//    navigateUp: () -> Unit,
     navigateToExplore: () -> Unit,
     navigateToFavourites: () -> Unit,
     navigateToProfile: () -> Unit,
@@ -82,8 +82,8 @@ fun HomeScreen(
         topBar = {
             RFATopBar(
                 title = stringResource(id = R.string.app_name_2),
-                canNavigateBack = true,
-                navigateUp = navigateUp,
+                canNavigateBack = false,
+//                navigateUp = navigateUp,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -206,10 +206,12 @@ fun HomeBody(
                         is LoadState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
                         is LoadState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
                         else -> items(
-                            count = rentalItems.itemCount,
-                            key = { index ->
-                                rentalItems[index]?.id ?: index.toString()
-                            }) { index ->
+                            count = 4,
+//                            count = rentalItems.itemCount,
+//                            key = { index ->
+//                                rentalItems[index]?.id ?: index.toString()
+//                            }
+                        ) { index ->
                             val rentalItem = rentalItems[index]
                             if (rentalItem != null) {
                                 PopularCard(rental = rentalItem)
@@ -269,7 +271,9 @@ fun HomeBody(
                         }
 
                         is HomeUiState.Success -> {
-                            items((uiState as HomeUiState.Success).rentalResults.reversed()) { rental ->
+                            items(
+                                (uiState as HomeUiState.Success).rentalResults.take(4).reversed()
+                            ) { rental ->
                                 PopularCard(rental = rental)
                             }
                         }
