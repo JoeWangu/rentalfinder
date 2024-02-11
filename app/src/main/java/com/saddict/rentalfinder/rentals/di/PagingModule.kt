@@ -1,5 +1,6 @@
 package com.saddict.rentalfinder.rentals.di
 
+import android.content.Context
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -10,6 +11,7 @@ import com.saddict.rentalfinder.rentals.model.local.RentalEntity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -21,7 +23,8 @@ object PagingModule {
     @Singleton
     fun providePager(
         rentalDatabase: RentalDatabase,
-        remoteDataSource: RemoteDataSource
+        remoteDataSource: RemoteDataSource,
+        @ApplicationContext context: Context
     ): Pager<Int, RentalEntity> {
         return Pager(
             config = PagingConfig(
@@ -30,9 +33,11 @@ object PagingModule {
                 enablePlaceholders = true
             ),
             remoteMediator = null,
-            pagingSourceFactory = { CustomPagingSource(
-                rentalDatabase, remoteDataSource
-            ) }
+            pagingSourceFactory = {
+                CustomPagingSource(
+                    rentalDatabase, remoteDataSource, context
+                )
+            }
         )
     }
 }
