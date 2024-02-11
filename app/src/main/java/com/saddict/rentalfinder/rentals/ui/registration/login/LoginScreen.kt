@@ -127,7 +127,7 @@ fun LoginBody(
                 capitalization = KeyboardCapitalization.None,
                 autoCorrect = false,
                 keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Done
             ),
             singleLine = true,
             leadingIcon = {
