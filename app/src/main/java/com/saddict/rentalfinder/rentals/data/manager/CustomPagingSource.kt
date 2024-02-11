@@ -1,5 +1,6 @@
 package com.saddict.rentalfinder.rentals.data.manager
 
+import android.content.Context
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.saddict.rentalfinder.rentals.data.local.RentalDatabase
@@ -7,12 +8,14 @@ import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
 import com.saddict.rentalfinder.rentals.model.local.RentalEntity
 import com.saddict.rentalfinder.utils.Constants.INITIAL_PAGE
 import com.saddict.rentalfinder.utils.mapToEntity
+import com.saddict.rentalfinder.utils.toastUtil
 import javax.inject.Inject
 
 class CustomPagingSource @Inject constructor(
     private val rentalDatabase: RentalDatabase,
-    private val remoteDataSource: RemoteDataSource
-): PagingSource<Int, RentalEntity>() {
+    private val remoteDataSource: RemoteDataSource,
+    private val context: Context
+) : PagingSource<Int, RentalEntity>() {
     override fun getRefreshKey(state: PagingState<Int, RentalEntity>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
@@ -21,9 +24,10 @@ class CustomPagingSource @Inject constructor(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RentalEntity> {
-            val page = params.key ?: INITIAL_PAGE
+        val page = params.key ?: INITIAL_PAGE
         return try {
             val response = remoteDataSource.getRentals(page).results
+//            println(response)
             val entities = response.map { it.mapToEntity() }
             rentalDatabase.rentalDao().upsertAllRentals(entities)
             val dataLoaded = rentalDatabase.rentalDao().getAllPaged()
@@ -35,8 +39,10 @@ class CustomPagingSource @Inject constructor(
         } catch (e: Exception) {
             val dataFromDb = rentalDatabase.rentalDao().getAllPaged()
             if (dataFromDb.isEmpty()) {
+                context.toastUtil("database is empty : check internet connection")
                 LoadResult.Error(e)
             } else {
+                context.toastUtil("Cannot load data, check internet connection")
                 val numberOfPages = dataFromDb.size / 10
                 LoadResult.Page(
                     data = dataFromDb,
