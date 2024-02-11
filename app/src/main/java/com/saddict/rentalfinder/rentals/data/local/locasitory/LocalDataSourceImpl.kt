@@ -12,11 +12,11 @@ class LocalDataSourceImpl @Inject constructor(
         return rentalDao.upsertAllRentals(rentals)
     }
 
-    override suspend fun fetchRentals(): Flow<List<RentalEntity>> {
+    override fun fetchRentals(): Flow<List<RentalEntity>> {
         return rentalDao.fetchRentals()
     }
 
-    override suspend fun fetchAllRentalsDesc(): Flow<List<RentalEntity>> {
+    override fun fetchAllRentalsDesc(): Flow<List<RentalEntity>> {
         return rentalDao.fetchRentals()
     }
 
