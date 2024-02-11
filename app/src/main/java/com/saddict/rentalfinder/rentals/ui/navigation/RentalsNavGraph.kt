@@ -58,7 +58,7 @@ fun RentalsNavGraph(
                 pressedTime = System.currentTimeMillis()
             }
             HomeScreen(
-                navigateUp = { navController.navigate(LoginDestination.route) },
+//                navigateUp = { navController.navigate(LoginDestination.route) },
                 navigateToExplore = { navController.navigate(ExploreDestination.route) },
                 navigateToFavourites = { navController.navigate(FavouritesDestination.route) },
                 navigateToProfile = { navController.navigate(ProfileDestination.route) },
@@ -138,10 +138,19 @@ fun RentalsNavGraph(
         }
         composable(route = SettingsDestination.route) {
             SettingsScreen(
-                navigateUp = { navController.popBackStack() }
+                navigateUp = { navController.popBackStack() },
+                navigateToLogin = { navController.navigate(LoginDestination.route) },
             )
         }
         composable(route = LoginDestination.route) {
+            BackHandler {
+                if (pressedTime + 2000 > System.currentTimeMillis()) {
+                    activity?.finish()
+                } else {
+                    ctx.toastUtil("Press back again to exit")
+                }
+                pressedTime = System.currentTimeMillis()
+            }
             LoginScreen(
 //                navigateUp = { navController.popBackStack() }
                 navigateToRegister = { navController.navigate(RegisterDestination.route) },
