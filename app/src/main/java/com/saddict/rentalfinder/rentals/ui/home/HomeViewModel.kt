@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
+import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.model.local.RentalEntity
 import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.utils.mapToResults
@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,7 +29,8 @@ sealed interface HomeUiState {
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     pager: Pager<Int, RentalEntity>,
-    private val remoteDataSource: RemoteDataSource
+//    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource
 ) : ViewModel() {
     private val _uiState = MutableSharedFlow<HomeUiState>()
     val uiState: SharedFlow<HomeUiState> = _uiState
@@ -43,7 +45,8 @@ class HomeViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 try {
                     _uiState.emit(HomeUiState.Loading)
-                    val items = remoteDataSource.getRentals(1).results
+//                    val items = remoteDataSource.getRentals(1).results
+                    val items = localDataSource.fetchRentals().first().map { it.mapToResults() }
                     if (items.isNotEmpty()) {
                         _uiState.emit(HomeUiState.Success(items))
                         Log.i("Home Items", "Could load home items")
@@ -52,6 +55,7 @@ class HomeViewModel @Inject constructor(
                         Log.d("Home Items", "Could not load home items")
                     }
                 } catch (e: Exception) {
+                    _uiState.emit(HomeUiState.Error)
                     Log.e("Home Items", "Could not load home items")
                 }
             }
