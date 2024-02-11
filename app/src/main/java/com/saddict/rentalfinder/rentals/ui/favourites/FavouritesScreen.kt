@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -18,19 +19,26 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.FavButton
+import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
+import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
 
 object FavouritesDestination : NavigationDestination {
     override val route: String = "favourite"
@@ -48,42 +56,51 @@ fun FavouritesScreen(
     modifier: Modifier = Modifier
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-//    Scaffold(
-//        modifier = modifier
-//            .nestedScroll(scrollBehavior.nestedScrollConnection),
-//        topBar = {
-//            RFATopBar(
-//                title = stringResource(id = R.string.favourites),
-//                canNavigateBack = false,
-//                scrollBehavior = scrollBehavior
-//            )
-//        },
-//        bottomBar = {
-//            RFABottomBar(
-//                navigateToHome = { navigateToHome() },
-//                navigateToExplore = { navigateToExplore() },
-//                navigateToFavourites = {},
-//                navigateToProfile = { navigateToProfile() },
-//                selectedItem = selectedBottomItem,
-//                onItemSelected = onItemSelected
-//            )
-//        }
-//    ) { innerPadding ->
-////        FavouritesBody(
-////            modifier = Modifier
-////                .padding(innerPadding)
-////        )
-//    }
+    Scaffold(
+        modifier = modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            RFATopBar(
+                title = stringResource(id = R.string.favourites),
+                canNavigateBack = false,
+                scrollBehavior = scrollBehavior
+            )
+        },
+        bottomBar = {
+            RFABottomBar(
+                navigateToHome = { navigateToHome() },
+                navigateToExplore = { navigateToExplore() },
+                navigateToFavourites = {},
+                navigateToProfile = { navigateToProfile() },
+                selectedItem = selectedBottomItem,
+                onItemSelected = onItemSelected
+            )
+        }
+    ) { innerPadding ->
+        FavouritesBody(
+            modifier = Modifier
+                .padding(innerPadding)
+        )
+    }
 }
 
-//@Composable
-//fun FavouritesBody(modifier: Modifier = Modifier) {
+@Composable
+fun FavouritesBody(modifier: Modifier = Modifier) {
 //    LazyColumn(modifier = modifier) {
 //        items(RentalDataSource.rentals.take(10)) { rental ->
 //            FavouritesCard(rental = rental)
 //        }
 //    }
-//}
+    Text(
+        text = "No Favourites Yet",
+        fontSize = 30.sp,
+        textAlign = TextAlign.Center,
+        modifier = modifier
+            .fillMaxSize()
+            .padding(top = 50.dp)
+            .alpha(0.2F)
+    )
+}
 
 @Composable
 fun FavouritesCard(
