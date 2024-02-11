@@ -21,22 +21,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.rentals.ui.profile.ProfileRow
+import com.saddict.rentalfinder.utils.toastUtil
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
+import kotlinx.coroutines.launch
 
 object SettingsDestination : NavigationDestination {
     override val route: String = "settings"
@@ -47,6 +52,7 @@ object SettingsDestination : NavigationDestination {
 @Composable
 fun SettingsScreen(
     navigateUp: () -> Unit,
+    navigateToLogin: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -63,15 +69,22 @@ fun SettingsScreen(
     ) { contentPadding ->
         SettingsBody(
             modifier = Modifier
-                .padding(contentPadding)
+                .padding(contentPadding),
+            navigateToLogin = navigateToLogin
         )
     }
 }
 
 @Composable
-fun SettingsBody(modifier: Modifier = Modifier) {
+fun SettingsBody(
+    navigateToLogin: () -> Unit,
+    modifier: Modifier = Modifier,
+    settingsViewModel: SettingsViewModel = hiltViewModel()
+) {
     val settingsItems1 = listOf("language", "contact us")
     val settingsItems2 = listOf("change pin", "privacy policy")
+    val coroutine = rememberCoroutineScope()
+    val ctx = LocalContext.current
     var radioSelected by remember { mutableStateOf(false) }
     Column(
         modifier = modifier
@@ -162,7 +175,13 @@ fun SettingsBody(modifier: Modifier = Modifier) {
                 color = Color.Red,
                 modifier = Modifier
                     .padding(top = 50.dp)
-                    .clickable { /*ToDo*/ }
+                    .clickable {
+                        coroutine.launch {
+                            settingsViewModel.logout()
+                            ctx.toastUtil("You have been logged out")
+                            navigateToLogin()
+                        }
+                    }
             )
         }
     }
