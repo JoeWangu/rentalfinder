@@ -14,12 +14,12 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okio.IOException
 import javax.inject.Inject
 
 sealed interface LoginUiState {
     data class Success(val userResponse: LoginUserResponse) : LoginUiState
     data object Error : LoginUiState
+    data object NetError : LoginUiState
     data object Loading : LoginUiState
 }
 
@@ -49,11 +49,11 @@ class LoginViewModel @Inject constructor(
                     } else {
                         _uiState.emit(LoginUiState.Error)
                         val errorBody = login.raw()
-                        Log.e("NotSent", "Error: $errorBody")
+                        Log.e("NoSuccess", "Error: $errorBody")
                     }
-                } catch (e: IOException) {
+                } catch (e: Exception) {
                     Log.d("Login Failure", "cannot login the user: $e")
-//                    _uiState.emit(LoginUiState.Error)
+                    _uiState.emit(LoginUiState.NetError)
                 }
             }
         }
