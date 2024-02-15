@@ -54,7 +54,7 @@ fun RentalfinderTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+//        typography = Typography,
         content = content,
         shapes = shapes
     )
