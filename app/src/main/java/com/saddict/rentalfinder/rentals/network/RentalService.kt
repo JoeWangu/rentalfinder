@@ -8,6 +8,7 @@ import com.saddict.rentalfinder.rentals.model.remote.register.LoginUserResponse
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUser
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUserResponse
 import com.saddict.rentalfinder.utils.Constants.CREATE_USER_URL
+import com.saddict.rentalfinder.utils.Constants.LOGIN_URL
 import com.saddict.rentalfinder.utils.Constants.RENTAL_URL
 import com.saddict.rentalfinder.utils.Constants.SINGLE_RENTAL_URL
 import retrofit2.Response
@@ -17,13 +18,12 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.Url
 
 interface RentalService {
-    @POST
+    @POST(LOGIN_URL)
     suspend fun loginUser(
         @Body user: LoginUser,
-        @Url url: String
+//        @Url url: String
     ): Response<LoginUserResponse>
 
     @POST(CREATE_USER_URL)
