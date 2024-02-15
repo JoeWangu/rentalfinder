@@ -25,6 +25,7 @@
     <string name="bedsitter">bedsitter</string>
     <string name="single">single</string>
     <string name="double_room">double</string>
+    <string name="bedroom">bedroom</string>
     <string name="bedroom1">1 bedroom</string>
     <string name="bedroom2">2 bedroom</string>
     <string name="popular_near">popular nearest you</string>
@@ -51,4 +52,13 @@
     <string name="no_account">Don\'t have an account?</string>
     <string name="reg_here">Register Here</string>
     <string name="required_fields">required</string>
+    <string name="rental_details">rental details</string>
+    <string name="rental_entry">rental entry</string>
+    <string name="rating">rating</string>
+    <string name="ksh">price(kshs)</string>
+    <string name="property_info">property info</string>
+    <string name="location">location</string>
+    <string name="type">type</string>
+    <string name="posted_on">posted on</string>
+    <string name="description">description</string>
 </resources>
