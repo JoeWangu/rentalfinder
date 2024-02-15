@@ -9,9 +9,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.saddict.rentalfinder.rentals.data.manager.PreferenceDataStoreImpl
 import com.saddict.rentalfinder.rentals.ui.explore.ExploreDestination
 import com.saddict.rentalfinder.rentals.ui.explore.ExploreScreen
@@ -29,6 +31,8 @@ import com.saddict.rentalfinder.rentals.ui.registration.login.LoginDestination
 import com.saddict.rentalfinder.rentals.ui.registration.login.LoginScreen
 import com.saddict.rentalfinder.rentals.ui.registration.register.RegisterDestination
 import com.saddict.rentalfinder.rentals.ui.registration.register.RegisterScreen
+import com.saddict.rentalfinder.rentals.ui.rentals.RentalDetailsNavigationDestination
+import com.saddict.rentalfinder.rentals.ui.rentals.RentalDetailsScreen
 import com.saddict.rentalfinder.utils.toastUtil
 
 @Composable
@@ -65,7 +69,12 @@ fun RentalsNavGraph(
 //                selectedBottomItem = selectedBottomItem,
 //                onItemSelected = onItemSelected
                 selectedBottomItem = selectedItem,
-                onItemSelected = { selectedItem = it }
+                onItemSelected = { selectedItem = it },
+                navigateToRentalDetails = {
+                    navController.navigate(
+                        "${RentalDetailsNavigationDestination.route}/${it}"
+                    )
+                },
             )
         }
         composable(route = ExploreDestination.route) {
@@ -164,6 +173,15 @@ fun RentalsNavGraph(
                 navigateToHome = { navController.navigate(HomeDestination.route) },
             )
         }
-
+        composable(
+            route = RentalDetailsNavigationDestination.routeWithArgs,
+            arguments = listOf(navArgument(RentalDetailsNavigationDestination.rentalIdArg) {
+                type = NavType.IntType
+            })
+        ) {
+            RentalDetailsScreen(
+                navigateUp = { navController.popBackStack() }
+            )
+        }
     }
 }
