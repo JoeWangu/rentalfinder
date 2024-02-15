@@ -160,6 +160,10 @@ fun LoginBody(
                                 ctx.toastUtil("Incorrect username or password")
                             }
 
+                            LoginUiState.NetError -> {
+                                ctx.toastUtil("Check your internet connection")
+                            }
+
                             LoginUiState.Loading -> {
                                 ctx.toastUtil("Waiting for response")
                             }
