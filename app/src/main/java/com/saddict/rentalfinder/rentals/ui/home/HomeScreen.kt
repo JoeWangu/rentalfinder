@@ -48,6 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.model.remote.RentalResults
@@ -74,6 +75,7 @@ fun HomeScreen(
     navigateToProfile: () -> Unit,
     selectedBottomItem: Int,
     onItemSelected: (Int) -> Unit,
+    navigateToRentalDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -99,14 +101,16 @@ fun HomeScreen(
         }
     ) { contentPadding ->
         HomeBody(
+            navigateToRentalDetails = navigateToRentalDetails,
             modifier = Modifier
-                .padding(contentPadding)
+                .padding(contentPadding),
         )
     }
 }
 
 @Composable
 fun HomeBody(
+    navigateToRentalDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
     rentalItems: LazyPagingItems<RentalResults> = homeViewModel.rentalItemsPagedFlow.collectAsLazyPagingItems()
@@ -117,9 +121,6 @@ fun HomeBody(
         if (rentalItems.loadState.refresh is LoadState.Error) {
             ctx.toastUtilLong("Error: " + (rentalItems.loadState.refresh as LoadState.Error).error.message)
         }
-    }
-    LaunchedEffect(Unit) {
-        homeViewModel.recommendedItems()
     }
     val state = rememberScrollState()
     val imageList = listOf(
@@ -211,21 +212,29 @@ fun HomeBody(
 //                            key = { index ->
 //                                rentalItems[index]?.id ?: index.toString()
 //                            }
+                            key = rentalItems.itemKey { it.id }
                         ) { index ->
                             val rentalItem = rentalItems[index]
                             if (rentalItem != null) {
-                                PopularCard(rental = rentalItem)
+                                PopularCard(
+                                    rental = rentalItem,
+                                    modifier = Modifier
+                                        .clickable { navigateToRentalDetails(rentalItem.id) }
+                                )
                             } else {
                                 ErrorPlaceholderCardItem()
                             }
                         }
                     }
-//                    if (rentalItems.loadState.refresh is LoadState.Loading){
-//                    }else if (rentalItems.loadState.refresh is LoadState.Error){
-//                    }else{}
                 }
             }
 // --------------------------- end of popular start of recommended  --------------------- //
+            LaunchedEffect(key1 = rentalItems.loadState) {
+                if (rentalItems.loadState.refresh is LoadState.NotLoading) {
+//                    delay(1_000L)
+                    homeViewModel.recommendedItems()
+                }
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -274,7 +283,11 @@ fun HomeBody(
                             items(
                                 (uiState as HomeUiState.Success).rentalResults.take(4).reversed()
                             ) { rental ->
-                                PopularCard(rental = rental)
+                                PopularCard(
+                                    rental = rental,
+                                    modifier = Modifier
+                                        .clickable { navigateToRentalDetails(rental.id) }
+                                )
                             }
                         }
                     }
@@ -385,7 +398,7 @@ fun PopularCard(
                     .align(Alignment.BottomEnd)
                     .offset(x = (-5).dp, y = 13.dp)
                     .size(30.dp)
-                    .clickable {},
+                    .clickable {/*TODO*/ },
                 shape = CircleShape
             ) {
                 FavButton(modifier = Modifier)
@@ -405,7 +418,7 @@ fun PopularCard(
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
-                text = "${rental.type} in ${rental.location}",
+                text = rental.type,
                 style = MaterialTheme.typography.bodyLarge
             )
         }
