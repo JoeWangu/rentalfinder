@@ -18,7 +18,7 @@ fun RentalEntity.mapToResults(): RentalResults{
         totalUnits,
         datePosted,
         dateModified,
-        imageDetail = RentalImage(image ?: 1, imageUrl)
+        imageDetail = RentalImage(image ?: 1, imageUrl, imageName)
     )
 }
 fun RentalResults.mapToEntity(): RentalEntity{
@@ -35,6 +35,7 @@ fun RentalResults.mapToEntity(): RentalEntity{
         totalUnits,
         datePosted,
         dateModified,
-        imageUrl = imageDetail.image
+        imageUrl = imageDetail.image,
+        imageName = imageDetail.imageName
     )
 }
