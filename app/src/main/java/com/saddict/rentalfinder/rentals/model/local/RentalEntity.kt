@@ -26,4 +26,5 @@ data class RentalEntity(
     val dateModified: String,
     @ColumnInfo(name = "image_detail")
     val imageUrl: String,
+    val imageName: String,
 )

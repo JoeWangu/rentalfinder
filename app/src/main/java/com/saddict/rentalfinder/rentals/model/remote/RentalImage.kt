@@ -8,5 +8,7 @@ data class RentalImage(
     @JsonProperty("id")
     val id: Int,
     @JsonProperty("image")
-    val image: String
+    val image: String,
+    @JsonProperty("image_name")
+    val imageName: String
 )
