@@ -33,6 +33,8 @@ import com.saddict.rentalfinder.rentals.ui.registration.register.RegisterDestina
 import com.saddict.rentalfinder.rentals.ui.registration.register.RegisterScreen
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalDetailsNavigationDestination
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalDetailsScreen
+import com.saddict.rentalfinder.rentals.ui.rentals.RentalEntryNavigationDestination
+import com.saddict.rentalfinder.rentals.ui.rentals.RentalEntryScreen
 import com.saddict.rentalfinder.utils.toastUtil
 
 @Composable
@@ -75,6 +77,7 @@ fun RentalsNavGraph(
                         "${RentalDetailsNavigationDestination.route}/${it}"
                     )
                 },
+                navigateToRentalEntry = { navController.navigate(RentalEntryNavigationDestination.route) }
             )
         }
         composable(route = ExploreDestination.route) {
@@ -96,7 +99,12 @@ fun RentalsNavGraph(
 //                selectedBottomItem = selectedBottomItem,
 //                onItemSelected = onItemSelected
                 selectedBottomItem = selectedItem,
-                onItemSelected = { selectedItem = it }
+                onItemSelected = { selectedItem = it },
+                navigateToRentalDetails = {
+                    navController.navigate(
+                        "${RentalDetailsNavigationDestination.route}/${it}"
+                    )
+                },
             )
         }
         composable(route = FavouritesDestination.route) {
@@ -181,6 +189,12 @@ fun RentalsNavGraph(
         ) {
             RentalDetailsScreen(
                 navigateUp = { navController.popBackStack() }
+            )
+        }
+        composable(route = RentalEntryNavigationDestination.route) {
+            RentalEntryScreen(
+                navigateUp = { navController.popBackStack() },
+                navigateToHome = { navController.navigate(HomeDestination.route) },
             )
         }
     }
