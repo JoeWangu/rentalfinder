@@ -66,6 +66,7 @@ fun ExploreScreen(
     navigateToProfile: () -> Unit,
     selectedBottomItem: Int,
     onItemSelected: (Int) -> Unit,
+    navigateToRentalDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -91,7 +92,8 @@ fun ExploreScreen(
     ) { contentPadding ->
         ExploreBody(
             modifier = Modifier
-                .padding(contentPadding)
+                .padding(contentPadding),
+            navigateToRentalDetails = navigateToRentalDetails
         )
     }
 }
@@ -99,6 +101,7 @@ fun ExploreScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExploreBody(
+    navigateToRentalDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     exploreViewModel: ExploreViewModel = hiltViewModel(),
     exploreItems: List<RentalEntity> = exploreViewModel.exploreItems.collectAsState(initial = emptyList()).value
@@ -182,7 +185,11 @@ fun ExploreBody(
                 CarouselSlider(imageList = imageList)
             }
             items(count = exploreItems.size) { items ->
-                ExploreCard(exploreItems[items], modifier = Modifier)
+                ExploreCard(
+                    exploreItems[items],
+                    modifier = Modifier
+                        .clickable { navigateToRentalDetails(exploreItems[items].id) }
+                )
             }
         }
 //        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
@@ -197,7 +204,10 @@ fun ExploreBody(
 }
 
 @Composable
-fun ExploreCard(rental: RentalEntity, modifier: Modifier = Modifier) {
+fun ExploreCard(
+    rental: RentalEntity,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier
             .padding(8.dp),
@@ -233,19 +243,19 @@ fun ExploreCard(rental: RentalEntity, modifier: Modifier = Modifier) {
         }
         Column(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(4.dp)
         ) {
             Text(
                 text = rental.name,
                 fontSize = 15.sp,
-                style = MaterialTheme.typography.displayMedium
+                style = MaterialTheme.typography.displayMedium,
             )
             Text(
                 text = "${rental.price}Ksh/ Month",
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
-                text = "${rental.type} in ${rental.location}",
+                text = rental.type,
                 style = MaterialTheme.typography.bodyLarge
             )
         }
