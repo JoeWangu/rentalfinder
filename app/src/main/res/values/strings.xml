@@ -61,4 +61,17 @@
     <string name="type">type</string>
     <string name="posted_on">posted on</string>
     <string name="description">description</string>
+    <string name="rental_name">rental name</string>
+    <string name="rental_name_enter">enter your rental name</string>
+    <string name="rental_price">rental price</string>
+    <string name="rental_price_enter">enter your rental price</string>
+    <string name="rental_location">rental location</string>
+    <string name="rental_location_enter">enter your rental location</string>
+    <string name="rental_total_units">rental total units</string>
+    <string name="rental_total_units_enter">enter your rental total units</string>
+    <string name="rental_description">rental description</string>
+    <string name="rental_description_enter">describe your rental with at most 255 words</string>
+    <string name="available">are there rooms available?</string>
+    <string name="choose_image">choose image</string>
+    <string name="post_rental">post rental</string>
 </resources>
