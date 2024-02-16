@@ -48,7 +48,7 @@ fun RFATopBar(
                 Text(
                     text = everyFirstLetterCapitalize(title),
                     style = MaterialTheme.typography.bodyLarge,
-                    fontSize = 50.sp,
+                    fontSize = 30.sp,
                 )
             }
         },
