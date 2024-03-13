@@ -16,6 +16,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -50,6 +51,10 @@ object ApiModule {
             .newBuilder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(requestInterceptor)
+            .connectTimeout(120, TimeUnit.SECONDS) // Connect timeout
+            .readTimeout(120, TimeUnit.SECONDS) // Read timeout
+            .writeTimeout(120, TimeUnit.SECONDS) // Write timeout
+            .retryOnConnectionFailure(true)
             .build()
         return Retrofit
             .Builder()
