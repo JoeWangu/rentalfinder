@@ -35,7 +35,7 @@ fun RentalResults.mapToEntity(): RentalEntity{
         totalUnits,
         datePosted,
         dateModified,
-        imageUrl = imageDetail.image,
+        imageUrl = imageDetail.imageUrl,
         imageName = imageDetail.imageName
     )
 }
