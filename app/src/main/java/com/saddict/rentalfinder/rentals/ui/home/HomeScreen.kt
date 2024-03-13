@@ -398,7 +398,7 @@ fun PopularCard(
 //                    .height(100.dp)
 //            )
             AsyncImage(
-                model = rental.imageDetail.image,
+                model = rental.imageDetail.imageUrl,
 //                model = ImageRequest.Builder(context = LocalContext.current)
 //                    .data(rental.imageDetail.image)
 //                    .crossfade(true)
