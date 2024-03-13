@@ -1,8 +1,11 @@
 package com.saddict.rentalfinder.rentals.ui.navigation
 
 import android.app.Activity
+import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresExtension
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,6 +24,10 @@ import com.saddict.rentalfinder.rentals.ui.favourites.FavouritesDestination
 import com.saddict.rentalfinder.rentals.ui.favourites.FavouritesScreen
 import com.saddict.rentalfinder.rentals.ui.home.HomeDestination
 import com.saddict.rentalfinder.rentals.ui.home.HomeScreen
+import com.saddict.rentalfinder.rentals.ui.images.ImageUploaderNavigationDestination
+import com.saddict.rentalfinder.rentals.ui.images.ImageUploaderScreen
+import com.saddict.rentalfinder.rentals.ui.images.RentalImageNavigationDestination
+import com.saddict.rentalfinder.rentals.ui.images.RentalImageScreen
 import com.saddict.rentalfinder.rentals.ui.profile.ProfileDestination
 import com.saddict.rentalfinder.rentals.ui.profile.ProfileScreen
 import com.saddict.rentalfinder.rentals.ui.profile.account.AccountDestination
@@ -37,6 +44,7 @@ import com.saddict.rentalfinder.rentals.ui.rentals.RentalEntryNavigationDestinat
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalEntryScreen
 import com.saddict.rentalfinder.utils.toastUtil
 
+@RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
 fun RentalsNavGraph(
 //    selectedBottomItem: Int,
@@ -183,7 +191,7 @@ fun RentalsNavGraph(
         }
         composable(
             route = RentalDetailsNavigationDestination.routeWithArgs,
-            arguments = listOf(navArgument(RentalDetailsNavigationDestination.rentalIdArg) {
+            arguments = listOf(navArgument(RentalDetailsNavigationDestination.RENTALIDARG) {
                 type = NavType.IntType
             })
         ) {
@@ -191,10 +199,55 @@ fun RentalsNavGraph(
                 navigateUp = { navController.popBackStack() }
             )
         }
-        composable(route = RentalEntryNavigationDestination.route) {
+        composable(
+            route = RentalEntryNavigationDestination.route,
+            arguments = listOf(
+                navArgument(name = "imageId") {
+                    type = NavType.IntType
+                    defaultValue = 1
+                },
+                navArgument(name = "imageName") {
+                    type = NavType.StringType
+                    defaultValue = "default.jpg"
+                }
+            )
+        ) { backStackEntry ->
+            val imageId = backStackEntry.savedStateHandle.getStateFlow(
+                "imageId", initialValue = 1
+            ).collectAsState().value
+            val imageName = backStackEntry.savedStateHandle.getStateFlow(
+                "imageName", initialValue = "default.jpg"
+            ).collectAsState().value
             RentalEntryScreen(
                 navigateUp = { navController.popBackStack() },
                 navigateToHome = { navController.navigate(HomeDestination.route) },
+                navigateToImagePicker = { navController.navigate(RentalImageNavigationDestination.route) },
+                navigateToImageUploader = {
+                    navController.navigate(
+                        ImageUploaderNavigationDestination.route
+                    )
+                },
+                imageId = imageId,
+                imageName = imageName
+            )
+        }
+        composable(route = RentalImageNavigationDestination.route) {
+            RentalImageScreen(
+                navigateUp = { navController.popBackStack() },
+                onImageClick = {
+                    navController.previousBackStackEntry?.savedStateHandle?.set("imageId", it.id)
+                    navController.previousBackStackEntry?.savedStateHandle?.set(
+                        "imageName",
+                        it.imageName
+                    )
+                    navController.popBackStack()
+                }
+//                navigateToHome = { navController.navigate(HomeDestination.route) },
+            )
+        }
+        composable(route = ImageUploaderNavigationDestination.route) {
+            ImageUploaderScreen(
+                navigateUp = { navController.popBackStack() }
             )
         }
     }
