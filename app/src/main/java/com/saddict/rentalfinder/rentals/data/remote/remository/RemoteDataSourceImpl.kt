@@ -1,13 +1,16 @@
 package com.saddict.rentalfinder.rentals.data.remote.remository
 
 import com.saddict.rentalfinder.rentals.model.remote.CreateRental
+import com.saddict.rentalfinder.rentals.model.remote.ImageList
 import com.saddict.rentalfinder.rentals.model.remote.Rental
+import com.saddict.rentalfinder.rentals.model.remote.RentalImage
 import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.rentals.model.remote.register.LoginUser
 import com.saddict.rentalfinder.rentals.model.remote.register.LoginUserResponse
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUser
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUserResponse
 import com.saddict.rentalfinder.rentals.network.RentalService
+import okhttp3.MultipartBody
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -36,5 +39,13 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun updateRental(id: Int, body: CreateRental): Response<RentalResults> {
         return rentalService.updateRental(id, body)
+    }
+
+    override suspend fun getImages(page: Int): ImageList {
+        return rentalService.getImages("json", page = page)
+    }
+
+    override suspend fun postImage(image: MultipartBody.Part): Response<RentalImage> {
+        return rentalService.uploadImage(image)
     }
 }
