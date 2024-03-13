@@ -74,4 +74,6 @@
     <string name="available">are there rooms available?</string>
     <string name="choose_image">choose image</string>
     <string name="post_rental">post rental</string>
+    <string name="rental_image">rental image</string>
+    <string name="upload_image">upload image</string>
 </resources>
