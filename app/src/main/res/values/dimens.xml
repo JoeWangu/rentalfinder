@@ -21,4 +21,11 @@
     <dimen name="video_item_height">130dp</dimen>
 
     <dimen name="lottie_error_image_size">200dp</dimen>
+
+    <dimen name="dimen_5dp">5dp</dimen>
+    <dimen name="dimen_10dp">10dp</dimen>
+    <dimen name="dimen_14dp">14dp</dimen>
+    <dimen name="dimen_16dp">16dp</dimen>
+    <dimen name="dimen_18dp">18dp</dimen>
+    <dimen name="dimen_200dp">200dp</dimen>
 </resources>
