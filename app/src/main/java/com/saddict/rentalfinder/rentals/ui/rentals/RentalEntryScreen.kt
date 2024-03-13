@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -34,7 +37,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.saddict.rentalfinder.R
@@ -55,8 +57,13 @@ object RentalEntryNavigationDestination : NavigationDestination {
 fun RentalEntryScreen(
     navigateUp: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToImagePicker: () -> Unit,
+    navigateToImageUploader: () -> Unit,
+    imageId: Int,
+    imageName: String,
     modifier: Modifier = Modifier
 ) {
+    val state = rememberScrollState()
     Scaffold(
         topBar = {
             RFATopBar(
@@ -67,8 +74,14 @@ fun RentalEntryScreen(
         }
     ) { innerPadding ->
         RentalEntryBody(
-            modifier = modifier.padding(innerPadding),
-            navigateToHome = navigateToHome
+            modifier = modifier
+                .padding(innerPadding)
+                .verticalScroll(state = state),
+            navigateToHome = navigateToHome,
+            navigateToImagePicker = navigateToImagePicker,
+            imageId = imageId,
+            imageName = imageName,
+            navigateToImageUploader = navigateToImageUploader
         )
     }
 }
@@ -76,7 +89,11 @@ fun RentalEntryScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RentalEntryBody(
+    imageId: Int,
+    imageName: String,
     navigateToHome: () -> Unit,
+    navigateToImagePicker: () -> Unit,
+    navigateToImageUploader: () -> Unit,
     modifier: Modifier = Modifier,
     entryViewModel: RentalEntryViewModel = hiltViewModel(),
     uiState: RenEntryUiState = entryViewModel.entryUiState,
@@ -86,7 +103,7 @@ fun RentalEntryBody(
 ) {
     Column(
         modifier = modifier
-            .padding(top = 16.dp)
+            .padding(top = 16.dp, bottom = 50.dp)
     ) {
         Column(
 //        modifier = modifier.padding(8.dp)
@@ -151,11 +168,11 @@ fun RentalEntryBody(
                 singleLine = true,
                 shape = MaterialTheme.shapes.large,
                 modifier = Modifier,
-//                .padding(start = 8.dp, end = 4.dp),
+                //                .padding(start = 8.dp, end = 4.dp),
                 enabled = enabled
             )
             OutlinedTextField(
-                value = entryDetails.image,
+                value = imageId.toString(),
                 onValueChange = { onValueChange(entryDetails.copy(image = it)) },
                 label = { Text(text = stringResource(id = R.string.choose_image)) },
                 placeholder = { Text(text = stringResource(id = R.string.choose_image)) },
@@ -168,9 +185,28 @@ fun RentalEntryBody(
                 singleLine = true,
                 shape = MaterialTheme.shapes.large,
                 modifier = Modifier,
-//                .padding(start = 8.dp, end = 4.dp),
+                //                .padding(start = 8.dp, end = 4.dp),
                 enabled = enabled
             )
+            Text(text = imageName)
+            Row {
+                ElevatedButton(
+                    onClick = {
+                        navigateToImagePicker()
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "pick image")
+                }
+                ElevatedButton(
+                    onClick = {
+                        navigateToImageUploader()
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(text = "upload image")
+                }
+            }
             OutlinedTextField(
                 value = entryDetails.description,
                 onValueChange = { onValueChange(entryDetails.copy(description = it)) },
@@ -346,8 +382,15 @@ fun RentalEntryBody(
     }
 }
 
-@Preview
-@Composable
-fun EntryPreview() {
-    RentalEntryScreen(navigateUp = {}, navigateToHome = {})
-}
+//@Preview
+//@Composable
+//fun EntryPreview() {
+//    RentalEntryScreen(
+//        navigateUp = {},
+//        navigateToHome = {},
+//        navigateToImagePicker = {},
+//        navigateToImageUploader = {},
+//        imageId = 1,
+//        imageName = "name"
+//    )
+//}
