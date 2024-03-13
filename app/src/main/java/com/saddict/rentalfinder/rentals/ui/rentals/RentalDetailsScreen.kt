@@ -52,8 +52,8 @@ import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
 object RentalDetailsNavigationDestination : NavigationDestination {
     override val route: String = "rentaldetails"
     override val titleRes: Int = R.string.rental_details
-    const val rentalIdArg = "itemId"
-    val routeWithArgs = "$route/{$rentalIdArg}"
+    const val RENTALIDARG = "itemId"
+    val routeWithArgs = "$route/{$RENTALIDARG}"
 }
 
 @Composable
