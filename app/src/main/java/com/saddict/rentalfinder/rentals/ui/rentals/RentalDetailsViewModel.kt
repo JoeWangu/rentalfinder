@@ -20,7 +20,7 @@ class RentalDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val rentalId: Int =
-        checkNotNull(savedStateHandle[RentalDetailsNavigationDestination.rentalIdArg])
+        checkNotNull(savedStateHandle[RentalDetailsNavigationDestination.RENTALIDARG])
     val uiState: StateFlow<RenDetailsUiState> =
         localDataSource.fetchOneRentals(rentalId)
             .filterNotNull()
