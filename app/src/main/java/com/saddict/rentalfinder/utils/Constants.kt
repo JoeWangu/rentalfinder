@@ -18,6 +18,7 @@ object Constants {
     const val LOGIN_URL = "login-user-api/"
     const val RENTAL_URL = "rentals/api/rentals/"
     const val SINGLE_RENTAL_URL = "rentals/api/rentals/{id}/"
+    const val RENTAL_IMAGE_URL = "rentals/api/images/"
     //    const val LOGOUT_URL = "logout-api/"
     const val INITIAL_PAGE = 1
     const val TOKEN = "user_token"
