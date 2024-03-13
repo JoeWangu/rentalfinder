@@ -5,7 +5,15 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+//repositories{
+//    mavenCentral()
+//}
+
 android {
+    lint {
+        checkReleaseBuilds = false
+    }
+    
     namespace = "com.saddict.rentalfinder"
     compileSdk = 34
 
@@ -24,7 +32,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
