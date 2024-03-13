@@ -1,7 +1,9 @@
 package com.saddict.rentalfinder.rentals.network
 
 import com.saddict.rentalfinder.rentals.model.remote.CreateRental
+import com.saddict.rentalfinder.rentals.model.remote.ImageList
 import com.saddict.rentalfinder.rentals.model.remote.Rental
+import com.saddict.rentalfinder.rentals.model.remote.RentalImage
 import com.saddict.rentalfinder.rentals.model.remote.RentalResults
 import com.saddict.rentalfinder.rentals.model.remote.register.LoginUser
 import com.saddict.rentalfinder.rentals.model.remote.register.LoginUserResponse
@@ -9,13 +11,17 @@ import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUser
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUserResponse
 import com.saddict.rentalfinder.utils.Constants.CREATE_USER_URL
 import com.saddict.rentalfinder.utils.Constants.LOGIN_URL
+import com.saddict.rentalfinder.utils.Constants.RENTAL_IMAGE_URL
 import com.saddict.rentalfinder.utils.Constants.RENTAL_URL
 import com.saddict.rentalfinder.utils.Constants.SINGLE_RENTAL_URL
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -46,4 +52,14 @@ interface RentalService {
         @Path("id") id: Int,
         @Body body: CreateRental
     ): Response<RentalResults>
+
+    @GET(RENTAL_IMAGE_URL)
+    suspend fun getImages(
+        @Query("format") format: String,
+        @Query("page") page: Int,
+    ): ImageList
+
+    @Multipart
+    @POST(RENTAL_IMAGE_URL)
+    suspend fun uploadImage(@Part image: MultipartBody.Part): Response<RentalImage>
 }
