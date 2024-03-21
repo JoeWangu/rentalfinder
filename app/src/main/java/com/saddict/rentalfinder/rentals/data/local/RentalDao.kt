@@ -1,8 +1,10 @@
 package com.saddict.rentalfinder.rentals.data.local
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import com.saddict.rentalfinder.rentals.model.local.ImageEntity
 import com.saddict.rentalfinder.rentals.model.local.RentalEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -22,4 +24,16 @@ interface RentalDao {
 
     @Query("SELECT * FROM rentals ORDER BY id ASC")
     suspend fun getAllPaged(): List<RentalEntity>
+
+    @Upsert
+    suspend fun upsertAllImages(rentals: List<ImageEntity>)
+
+    @Query("SELECT * FROM images ORDER BY id ASC")
+    fun fetchImages(): Flow<List<ImageEntity>>
+
+    @Query("SELECT * FROM images ORDER BY id ASC")
+    suspend fun getAllImages(): List<ImageEntity>
+
+    @Query("SELECT * FROM images")
+    fun pagingSourceImages(): PagingSource<Int, ImageEntity>
 }
