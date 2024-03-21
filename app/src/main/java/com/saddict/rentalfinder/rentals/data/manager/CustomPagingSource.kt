@@ -3,8 +3,10 @@ package com.saddict.rentalfinder.rentals.data.manager
 import android.content.Context
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import androidx.room.withTransaction
 import com.saddict.rentalfinder.rentals.data.local.RentalDatabase
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
+import com.saddict.rentalfinder.rentals.model.local.RemoteKeys
 import com.saddict.rentalfinder.rentals.model.local.RentalEntity
 import com.saddict.rentalfinder.utils.Constants.INITIAL_PAGE
 import com.saddict.rentalfinder.utils.mapToEntity
@@ -16,6 +18,7 @@ class CustomPagingSource @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val context: Context
 ) : PagingSource<Int, RentalEntity>() {
+    private val keysDao = rentalDatabase.remoteKeysDao()
     override fun getRefreshKey(state: PagingState<Int, RentalEntity>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
@@ -25,7 +28,20 @@ class CustomPagingSource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RentalEntity> {
         val page = params.key ?: INITIAL_PAGE
+        val currentTimeMillis = System.currentTimeMillis()
         return try {
+            rentalDatabase.withTransaction {
+                keysDao.insertOrReplace(
+                    RemoteKeys(
+                        label = "imageKey",
+                        nextKey = null,
+                        prevKey = null,
+                        nextPage = null,
+                        prevPage = null,
+                        lastUpdated = currentTimeMillis
+                    )
+                )
+            }
             val response = remoteDataSource.getRentals(page).results
 //            println(response)
             val entities = response.map { it.mapToEntity() }
