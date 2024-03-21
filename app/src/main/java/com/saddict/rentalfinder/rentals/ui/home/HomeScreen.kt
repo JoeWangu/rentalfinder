@@ -39,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
@@ -60,7 +59,6 @@ import com.saddict.rentalfinder.utils.ErrorPlaceholderCardItem
 import com.saddict.rentalfinder.utils.FavButton
 import com.saddict.rentalfinder.utils.LoadingPlaceholderCardItem
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
-import com.saddict.rentalfinder.utils.toastUtilLong
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
 
@@ -130,16 +128,18 @@ fun HomeBody(
     navigateToRentalDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
-    rentalItems: LazyPagingItems<RentalResults> = homeViewModel.rentalItemsPagedFlow.collectAsLazyPagingItems()
 ) {
-    val ctx = LocalContext.current
+    val rentalItems: LazyPagingItems<RentalResults> =
+        homeViewModel.rentalItemsPagedFlow.collectAsLazyPagingItems()
+//    val ctx = LocalContext.current
 //    val coroutineScope = rememberCoroutineScope()
-    LaunchedEffect(key1 = rentalItems.loadState) {
-        if (rentalItems.loadState.refresh is LoadState.Error) {
-            ctx.toastUtilLong("Error: " + (rentalItems.loadState.refresh as LoadState.Error).error.message)
-        }
-    }
+//    LaunchedEffect(key1 = rentalItems.loadState) {
+//        if (rentalItems.loadState.refresh is LoadState.Error) {
+//            ctx.toastUtilLong("Error: " + (rentalItems.loadState.refresh as LoadState.Error).error.message)
+//        }
+//    }
     val state = rememberScrollState()
+//    val uiState by homeViewModel.uiState.collectAsState(Unit)
     val imageList = listOf(
         R.drawable.proxy_image_1,
         R.drawable.proxy_image_2,
@@ -213,12 +213,26 @@ fun HomeBody(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+//                coroutineScope.launch {
                 LazyRow(
 //                    reverseLayout = true,
                     modifier = Modifier,
                 ) {
 //                    items(RentalDataSource.rentals.take(4)) { rental ->
 //                        PopularCard(rental = rental)
+//                    }
+                    /*when (uiState) {
+                        HomeUiState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
+                        HomeUiState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
+                        is HomeUiState.Success ->
+                            items((uiState as HomeUiState.Success).rentalResults.take(4)) { popularRental ->
+                                PopularCard(
+                                    rental = popularRental,
+                                    modifier = Modifier
+                                        .clickable { navigateToRentalDetails(popularRental.id) }
+                                )
+                            }
+                    }*/
 //                    }
                     when (rentalItems.loadState.refresh) {
                         is LoadState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
@@ -310,16 +324,6 @@ fun HomeBody(
                     }
 //                    items(RentalDataSource.rentals.take(4).reversed()) { rental ->
 //                        PopularCard(rental = rental)
-//                    }
-//                    items(
-//                        count = rentalItems.itemCount,
-//                        key = rentalItems.itemKey { it.id.plus(4) }) { index ->
-//                        if (index in 4..8) {
-//                            val rentalItem = rentalItems[index]
-//                            if (rentalItem != null) {
-//                                PopularCard(rental = rentalItem)
-//                            }
-//                        }
 //                    }
 //                    coroutineScope.launch {
 //                        homeViewModel.recommendedItems()

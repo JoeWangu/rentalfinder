@@ -26,41 +26,146 @@ sealed interface HomeUiState {
     data object Error : HomeUiState
 }
 
+//@SuppressLint("StaticFieldLeak")
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    pager: Pager<Int, RentalEntity>,
+    private val pager: Pager<Int, RentalEntity>,
 //    private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource
+    private val localDataSource: LocalDataSource,
+//    @ApplicationContext private val context: Context
 ) : ViewModel() {
     private val _uiState = MutableSharedFlow<HomeUiState>()
     val uiState: SharedFlow<HomeUiState> = _uiState
+
     val rentalItemsPagedFlow = pager
         .flow
         .map { pagingData ->
             pagingData.map { it.mapToResults() }
         }.cachedIn(viewModelScope)
 
+
     fun recommendedItems() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
                     _uiState.emit(HomeUiState.Loading)
-//                    val items = remoteDataSource.getRentals(1).results
                     val items = localDataSource.fetchRentals().first().map { it.mapToResults() }
                     if (items.isNotEmpty()) {
                         _uiState.emit(HomeUiState.Success(items))
-                        Log.i("Home Items", "Could load home items")
                     } else {
                         _uiState.emit(HomeUiState.Error)
-                        Log.d("Home Items", "Could not load home items")
                     }
                 } catch (e: Exception) {
-                    _uiState.emit(HomeUiState.Error)
                     Log.e("Home Items", "Could not load home items")
                 }
             }
         }
     }
+//    private var doneLoading = false
+
+    /*    init {
+            loadHomeItemsFromOnline()
+        }
+
+        private fun loadHomeItemsFromOnline() {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    try {
+                        _uiState.emit(HomeUiState.Loading)
+                        val data = remoteDataSource.getRentals(1)
+                        if (data.results.isNotEmpty()) {
+    //                        doneLoading = true
+                            homeItems()
+                        }
+                    } catch (e: Exception) {
+                        _uiState.emit(HomeUiState.Error)
+                    }
+                }
+            }
+        }
+
+            fun homeItems() {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    try {
+    //                    _uiState.emit(HomeUiState.Loading)
+    //                    val items = remoteDataSource.getRentals(1).results
+                        val items = localDataSource.fetchRentals().first().map { it.mapToResults() }
+                        if (items.isNotEmpty()) {
+                            _uiState.emit(HomeUiState.Success(items))
+                            Log.i("Home Items", "Could load home items")
+                        } else {
+                            _uiState.emit(HomeUiState.Error)
+                            Log.d("Home Items", "Could not load home items")
+                        }
+                    } catch (e: Exception) {
+                        _uiState.emit(HomeUiState.Error)
+                        Log.e("Home Items", "Could not load home items")
+                    }
+                }
+            }
+        }*/
+
+//    private fun loadHomeItemsFromOnline() {
+//        viewModelScope.launch {
+//            withContext(Dispatchers.IO) {
+//                try {
+//                    _uiState.emit(HomeUiState.Loading)
+////                    val items = remoteDataSource.getRentals(1).results
+////                    val items = localDataSource.fetchRentals().first().map { it.mapToResults() }
+//                    if (isOnline(context)) {
+//                        val items = remoteDataSource.getRentals(1).results
+//                        if (items.isNotEmpty()) {
+//                            _uiState.emit(HomeUiState.Success(items))
+//                            Log.i("Home Items", "loaded online home items")
+//                        } else {
+//                            _uiState.emit(HomeUiState.Error)
+//                            Log.d("Home Items", "Could not load online home items")
+//                        }
+//                    } else {
+//                        context.toastUtil("No internet connection!")
+//                        val items = localDataSource.fetchRentals()
+//                        if (items.first().isNotEmpty()) {
+//                            _uiState.emit(
+//                                HomeUiState.Success(
+//                                    items.first().map { it.mapToResults() })
+//                            )
+//                            Log.i("Home Items", "Could load local home items")
+//                        } else {
+//                            _uiState.emit(HomeUiState.Error)
+//                            Log.d("Home Items", "Could not load local home items")
+//                        }
+//                    }
+//                } catch (e: Exception) {
+//                    _uiState.emit(HomeUiState.Error)
+//                    Log.e("Home Items", "Could not load home items")
+//                }
+//            }
+//        }
+//    }
+
+//    fun homeItems() {
+//        viewModelScope.launch {
+//            withContext(Dispatchers.IO) {
+//                try {
+//                    _uiState.emit(HomeUiState.Loading)
+////                    val items = remoteDataSource.getRentals(1).results
+////                    val items = localDataSource.fetchRentals().first().map { it.mapToResults() }
+//                    val items = remoteDataSource.getRentals(1).results
+//                    if (items.isNotEmpty()) {
+//                        _uiState.emit(HomeUiState.Success(items))
+//                        Log.i("Home Items", "Could load home items")
+//                    } else {
+//                        _uiState.emit(HomeUiState.Error)
+//                        Log.d("Home Items", "Could not load home items")
+//                    }
+//                } catch (e: Exception) {
+//                    _uiState.emit(HomeUiState.Error)
+//                    Log.e("Home Items", "Could not load home items")
+//                }
+//            }
+//        }
+//    }
 }
 
 //fun recommendedItems() {
