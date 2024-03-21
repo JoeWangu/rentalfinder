@@ -5,26 +5,24 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
+import com.saddict.rentalfinder.rentals.model.local.ImageEntity
 import com.saddict.rentalfinder.rentals.model.remote.RentalImage
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
-import com.saddict.rentalfinder.utils.LoadingPlaceholderCardItem
-import com.saddict.rentalfinder.utils.toastUtil
+import com.saddict.rentalfinder.utils.mapToRentalImage
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
 
 object RentalImageNavigationDestination : NavigationDestination {
@@ -59,54 +57,81 @@ fun RentalImageScreen(
 fun RentalImageBody(
     onImageClick: (RentalImage) -> Unit,
     modifier: Modifier = Modifier,
-    imagesViewModel: RentalImageViewModel = hiltViewModel()
+    imagesViewModel: RentalImageViewModel = hiltViewModel(),
+    images: LazyPagingItems<ImageEntity> = imagesViewModel.images.collectAsLazyPagingItems()
 ) {
-    val uiState by imagesViewModel.uiState.collectAsState(Unit)
-    val ctx = LocalContext.current
-    LaunchedEffect(key1 = Unit) {
-        imagesViewModel.getImages()
-    }
+//    val coroutineScope = rememberCoroutineScope()
     LazyColumn(modifier = modifier) {
-        when (uiState) {
-            ImagesUiState.Loading -> {
-                ctx.toastUtil("loading data")
-                items(count = 10) { LoadingPlaceholderCardItem() }
-            }
-
-            ImagesUiState.Error -> {
-                ctx.toastUtil("unable to load data")
-            }
-
-            ImagesUiState.Empty -> {
-                ctx.toastUtil("data is empty")
-            }
-
-            is ImagesUiState.Success -> {
-                items(
-                    (uiState as ImagesUiState.Success).images
-                ) { imageData ->
-                    Box(
-                        modifier = Modifier
+        items(images.itemCount, key = images.itemKey { it.id }) { index ->
+            val image = images[index]
+            Box(
+                modifier = Modifier
 //                            .fillMaxWidth()
-                            .clickable {
-                                onImageClick(imageData)
-                            }
-                    ) {
-                        AsyncImage(
-                            model = imageData.imageUrl,
-                            contentDescription = imageData.imageName,
-                            contentScale = ContentScale.Crop,
-                            error = painterResource(id = R.drawable.ic_broken_image),
-                            placeholder = painterResource(id = R.drawable.loading_img),
-                            modifier = Modifier
-                                .height(100.dp)
-                                .padding(8.dp)
-                        )
+                    .clickable {
+                        if (image != null) {
+                            onImageClick(image.mapToRentalImage())
+                        }
                     }
-                }
+            ) {
+                AsyncImage(
+                    model = image?.imageUrl,
+                    contentDescription = image?.imageName,
+                    contentScale = ContentScale.Crop,
+                    error = painterResource(id = R.drawable.ic_broken_image),
+                    placeholder = painterResource(id = R.drawable.loading_img),
+                    modifier = Modifier
+                        .height(100.dp)
+                        .padding(8.dp)
+                )
             }
         }
     }
+//    val uiState by imagesViewModel.uiState.collectAsState(Unit)
+//    val ctx = LocalContext.current
+//    LaunchedEffect(key1 = Unit) {
+//        imagesViewModel.getImages()
+//    }
+//    LazyColumn(modifier = modifier) {
+//        when (uiState) {
+//            ImagesUiState.Loading -> {
+//                ctx.toastUtil("loading data")
+//                items(count = 10) { LoadingPlaceholderCardItem() }
+//            }
+//
+//            ImagesUiState.Error -> {
+//                ctx.toastUtil("unable to load data")
+//            }
+//
+//            ImagesUiState.Empty -> {
+//                ctx.toastUtil("data is empty")
+//            }
+//
+//            is ImagesUiState.Success -> {
+//                items(
+//                    (uiState as ImagesUiState.Success).images
+//                ) { imageData ->
+//                    Box(
+//                        modifier = Modifier
+////                            .fillMaxWidth()
+//                            .clickable {
+//                                onImageClick(imageData)
+//                            }
+//                    ) {
+//                        AsyncImage(
+//                            model = imageData.imageUrl,
+//                            contentDescription = imageData.imageName,
+//                            contentScale = ContentScale.Crop,
+//                            error = painterResource(id = R.drawable.ic_broken_image),
+//                            placeholder = painterResource(id = R.drawable.loading_img),
+//                            modifier = Modifier
+//                                .height(100.dp)
+//                                .padding(8.dp)
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
 
 //@Composable
