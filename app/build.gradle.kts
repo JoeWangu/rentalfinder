@@ -113,6 +113,7 @@ dependencies {
     val pagingVersion = "3.2.1"
     implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
     implementation("androidx.paging:paging-compose:$pagingVersion")
+    implementation("androidx.room:room-paging:$roomVersion")
 
 //    LOCAL UNIT TESTS
     testImplementation("junit:junit:4.13.2")
