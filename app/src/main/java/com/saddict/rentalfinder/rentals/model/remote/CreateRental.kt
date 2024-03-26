@@ -11,7 +11,7 @@ data class CreateRental(
     val type: String,
     val location: String,
     val available: Boolean,
-    val rating: Int,
+    val rating: String,
     @Suppress("PropertyName")
     val total_units: Int,
 )
