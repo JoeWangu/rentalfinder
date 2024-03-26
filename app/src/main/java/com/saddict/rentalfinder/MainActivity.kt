@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.saddict.rentalfinder.rentals.ui.navigation.RentalsNavGraph
 import com.saddict.rentalfinder.ui.theme.RentalfinderTheme
+import com.saddict.rentalfinder.utils.isOnline
+import com.saddict.rentalfinder.utils.toastUtilLong
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,20 +28,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    var selectedItem by rememberSaveable { mutableIntStateOf(0) }
-                    RentalsNavGraph(
-//                        selectedBottomItem = selectedItem,
-//                        onItemSelected = { selectedItem = it }
-                    )
-                    // Handle back button press
-//                    BackHandler(onBack = {
-//                        if (selectedItem > 0) {
-//                            selectedItem--
-//                        } else {
-//                            // Exit the app if already on the first item
-//                            exitProcess(0)
-//                        }
-//                    })
+                    val context = LocalContext.current
+                    if (!isOnline(context)) {
+                        context.toastUtilLong("application is offline")
+                    }
+                    RentalsNavGraph()
                 }
             }
         }
