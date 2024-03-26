@@ -6,107 +6,103 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.saddict.rentalfinder.rentals.data.local.RentalDatabase
-import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
 import com.saddict.rentalfinder.rentals.model.local.ImageEntity
-import com.saddict.rentalfinder.rentals.model.local.RemoteKeys
-import com.saddict.rentalfinder.utils.Constants.INITIAL_PAGE
+import com.saddict.rentalfinder.rentals.model.local.ImageRemoteKeys
+import com.saddict.rentalfinder.rentals.network.RentalService
 import com.saddict.rentalfinder.utils.mapToImageEntity
-import kotlinx.coroutines.flow.first
-import okio.IOException
-import retrofit2.HttpException
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 class ImageRemoteMediator @Inject constructor(
-    private val rentalDatabase: RentalDatabase,
-    private val remoteDataSource: RemoteDataSource,
+    private val appApi: RentalService,
+    private val appDatabase: RentalDatabase
 ) : RemoteMediator<Int, ImageEntity>() {
-    private val rentalDao = rentalDatabase.rentalDao()
-    private val keysDao = rentalDatabase.remoteKeysDao()
-
-    override suspend fun initialize(): InitializeAction {
-//        return InitializeAction.SKIP_INITIAL_REFRESH
-//
-//        return super.initialize()
-
-        val cacheTimeout = TimeUnit.MILLISECONDS.convert(24, TimeUnit.HOURS)
-        val images = rentalDao.fetchImages().first()
-        return if (
-            System.currentTimeMillis() - rentalDatabase.remoteKeysDao()
-                .remoteKeyByQuery("imageKey").lastUpdated <= cacheTimeout
-        ) {
-            // Cached data is up-to-date, so there is no need to re-fetch
-            // from the network.
-            InitializeAction.LAUNCH_INITIAL_REFRESH
-
-        } else {
-            // Need to refresh cached data from network; returning
-            // LAUNCH_INITIAL_REFRESH here will also block RemoteMediator's
-            // APPEND and PREPEND from running until REFRESH succeeds.
-            if (images.isEmpty()) {
-                InitializeAction.LAUNCH_INITIAL_REFRESH
-            } else {
-                InitializeAction.SKIP_INITIAL_REFRESH
-            }
-        }
-    }
-
+    private val appDao = appDatabase.rentalDao()
+    private val remoteKeysDao = appDatabase.imageRemoteKeysDao()
 
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, ImageEntity>
     ): MediatorResult {
         return try {
-            val currentTimeMillis = System.currentTimeMillis()
-            val loadKey = when (loadType) {
-                LoadType.REFRESH -> null
-                LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
+            val currentPage = when (loadType) {
+                LoadType.REFRESH -> {
+                    val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
+                    remoteKeys?.nextPage?.minus(1) ?: 1
+                }
+
+                LoadType.PREPEND -> {
+                    val remoteKeys = getRemoteKeyForFirstItem(state)
+                    val prevPage = remoteKeys?.prevPage
+                        ?: return MediatorResult.Success(
+                            endOfPaginationReached = remoteKeys != null
+                        )
+                    prevPage
+                }
+
                 LoadType.APPEND -> {
-//                    val lastItem = state.lastItemOrNull()
-//                        ?: return MediatorResult.Success(endOfPaginationReached = true)
-//                    lastItem.id
-//                    val page = INITIAL_PAGE
-                    val remoteKey = rentalDatabase.withTransaction {
-                        keysDao.remoteKeyByQuery("imageKey")
-                    }
-                    if (remoteKey.nextKey == null) {
-                        return MediatorResult.Success(endOfPaginationReached = true)
-                    }
-                    remoteKey.nextPage
+                    val remoteKeys = getRemoteKeyForLastItem(state)
+                    val nextPage = remoteKeys?.nextPage
+                        ?: return MediatorResult.Success(
+                            endOfPaginationReached = remoteKeys != null
+                        )
+                    nextPage
                 }
             }
-//            val page = Constants.INITIAL_PAGE
-//            val page = state.config.pageSize / 10
-            val response = remoteDataSource.getImages(page = loadKey ?: INITIAL_PAGE)
-            rentalDatabase.withTransaction {
+
+            val response = appApi.getImages("json", currentPage)
+            val endOfPaginationReached = response.imageList.isEmpty()
+
+            val prevPage = if (currentPage == 1) null else currentPage - 1
+            val nextPage = if (endOfPaginationReached) null else currentPage + 1
+
+            appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    keysDao.deleteByQuery("imageKey")
+                    appDao.deleteAllImages()
+                    remoteKeysDao.deleteAllRemoteKeys()
                 }
-                keysDao.insertOrReplace(
-                    RemoteKeys(
-                        label = "imageKey",
-                        nextKey = response.next,
-                        prevKey = response.previous,
-                        nextPage = loadKey?.plus(1),
-                        prevPage = loadKey?.minus(1),
-                        lastUpdated = currentTimeMillis
+                val keys = response.imageList.map { image ->
+                    ImageRemoteKeys(
+                        id = image.id,
+                        prevPage = prevPage,
+                        nextPage = nextPage
                     )
-                )
+                }
+                val imageEntity = response.imageList.map { it.mapToImageEntity() }
+                remoteKeysDao.addAllRemoteKeys(imageRemoteKeys = keys)
+                appDao.addImages(images = imageEntity)
             }
-            val images = response.imageList
-            rentalDao.upsertAllImages(images.map { it.mapToImageEntity() })
-//            val endOfPaginationReached = images.isEmpty()
-            MediatorResult.Success(
-                endOfPaginationReached = response.next == null
-            )
-        } catch (e: IOException) {
-            MediatorResult.Error(e)
-        } catch (e: HttpException) {
-            MediatorResult.Error(e)
+            MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: Exception) {
-            e.printStackTrace()
             MediatorResult.Error(e)
         }
+    }
+
+    private suspend fun getRemoteKeyClosestToCurrentPosition(
+        state: PagingState<Int, ImageEntity>
+    ): ImageRemoteKeys? {
+        return state.anchorPosition?.let { position ->
+            state.closestItemToPosition(position)?.id?.let { id ->
+                remoteKeysDao.getRemoteKeys(id = id)
+            }
+        }
+    }
+
+    private suspend fun getRemoteKeyForFirstItem(
+        state: PagingState<Int, ImageEntity>
+    ): ImageRemoteKeys? {
+        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
+            ?.let { image ->
+                remoteKeysDao.getRemoteKeys(id = image.id)
+            }
+    }
+
+    private suspend fun getRemoteKeyForLastItem(
+        state: PagingState<Int, ImageEntity>
+    ): ImageRemoteKeys? {
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
+            ?.let { unsplashImage ->
+                remoteKeysDao.getRemoteKeys(id = unsplashImage.id)
+            }
     }
 }
