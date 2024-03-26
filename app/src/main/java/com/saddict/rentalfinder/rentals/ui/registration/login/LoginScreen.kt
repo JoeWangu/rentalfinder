@@ -40,7 +40,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.saddict.rentalfinder.R
@@ -99,7 +98,7 @@ fun LoginBody(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-//            label = { Text(text = stringResource(id = R.string.email)) },
+            label = { Text(text = stringResource(id = R.string.email)) },
             placeholder = { Text(text = stringResource(id = R.string.email)) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,
@@ -121,7 +120,7 @@ fun LoginBody(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-//            label = { Text(text = stringResource(id = R.string.password)) },
+            label = { Text(text = stringResource(id = R.string.password)) },
             placeholder = { Text(text = stringResource(id = R.string.password)) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,
@@ -199,10 +198,4 @@ fun LoginBody(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun LoginPreview() {
-    LoginScreen(navigateToRegister = {}, navigateToHome = {})
 }

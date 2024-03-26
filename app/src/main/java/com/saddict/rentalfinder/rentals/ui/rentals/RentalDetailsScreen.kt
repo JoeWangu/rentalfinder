@@ -38,7 +38,6 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -191,7 +190,6 @@ fun PropertyRow(
     ) {
         Column(
             modifier = Modifier
-//                .padding(end = 8.dp)
         ) {
             Text(
                 text = rentalTotalUnits
@@ -209,7 +207,6 @@ fun PropertyRow(
         )
         Column(
             modifier = Modifier
-//                .padding(start = 8.dp, end = 8.dp)
         ) {
             Text(
                 text = rentalRating
@@ -227,7 +224,6 @@ fun PropertyRow(
         )
         Column(
             modifier = Modifier
-//                .padding(start = 8.dp)
         ) {
             Text(
                 text = rentalPrice
@@ -327,26 +323,4 @@ fun PropertyInfo(
                 .padding(top = 10.dp, start = 8.dp)
         )
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun DetailsPreview() {
-//    RentalDetailsScreen(navigateUp = {})
-    PropertyImage(
-        navigateUp = { /*TODO*/ },
-        rentalPrice = "3500",
-        rentalUrl = "https://www.wallpapers13.com/wp-content/uploads/2015/12/Nature-Lake-Bled.-Desktop-background-image-840x525.jpg"
-    )
-//    PropertyRow(
-//        rentalTotalUnits = "30",
-//        rentalRating = "4.5",
-//        rentalPrice = "5000",
-//    )
-//    PropertyInfo(
-//        rentalLocation = "placeholder text",
-//        rentalType = "placeholder text",
-//        rentalPosted = "placeholder text",
-//        rentalDescription = "placeholder text"
-//    )
 }

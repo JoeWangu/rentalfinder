@@ -30,7 +30,6 @@ import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 sealed interface UploadImageUiState {
-    //    data class Success(val image: RentalImage) : UploadImageUiState
     data object Success : UploadImageUiState
     data object Loading : UploadImageUiState
     data object NoSuccess : UploadImageUiState
@@ -55,36 +54,18 @@ class ImageUploaderViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 try {
                     _uiState.emit(UploadImageUiState.Loading)
-//                    Log.d("image uri", "$uri")
-//                    Log.d("image uri", "$bitmap")
-//                    val stream = ByteArrayOutputStream()
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-//                    val byteArray = stream.toByteArray()
                     val part = createPartFromBitmap(context, bitmap, uri)
-//                    val realPath = getRealPathFromURI(context = context, uri)
-//                    Log.d("image path", "$realPath")
-//                    val file = File(realPath!!)
-//                    Log.d("actual image", "${file.isFile}")
                     val upload = remoteDataSource.postImage(
                         part
-//                        MultipartBody.Part
-//                            .createFormData(
-//                                name = "image",
-//                                filename = "byteArray",
-//                                body = byteArray
-//                            )
                     )
                     if (upload.isSuccessful) {
                         _uiState.emit(UploadImageUiState.Success)
-//                        bitmap.recycle()
                     } else {
                         _uiState.emit(UploadImageUiState.NoSuccess)
-//                        bitmap.recycle()
                         Log.e("upload fail", "uploadImage: ${upload.errorBody()}")
                     }
                 } catch (e: SocketTimeoutException) {
                     e.printStackTrace()
-//                    bitmap.recycle()
                     _uiState.emit(UploadImageUiState.Error)
                 } catch (e: IOException) {
                     _uiState.emit(UploadImageUiState.Error)
@@ -92,7 +73,6 @@ class ImageUploaderViewModel @Inject constructor(
                     Log.e("error uploading", "${e.message}")
                     _uiState.emit(UploadImageUiState.Error)
                 } catch (e: Exception) {
-//                    bitmap.recycle()
                     e.printStackTrace()
                     _uiState.emit(UploadImageUiState.Error)
                 }
@@ -131,19 +111,9 @@ class ImageUploaderViewModel @Inject constructor(
         var result: String? = null
         if (uri.scheme == "content") {
             val cursor = context.contentResolver.query(uri, null, null, null, null)
-//            try {
-//                if (cursor != null && cursor.moveToFirst()) {
-////                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-//                    result =
-//                        cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
-//                }
-//            } finally {
-//                cursor?.close()
-//            }
             cursor.use {
                 if (it != null) {
                     if (cursor != null && it.moveToFirst()) {
-                        //                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
                         result =
                             it.getString(it.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
                     }
@@ -163,83 +133,3 @@ class ImageUploaderViewModel @Inject constructor(
     }
 
 }
-//@SuppressLint("StaticFieldLeak")
-//@HiltViewModel
-//class ImageUploaderViewModel @Inject constructor(
-//    private val remoteDataSource: RemoteDataSource,
-//    @ApplicationContext private val context: Context
-//) : ViewModel() {
-//    private val _uiState = MutableSharedFlow<UploadImageUiState>()
-//    val uiState: SharedFlow<UploadImageUiState> = _uiState
-////    private val ctx: Context = context.applicationContext
-//    fun uploadImage(bitmap: Bitmap) {
-//        viewModelScope.launch {
-//            withContext(Dispatchers.IO) {
-//                try {
-//                    _uiState.emit(UploadImageUiState.Loading)
-////                    Log.d("image uri", "$uri")
-//                    Log.d("image uri", "$bitmap")
-//                    val stream = ByteArrayOutputStream()
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-//                    val byteArray = stream.toByteArray()
-//                    bitmap.recycle()
-////                    val realPath = getRealPathFromURI(context = context, uri)
-////                    Log.d("image path", "$realPath")
-////                    val file = File(realPath!!)
-////                    Log.d("actual image", "${file.isFile}")
-//                    val upload = remoteDataSource.postImage(
-//                        MultipartBody.Part
-//                            .createFormData(
-//                                name = "image",
-//                                filename = "byteArray",
-//                                body = byteArray
-//                            )
-//                    )
-//                    if (upload.isSuccessful) {
-//                        _uiState.emit(UploadImageUiState.Success(upload.body()!!))
-//                    } else {
-//                        _uiState.emit(UploadImageUiState.NoSuccess)
-//                        Log.e("upload fail", "uploadImage: ${upload.errorBody()}")
-//                    }
-//                } catch (e: Exception) {
-//                    e.printStackTrace()
-//                    _uiState.emit(UploadImageUiState.Error)
-//                }
-//            }
-//        }
-//    }
-
-//    private fun getRealPathFromURI(context: Context, contentUri: Uri): String? {
-//        var cursor: Cursor? = null
-//        return try {
-//            val projection = arrayOf(MediaStore.Images.Media.DATA)
-//            cursor = context.applicationContext.contentResolver.query(contentUri, projection, null, null, null)
-//            cursor?.use {
-//                if (it.moveToFirst()) {
-//                    val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//                    return it.getString(columnIndex)
-//                }
-//            }
-//            null
-//        } finally {
-//            cursor?.close()
-//        }
-//    }
-
-//    private fun getRealPathFromURI(context: Context, contentUri: Uri): String? {
-//        var cursor: Cursor? = null
-//        return try {
-//            val projection = arrayOf(MediaStore.Images.Media.DATA)
-//            cursor = context.applicationContext.contentResolver.query(contentUri, projection, null, null, null)
-//            val columnIndex = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//            cursor.moveToFirst()
-//            cursor.getString(columnIndex)
-//        } finally {
-//            cursor?.close()
-//        }
-//    }
-
-//    fun getFileFromPath(path: String): File {
-//        return File(path)
-//    }
-//}

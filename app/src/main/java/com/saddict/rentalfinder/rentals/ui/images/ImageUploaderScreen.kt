@@ -82,12 +82,7 @@ fun ImageUploaderScreen(
 }
 
 val dimen_5dp = 5.dp
-
-//val dimen_10dp = 10.dp
-//val dimen_14dp = 14.dp
-//val dimen_16dp = 16.dp
 val dimen_18dp = 18.dp
-//val dimen_200dp = 200.dp
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
@@ -135,31 +130,8 @@ fun ImageUploaderBody(
                     isImageLoaded = true
                 }
             }
-//        val galleryLauncher = rememberLauncherForActivityResult(
-//            ActivityResultContracts.GetContent()
-//        ) {
-//            selectedImage = it
-//        }
-//        val uiState =
-//            imageUploaderViewModel.uiState.collectAsState(initial = UploadImageUiState.Loading).value
         if (imageBitmap != null) {
             /** Create a Card composable to wrap the image and button */
-//        Card(
-//            shape = RoundedCornerShape(dimen_14dp),
-//            modifier = Modifier
-//                .padding(dimen_10dp, dimen_16dp, dimen_10dp, dimen_16dp)
-//                .height(300.dp)
-//                .fillMaxWidth()
-//            ,
-//            elevation = CardDefaults.cardElevation(defaultElevation = dimen_10dp),
-//            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-//        ) {
-//            /** Create a Column to arrange the image and button vertically */
-//            Column(
-//                modifier = modifier.fillMaxSize(),
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                verticalArrangement = Arrangement.Center
-//            ) {
             // Check if an image is loaded
             if (isImageLoaded) {
                 /** Display the loaded image using the Image composable */
@@ -174,28 +146,13 @@ fun ImageUploaderBody(
                             .clip(
                                 RoundedCornerShape(
                                     dimen_18dp
-//                                    bottomStart = dimen_18dp,
-//                                    bottomEnd = dimen_18dp
                                 )
                             )
                     )
-//                    }
-//                }
                 }
-//                ElevatedButton(
-//                    onClick = { pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
-//                    modifier = Modifier
-//                ) {
-//                    if (imageBitmap == null) {
-//                        Text(text = "select image")
-//                    } else {
-//                        Text(text = "change image")
-//                    }
-//                }
                 // Add spacing
                 Spacer(modifier = Modifier.height(dimen_5dp))
             }
-//}
         }
         /** Display a button with an icon to trigger the image selection */
         TextButtonWithIcon(
@@ -276,93 +233,3 @@ fun TextButtonWithIcon(onClick: () -> Unit) {
         }
     }
 }
-
-
-//@Composable
-//fun ImageUploaderBody(
-//    navigateUp: () -> Unit,
-//    modifier: Modifier = Modifier,
-//    imageUploaderViewModel: ImageUploaderViewModel = hiltViewModel(),
-//) {
-//    Column(
-//        modifier = modifier.fillMaxSize(),
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center
-//    ) {
-//        val ctx = LocalContext.current
-//        var selectedImage by remember { mutableStateOf<Uri?>(null) }
-////        var file by remember { mutableStateOf<File?>(null) }
-//        val galleryLauncher = rememberLauncherForActivityResult(
-//            ActivityResultContracts.GetContent()
-//        ) {
-//            selectedImage = it
-////            val realPath = getRealPathFromURI(ctx, selectedImage)
-////            file = imageUploaderViewModel.getFileFromPath(realPath)
-//        }
-////        val realPath =
-////            selectedImage?.let { it1 -> imageUploaderViewModel.getRealPathFromURI(ctx, it1) }
-////        file = realPath?.let { it1 -> File(it1) }
-//        val uiState =
-//            imageUploaderViewModel.uiState.collectAsState(initial = UploadImageUiState.Loading).value
-////        val coroutineScope = rememberCoroutineScope()
-//        if (selectedImage != null) {
-//            Column {
-//                Image(
-//                    painter = rememberAsyncImagePainter(model = selectedImage),
-//                    contentDescription = null,
-//                    contentScale = ContentScale.Crop,
-//                    modifier = Modifier
-//                        .padding(8.dp)
-//                        .height(300.dp)
-//                )
-//            }
-//        }
-//        ElevatedButton(
-//            onClick = {
-//                galleryLauncher.launch("image/*")
-//            },
-//            modifier = Modifier
-//        ) {
-//            if (selectedImage == null) {
-//                Text(text = "select image")
-//            } else {
-//                Text(text = "change image")
-//            }
-//        }
-//        if (selectedImage != null) {
-//            ElevatedButton(
-//                onClick = {
-////                    coroutineScope.launch {
-//                    imageUploaderViewModel.uploadImage(selectedImage!!)
-////                        file?.let { imageUploaderViewModel.uploadImage(it) }
-//                    when (uiState) {
-//                        UploadImageUiState.Loading -> {
-//                            ctx.toastUtil("uploading")
-//                        }
-//
-//                        UploadImageUiState.Error -> {
-//                            ctx.toastUtil("cannot upload error occured")
-//                        }
-//
-//                        UploadImageUiState.NoSuccess -> {
-//                            ctx.toastUtil("did not upload check internet")
-//                        }
-//
-//                        is UploadImageUiState.Success -> {
-//                            ctx.toastUtil("uploaded successfully")
-////                                delay(1_000L)
-//                            navigateUp()
-//                        }
-//
-//                    }
-////                    }
-//                },
-//                modifier = Modifier
-//            ) {
-//                Text(text = "upload image")
-//            }
-//        }
-//    }
-//}
-
-

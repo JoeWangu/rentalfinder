@@ -108,25 +108,3 @@ fun RegisterDetails.toRegisterUser(): RegisterUser {
         gender = gender
     )
 }
-
-//        firstName: String,
-//        lastName: String,
-//        email: String,
-//        password: String,
-//        username: String,
-//        phoneNumber: String,
-//        address: String,
-//        dob: Any? = null,
-//        gender: Any? = null
-
-//                    val user = RegisterUser(
-//                        first_name = firstName,
-//                        last_name = lastName,
-//                        email = email,
-//                        password = password,
-//                        username = username,
-//                        phone_number = phoneNumber,
-//                        address = address,
-//                        dob = dob,
-//                        gender = gender
-//                    )

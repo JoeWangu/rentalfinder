@@ -47,8 +47,6 @@ import com.saddict.rentalfinder.utils.toastUtil
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
 @Composable
 fun RentalsNavGraph(
-//    selectedBottomItem: Int,
-//    onItemSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
@@ -72,12 +70,9 @@ fun RentalsNavGraph(
                 pressedTime = System.currentTimeMillis()
             }
             HomeScreen(
-//                navigateUp = { navController.navigate(LoginDestination.route) },
                 navigateToExplore = { navController.navigate(ExploreDestination.route) },
                 navigateToFavourites = { navController.navigate(FavouritesDestination.route) },
                 navigateToProfile = { navController.navigate(ProfileDestination.route) },
-//                selectedBottomItem = selectedBottomItem,
-//                onItemSelected = onItemSelected
                 selectedBottomItem = selectedItem,
                 onItemSelected = { selectedItem = it },
                 navigateToRentalDetails = {
@@ -92,7 +87,6 @@ fun RentalsNavGraph(
 //             Handle back button press
             BackHandler(onBack = {
                 if (selectedItem > 0) {
-//                    selectedItem = 0
                     selectedItem -= 1
                     navController.navigate(HomeDestination.route)
                 } else {
@@ -104,8 +98,6 @@ fun RentalsNavGraph(
                 navigateToHome = { navController.navigate(HomeDestination.route) },
                 navigateToFavourites = { navController.navigate(FavouritesDestination.route) },
                 navigateToProfile = { navController.navigate(ProfileDestination.route) },
-//                selectedBottomItem = selectedBottomItem,
-//                onItemSelected = onItemSelected
                 selectedBottomItem = selectedItem,
                 onItemSelected = { selectedItem = it },
                 navigateToRentalDetails = {
@@ -177,7 +169,6 @@ fun RentalsNavGraph(
                 pressedTime = System.currentTimeMillis()
             }
             LoginScreen(
-//                navigateUp = { navController.popBackStack() }
                 navigateToRegister = { navController.navigate(RegisterDestination.route) },
                 navigateToHome = { navController.navigate(HomeDestination.route) },
             )
@@ -242,7 +233,6 @@ fun RentalsNavGraph(
                     )
                     navController.popBackStack()
                 }
-//                navigateToHome = { navController.navigate(HomeDestination.route) },
             )
         }
         composable(route = ImageUploaderNavigationDestination.route) {

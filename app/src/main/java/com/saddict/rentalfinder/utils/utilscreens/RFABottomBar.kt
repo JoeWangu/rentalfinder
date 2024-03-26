@@ -51,7 +51,6 @@ fun RFABottomBar(
             NavigationBarItem(
                 selected = selectedItem == index,
                 onClick = {
-//                    selectedItem = index
                     onItemSelected(index)
                     when (index) {
                         0 -> {
@@ -81,11 +80,6 @@ fun RFABottomBar(
                         contentDescription = null
                     )
                 },
-//                label = if (selectedItem == index) {
-//                    { Text(text = stringResource(id = menuTitle[index])) }
-//                } else {
-//                    null
-//                }
                 label = {
                     Text(
                         text = menuTitle[index].capitalize(Locale.current)

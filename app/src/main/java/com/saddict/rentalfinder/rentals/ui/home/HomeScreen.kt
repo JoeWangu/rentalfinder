@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -34,7 +33,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -47,10 +45,6 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.model.remote.RentalResults
@@ -87,7 +81,6 @@ fun HomeScreen(
             RFATopBar(
                 title = stringResource(id = R.string.app_name_2),
                 canNavigateBack = false,
-//                navigateUp = navigateUp,
                 scrollBehavior = scrollBehavior
             )
         },
@@ -129,17 +122,11 @@ fun HomeBody(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
 ) {
-    val rentalItems: LazyPagingItems<RentalResults> =
-        homeViewModel.rentalItemsPagedFlow.collectAsLazyPagingItems()
-//    val ctx = LocalContext.current
-//    val coroutineScope = rememberCoroutineScope()
-//    LaunchedEffect(key1 = rentalItems.loadState) {
-//        if (rentalItems.loadState.refresh is LoadState.Error) {
-//            ctx.toastUtilLong("Error: " + (rentalItems.loadState.refresh as LoadState.Error).error.message)
-//        }
-//    }
+    LaunchedEffect(key1 = Unit) {
+        homeViewModel.homeItems()
+    }
+    val uiState = homeViewModel.uiState.collectAsState(initial = HomeUiState.Loading).value
     val state = rememberScrollState()
-//    val uiState by homeViewModel.uiState.collectAsState(Unit)
     val imageList = listOf(
         R.drawable.proxy_image_1,
         R.drawable.proxy_image_2,
@@ -213,59 +200,27 @@ fun HomeBody(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-//                coroutineScope.launch {
                 LazyRow(
-//                    reverseLayout = true,
                     modifier = Modifier,
                 ) {
-//                    items(RentalDataSource.rentals.take(4)) { rental ->
-//                        PopularCard(rental = rental)
-//                    }
-                    /*when (uiState) {
+                    when (uiState) {
                         HomeUiState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
                         HomeUiState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
-                        is HomeUiState.Success ->
-                            items((uiState as HomeUiState.Success).rentalResults.take(4)) { popularRental ->
-                                PopularCard(
-                                    rental = popularRental,
-                                    modifier = Modifier
-                                        .clickable { navigateToRentalDetails(popularRental.id) }
-                                )
-                            }
-                    }*/
-//                    }
-                    when (rentalItems.loadState.refresh) {
-                        is LoadState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
-                        is LoadState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
-                        else -> items(
-                            count = 4,
-//                            count = rentalItems.itemCount,
-//                            key = { index ->
-//                                rentalItems[index]?.id ?: index.toString()
-//                            }
-                            key = rentalItems.itemKey { it.id }
+                        is HomeUiState.Success -> items(
+                            count = uiState.rentalResults.take(4).size,
+                            key = { index -> uiState.rentalResults[index].id }
                         ) { index ->
-                            val rentalItem = rentalItems[index]
-                            if (rentalItem != null) {
-                                PopularCard(
-                                    rental = rentalItem,
-                                    modifier = Modifier
-                                        .clickable { navigateToRentalDetails(rentalItem.id) }
-                                )
-                            } else {
-                                ErrorPlaceholderCardItem()
-                            }
+                            val rentalItem = uiState.rentalResults[index]
+                            PopularCard(
+                                rental = rentalItem,
+                                modifier = Modifier
+                                    .clickable { navigateToRentalDetails(rentalItem.id) }
+                            )
                         }
                     }
                 }
             }
 // --------------------------- end of popular start of recommended  --------------------- //
-            LaunchedEffect(key1 = rentalItems.loadState) {
-                if (rentalItems.loadState.refresh is LoadState.NotLoading) {
-//                    delay(1_000L)
-                    homeViewModel.recommendedItems()
-                }
-            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -297,54 +252,25 @@ fun HomeBody(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val uiState by homeViewModel.uiState.collectAsState(Unit)
                 LazyRow(
                     modifier = Modifier,
                 ) {
                     when (uiState) {
-                        HomeUiState.Loading -> {
-                            items(count = 4) { LoadingPlaceholderCardItem() }
-                        }
+                        HomeUiState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
+                        HomeUiState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
+                        is HomeUiState.Success -> items(
+                            count = uiState.rentalResults.take(4).reversed().size,
 
-                        HomeUiState.Error -> {
-                            items(count = 4) { ErrorPlaceholderCardItem() }
-                        }
-
-                        is HomeUiState.Success -> {
-                            items(
-                                (uiState as HomeUiState.Success).rentalResults.take(4).reversed()
-                            ) { rental ->
-                                PopularCard(
-                                    rental = rental,
-                                    modifier = Modifier
-                                        .clickable { navigateToRentalDetails(rental.id) }
-                                )
-                            }
+                            key = { index -> uiState.rentalResults[index].id }
+                        ) { index ->
+                            val rentalItem = uiState.rentalResults[index]
+                            PopularCard(
+                                rental = rentalItem,
+                                modifier = Modifier
+                                    .clickable { navigateToRentalDetails(rentalItem.id) }
+                            )
                         }
                     }
-//                    items(RentalDataSource.rentals.take(4).reversed()) { rental ->
-//                        PopularCard(rental = rental)
-//                    }
-//                    coroutineScope.launch {
-//                        homeViewModel.recommendedItems()
-//                        homeViewModel.uiState.collect { state ->
-//                            when (state) {
-//                                HomeUiState.Loading -> {
-//                                    items(count = 4) { LoadingPlaceholderCardItem() }
-//                                }
-//
-//                                HomeUiState.Error -> {
-//                                    items(count = 4) { ErrorPlaceholderCardItem() }
-//                                }
-//
-//                                is HomeUiState.Success -> {
-//                                    items(state.rentalResults) { rental ->
-//                                        PopularCard(rental = rental)
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
                 }
             }
         }
@@ -371,7 +297,6 @@ fun CategoryCard(
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-//                    .height(100.dp)
             )
         }
         Text(
@@ -394,19 +319,8 @@ fun PopularCard(
         shape = MaterialTheme.shapes.extraSmall
     ) {
         Box(modifier = Modifier) {
-//            Image(
-//                painter = rental.image,
-//                contentDescription = null,
-//                contentScale = ContentScale.Crop,
-//                modifier = Modifier
-//                    .height(100.dp)
-//            )
             AsyncImage(
                 model = rental.imageDetail.imageUrl,
-//                model = ImageRequest.Builder(context = LocalContext.current)
-//                    .data(rental.imageDetail.image)
-//                    .crossfade(true)
-//                    .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 error = painterResource(id = R.drawable.ic_broken_image),
@@ -445,11 +359,3 @@ fun PopularCard(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    RentalfinderTheme {
-//        Greeting("Android")
-//    }
-//}

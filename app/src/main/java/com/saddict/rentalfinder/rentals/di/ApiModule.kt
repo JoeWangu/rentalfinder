@@ -24,19 +24,17 @@ import javax.inject.Singleton
 object ApiModule {
     @Provides
     @Singleton
-    fun provideNetworkService(preferenceDataStore: PreferenceDataStore): RentalService {
+    fun provideOkHttpClient(preferenceDataStore: PreferenceDataStore): OkHttpClient {
         val loggingInterceptor =
-            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val requestInterceptor = Interceptor.invoke { chain ->
             val request = chain.request()
             val token = preferenceDataStore.getToken()
-//            val token = "54deeb647c1f09a95fa7694f3a4248876ff07e3e"
             println("Outgoing request to ${request.url}")
             return@invoke if (
                 !request.url.encodedPath.contains(LOGIN_URL) &&
                 !request.url.encodedPath.contains(CREATE_USER_URL)
             ) {
-                println("Token is $token")
                 val requestBuild = request.newBuilder()
                     .addHeader("Authorization", "Token $token")
                     .header("Content-Type", "application/json")
@@ -47,22 +45,32 @@ object ApiModule {
                 chain.proceed(requestBuild)
             }
         }
-        val okHttpClient = OkHttpClient()
+        return OkHttpClient()
             .newBuilder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(requestInterceptor)
-            .connectTimeout(120, TimeUnit.SECONDS) // Connect timeout
-            .readTimeout(120, TimeUnit.SECONDS) // Read timeout
-            .writeTimeout(120, TimeUnit.SECONDS) // Write timeout
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
             .retryOnConnectionFailure(true)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNetworkService(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit
             .Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(JacksonConverterFactory.create())
             .client(okHttpClient)
             .build()
-            .create(RentalService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRentalService(retrofit: Retrofit): RentalService {
+        return retrofit.create(RentalService::class.java)
     }
 
     @Provides

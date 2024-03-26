@@ -85,36 +85,6 @@ fun everyFirstLetterCapitalize(str: String): String {
 }
 
 val Context.tokenDataStore by preferencesDataStore(TOKEN)
-//fun everyFirstLetterCapitalize2(str: String): String {
-//    return "\\b[a-z]".toRegex().replace(str) { it.value.uppercase() }
-//}
-
-//@Composable
-//fun PlaceholderCardItem(
-//    isLoading: Boolean,
-//    isError: Boolean
-//) {
-//    Card(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(16.dp)
-//    ) {
-//        if (isLoading) {
-//            // Show shimmer animation while loading
-//            ShimmerAnimation(modifier = Modifier.fillMaxSize())
-//        } else if (isError) {
-//            // Show broken item drawable on error
-//            Image(
-//                painter = painterResource(id = R.drawable.ic_broken_image),
-//                contentDescription = "Error loading item",
-//                modifier = Modifier.fillMaxSize()
-//            )
-//        } else {
-//            // Show actual item content
-//            // ...
-//        }
-//    }
-//}
 
 @Composable
 fun ErrorPlaceholderCardItem(modifier: Modifier = Modifier) {

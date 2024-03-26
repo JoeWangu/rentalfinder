@@ -292,7 +292,6 @@ fun AccountBody(
                     imeAction = ImeAction.Done
                 ),
                 singleLine = true,
-//                shape = MaterialTheme.shapes.extraSmall,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp, bottom = 0.dp, start = 16.dp, end = 16.dp)
