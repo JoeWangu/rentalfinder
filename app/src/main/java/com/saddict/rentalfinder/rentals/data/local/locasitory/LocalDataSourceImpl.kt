@@ -9,7 +9,7 @@ class LocalDataSourceImpl @Inject constructor(
     private val rentalDao: RentalDao
 ) : LocalDataSource {
     override suspend fun upsertAllRentals(rentals: List<RentalEntity>) {
-        return rentalDao.upsertAllRentals(rentals)
+        return rentalDao.insertAllRentals(rentals)
     }
 
     override fun fetchRentals(): Flow<List<RentalEntity>> {
