@@ -2,19 +2,23 @@ package com.saddict.rentalfinder.rentals.data.local
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
 import com.saddict.rentalfinder.rentals.model.local.ImageEntity
 import com.saddict.rentalfinder.rentals.model.local.RentalEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RentalDao {
-    @Upsert
-    suspend fun upsertAllRentals(rentals: List<RentalEntity>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllRentals(rentals: List<RentalEntity>)
 
     @Query("SELECT * FROM rentals ORDER BY id ASC")
     fun fetchRentals(): Flow<List<RentalEntity>>
+
+    @Query("SELECT * FROM rentals")
+    fun fetchAllPagedRentals(): PagingSource<Int, RentalEntity>
 
     @Query("SELECT * from rentals ORDER BY id DESC")
     fun fetchAllRentalsDesc(): Flow<List<RentalEntity>>
@@ -25,15 +29,18 @@ interface RentalDao {
     @Query("SELECT * FROM rentals ORDER BY id ASC")
     suspend fun getAllPaged(): List<RentalEntity>
 
-    @Upsert
-    suspend fun upsertAllImages(rentals: List<ImageEntity>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllImages(images: List<ImageEntity>)
 
     @Query("SELECT * FROM images ORDER BY id ASC")
     fun fetchImages(): Flow<List<ImageEntity>>
 
-    @Query("SELECT * FROM images ORDER BY id ASC")
-    suspend fun getAllImages(): List<ImageEntity>
-
     @Query("SELECT * FROM images")
-    fun pagingSourceImages(): PagingSource<Int, ImageEntity>
+    fun getAllPagedImages(): PagingSource<Int, ImageEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addImages(images: List<ImageEntity>)
+
+    @Query("DELETE FROM images")
+    suspend fun deleteAllImages()
 }
