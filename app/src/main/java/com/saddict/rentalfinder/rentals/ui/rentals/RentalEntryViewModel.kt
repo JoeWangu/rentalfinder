@@ -80,20 +80,20 @@ data class RenEntryUiState(
 
 data class EntryDetails(
     val name: String = "",
-    val image: String = "",
+    val image: Int = 1,
     val price: String = "",
     val description: String = "",
     val type: String = "single",
     val location: String = "M",
     val available: Boolean = false,
-    val rating: Int = 3,
+    val rating: String = "3",
     @Suppress("PropertyName")
     val total_units: String = "",
 )
 
 fun EntryDetails.toCreateRental(): CreateRental = CreateRental(
     name = name,
-    image = image.toInt(),
+    image = image,
     price = price,
     description = description,
     type = type,
@@ -102,4 +102,4 @@ fun EntryDetails.toCreateRental(): CreateRental = CreateRental(
     rating = rating,
     total_units = total_units.toInt(),
 )
-//image = 6
+//image = 8

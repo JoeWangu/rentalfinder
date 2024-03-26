@@ -23,6 +23,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -101,6 +102,9 @@ fun RentalEntryBody(
     onValueChange: (EntryDetails) -> Unit = entryViewModel::updateUiState,
     enabled: Boolean = true
 ) {
+    LaunchedEffect(key1 = imageId) {
+        onValueChange(entryDetails.copy(image = imageId))
+    }
     Column(
         modifier = modifier
             .padding(top = 16.dp, bottom = 50.dp)
@@ -134,7 +138,6 @@ fun RentalEntryBody(
                 singleLine = true,
                 shape = MaterialTheme.shapes.large,
                 modifier = Modifier,
-//                .padding(start = 8.dp, end = 4.dp),
                 enabled = enabled
             )
             OutlinedTextField(
@@ -151,7 +154,6 @@ fun RentalEntryBody(
                 singleLine = true,
                 shape = MaterialTheme.shapes.large,
                 modifier = Modifier,
-//                .padding(start = 8.dp, end = 4.dp),
                 enabled = enabled
             )
             OutlinedTextField(
@@ -168,12 +170,11 @@ fun RentalEntryBody(
                 singleLine = true,
                 shape = MaterialTheme.shapes.large,
                 modifier = Modifier,
-                //                .padding(start = 8.dp, end = 4.dp),
                 enabled = enabled
             )
             OutlinedTextField(
                 value = imageId.toString(),
-                onValueChange = { onValueChange(entryDetails.copy(image = it)) },
+                onValueChange = { onValueChange(entryDetails.copy(image = imageId)) },
                 label = { Text(text = stringResource(id = R.string.choose_image)) },
                 placeholder = { Text(text = stringResource(id = R.string.choose_image)) },
                 keyboardOptions = KeyboardOptions(
@@ -185,8 +186,8 @@ fun RentalEntryBody(
                 singleLine = true,
                 shape = MaterialTheme.shapes.large,
                 modifier = Modifier,
-                //                .padding(start = 8.dp, end = 4.dp),
-                enabled = enabled
+                enabled = enabled,
+                readOnly = true
             )
             Text(text = imageName)
             Row {
@@ -221,7 +222,6 @@ fun RentalEntryBody(
                 singleLine = false,
                 shape = MaterialTheme.shapes.large,
                 modifier = Modifier,
-//                .padding(start = 8.dp, end = 4.dp),
                 enabled = enabled
             )
             Row(
@@ -381,16 +381,3 @@ fun RentalEntryBody(
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun EntryPreview() {
-//    RentalEntryScreen(
-//        navigateUp = {},
-//        navigateToHome = {},
-//        navigateToImagePicker = {},
-//        navigateToImageUploader = {},
-//        imageId = 1,
-//        imageName = "name"
-//    )
-//}
