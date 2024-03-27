@@ -16,8 +16,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Divider
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
@@ -58,49 +61,66 @@ object RentalDetailsNavigationDestination : NavigationDestination {
 @Composable
 fun RentalDetailsScreen(
     navigateUp: () -> Unit,
+    navigateToEditRental: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RentalDetailsViewModel = hiltViewModel(),
     uiState: State<RenDetailsUiState> = viewModel.uiState.collectAsState(),
     rental: RentalEntity = uiState.value.rentalDetails,
 ) {
     val state = rememberScrollState()
-    Column(
-        modifier = modifier.verticalScroll(state)
-    ) {
-        PropertyImage(
-            rentalUrl = rental.imageUrl,
-            rentalPrice = rental.price.toString(),
-            navigateUp = navigateUp
-        )
+    Box(modifier = modifier) {
         Column(
             modifier = Modifier
-                .padding(20.dp)
+                .verticalScroll(state)
+                .padding(bottom = 100.dp)
         ) {
-            Text(
-                text = "${everyFirstLetterCapitalize(rental.name)} | ${
-                    everyFirstLetterCapitalize(
-                        rental.type
-                    )
-                }",
-                style = MaterialTheme.typography.displaySmall,
-                fontFamily = FontFamily(Font(R.font.montserrat_medium))
+            PropertyImage(
+                rentalUrl = rental.imageUrl,
+                rentalPrice = rental.price.toString(),
+                navigateUp = navigateUp
             )
-            PropertyRow(
-                rentalTotalUnits = rental.totalUnits.toString(),
-                rentalRating = rental.rating.toString(),
-                rentalPrice = rental.price.toString()
-            )
-            Divider(
-                thickness = 2.dp,
+            Column(
                 modifier = Modifier
-                    .padding(top = 8.dp, bottom = 8.dp)
-                    .alpha(0.2F)
-            )
-            PropertyInfo(
-                rentalLocation = rental.location.toString(),
-                rentalType = rental.type,
-                rentalPosted = rental.datePosted,
-                rentalDescription = rental.description
+                    .padding(20.dp)
+            ) {
+                Text(
+                    text = "${everyFirstLetterCapitalize(rental.name)} | ${
+                        everyFirstLetterCapitalize(
+                            rental.type
+                        )
+                    }",
+                    style = MaterialTheme.typography.displaySmall,
+                    fontFamily = FontFamily(Font(R.font.montserrat_medium))
+                )
+                PropertyRow(
+                    rentalTotalUnits = "${rental.totalUnits.toString()} (rooms)",
+                    rentalRating = rental.rating.toString(),
+                    rentalPrice = rental.price.toString()
+                )
+                Divider(
+                    thickness = 2.dp,
+                    modifier = Modifier
+                        .padding(top = 8.dp, bottom = 8.dp)
+                        .alpha(0.2F)
+                )
+                PropertyInfo(
+                    rentalLocation = rental.location.toString(),
+                    rentalType = rental.type,
+                    rentalPosted = rental.datePosted,
+                    rentalDescription = rental.description
+                )
+            }
+        }
+        FloatingActionButton(
+            onClick = { navigateToEditRental(uiState.value.rentalDetails.id) },
+            shape = MaterialTheme.shapes.extraSmall,
+            modifier = Modifier
+                .padding(dimensionResource(id = R.dimen.padding_large))
+                .align(Alignment.BottomEnd)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = stringResource(R.string.edit),
             )
         }
     }
@@ -195,7 +215,7 @@ fun PropertyRow(
                 text = rentalTotalUnits
             )
             Text(
-                text = "${stringResource(id = R.string.bedroom).capitalize(Locale.current)}s",
+                text = stringResource(id = R.string.rooms_available).capitalize(Locale.current),
                 modifier = Modifier
                     .alpha(0.3F)
             )
