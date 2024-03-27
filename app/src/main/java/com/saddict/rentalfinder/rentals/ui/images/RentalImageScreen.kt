@@ -90,7 +90,7 @@ fun RentalImageBody(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(image)
+                        .data(image?.imageUrl)
                         .crossfade(true)
                         .error(R.drawable.ic_broken_image)
                         .placeholder(R.drawable.loading_img)
