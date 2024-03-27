@@ -28,6 +28,7 @@
     <string name="bedroom">bedroom</string>
     <string name="bedroom1">1 bedroom</string>
     <string name="bedroom2">2 bedroom</string>
+    <string name="rooms_available">available</string>
     <string name="popular_near">popular nearest you</string>
     <string name="recommended">recommended for you</string>
     <string name="see_all">see all</string>
@@ -76,4 +77,5 @@
     <string name="post_rental">post rental</string>
     <string name="rental_image">rental image</string>
     <string name="upload_image">upload image</string>
+    <string name="edit">edit</string>
 </resources>
