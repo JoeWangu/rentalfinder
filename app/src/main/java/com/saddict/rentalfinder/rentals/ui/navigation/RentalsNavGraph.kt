@@ -40,6 +40,8 @@ import com.saddict.rentalfinder.rentals.ui.registration.register.RegisterDestina
 import com.saddict.rentalfinder.rentals.ui.registration.register.RegisterScreen
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalDetailsNavigationDestination
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalDetailsScreen
+import com.saddict.rentalfinder.rentals.ui.rentals.RentalEditNavigationDestination
+import com.saddict.rentalfinder.rentals.ui.rentals.RentalEditScreen
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalEntryNavigationDestination
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalEntryScreen
 import com.saddict.rentalfinder.utils.toastUtil
@@ -187,7 +189,8 @@ fun RentalsNavGraph(
             })
         ) {
             RentalDetailsScreen(
-                navigateUp = { navController.popBackStack() }
+                navigateUp = { navController.popBackStack() },
+                navigateToEditRental = { navController.navigate("${RentalEditNavigationDestination.route}/${it}") }
             )
         }
         composable(
@@ -238,6 +241,41 @@ fun RentalsNavGraph(
         composable(route = ImageUploaderNavigationDestination.route) {
             ImageUploaderScreen(
                 navigateUp = { navController.popBackStack() }
+            )
+        }
+        composable(
+            route = RentalEditNavigationDestination.routeWithArgs,
+            arguments = listOf(
+                navArgument(name = "imageId") {
+                    type = NavType.IntType
+                    defaultValue = 1
+                },
+                navArgument(name = "imageName") {
+                    type = NavType.StringType
+                    defaultValue = "default.jpg"
+                },
+                navArgument(name = RentalEditNavigationDestination.RENTALIDARG) {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+            val imageId = backStackEntry.savedStateHandle.getStateFlow(
+                "imageId", initialValue = 1
+            ).collectAsState().value
+            val imageName = backStackEntry.savedStateHandle.getStateFlow(
+                "imageName", initialValue = "default.jpg"
+            ).collectAsState().value
+            RentalEditScreen(
+                navigateUp = { navController.popBackStack() },
+                navigateToHome = { navController.navigate(HomeDestination.route) },
+                navigateToImagePicker = { navController.navigate(RentalImageNavigationDestination.route) },
+                navigateToImageUploader = {
+                    navController.navigate(
+                        ImageUploaderNavigationDestination.route
+                    )
+                },
+                imageId = imageId,
+                imageName = imageName
             )
         }
     }
