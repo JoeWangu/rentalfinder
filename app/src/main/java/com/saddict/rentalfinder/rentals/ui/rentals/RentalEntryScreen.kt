@@ -62,9 +62,16 @@ fun RentalEntryScreen(
     navigateToImageUploader: () -> Unit,
     imageId: Int,
     imageName: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    entryViewModel: RentalEntryViewModel = hiltViewModel(),
+    uiState: RenEntryUiState = entryViewModel.entryUiState,
+    entryDetails: EntryDetails = uiState.renEntry,
+    onValueChange: (EntryDetails) -> Unit = entryViewModel::updateUiState,
 ) {
     val state = rememberScrollState()
+    val ctx = LocalContext.current
+    val coroutine = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             RFATopBar(
@@ -78,11 +85,39 @@ fun RentalEntryScreen(
             modifier = modifier
                 .padding(innerPadding)
                 .verticalScroll(state = state),
-            navigateToHome = navigateToHome,
             navigateToImagePicker = navigateToImagePicker,
             imageId = imageId,
             imageName = imageName,
-            navigateToImageUploader = navigateToImageUploader
+            navigateToImageUploader = navigateToImageUploader,
+            onValueChange = onValueChange,
+            entryDetails = entryDetails,
+            saveButtonEnabled = entryViewModel.entryUiState.isEntryValid,
+            saveButtonOnClick = {
+                coroutine.launch {
+                    entryViewModel.postRental()
+                    entryViewModel.uiState.collect { state ->
+                        when (state) {
+                            CreateRentalUiState.Loading -> {
+                                ctx.toastUtil("please wait! posting rental")
+                            }
+
+                            CreateRentalUiState.Error -> {
+                                ctx.toastUtil("sorry could not post rental")
+                            }
+
+                            CreateRentalUiState.SuccessError -> {
+                                ctx.toastUtil("an error occured when posting")
+                            }
+
+                            is CreateRentalUiState.Success -> {
+                                ctx.toastUtilLong("successfully posted")
+                                delay(1_000L)
+                                navigateToHome()
+                            }
+                        }
+                    }
+                }
+            }
         )
     }
 }
@@ -92,14 +127,13 @@ fun RentalEntryScreen(
 fun RentalEntryBody(
     imageId: Int,
     imageName: String,
-    navigateToHome: () -> Unit,
     navigateToImagePicker: () -> Unit,
     navigateToImageUploader: () -> Unit,
+    onValueChange: (EntryDetails) -> Unit,
+    saveButtonEnabled: Boolean,
+    saveButtonOnClick: () -> Unit,
+    entryDetails: EntryDetails,
     modifier: Modifier = Modifier,
-    entryViewModel: RentalEntryViewModel = hiltViewModel(),
-    uiState: RenEntryUiState = entryViewModel.entryUiState,
-    entryDetails: EntryDetails = uiState.renEntry,
-    onValueChange: (EntryDetails) -> Unit = entryViewModel::updateUiState,
     enabled: Boolean = true
 ) {
     LaunchedEffect(key1 = imageId) {
@@ -122,8 +156,6 @@ fun RentalEntryBody(
             var isTypeExpanded by remember { mutableStateOf(false) }
             var isLocationExpanded by remember { mutableStateOf(false) }
             var radioSelected by remember { mutableStateOf(entryDetails.available) }
-            val coroutine = rememberCoroutineScope()
-            val ctx = LocalContext.current
             OutlinedTextField(
                 value = entryDetails.name,
                 onValueChange = { onValueChange(entryDetails.copy(name = it)) },
@@ -347,34 +379,9 @@ fun RentalEntryBody(
                 }
             }
             OutlinedButton(
-                onClick = {
-                    coroutine.launch {
-                        entryViewModel.postRental()
-                        entryViewModel.uiState.collect { state ->
-                            when (state) {
-                                CreateRentalUiState.Loading -> {
-                                    ctx.toastUtil("please wait! posting rental")
-                                }
-
-                                CreateRentalUiState.Error -> {
-                                    ctx.toastUtil("sorry could not post rental")
-                                }
-
-                                CreateRentalUiState.SuccessError -> {
-                                    ctx.toastUtil("an error occured when posting")
-                                }
-
-                                is CreateRentalUiState.Success -> {
-                                    ctx.toastUtilLong("successfully posted")
-                                    delay(1_000L)
-                                    navigateToHome()
-                                }
-                            }
-                        }
-                    }
-                },
+                onClick = saveButtonOnClick,
                 contentPadding = PaddingValues(start = 64.dp, end = 64.dp),
-                enabled = entryViewModel.entryUiState.isEntryValid
+                enabled = saveButtonEnabled
             ) {
                 Text(text = stringResource(id = R.string.post_rental))
             }
