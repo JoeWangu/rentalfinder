@@ -16,4 +16,4 @@ val Pink40 = Color(0xFF7D5260)
 //val Teal200 = Color(0xFF03DAC5)
 
 
-val flix_color_translucent_black = Color(0xE6000000)
+//val flix_color_translucent_black = Color(0xE6000000)
