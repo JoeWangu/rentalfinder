@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -42,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -106,7 +108,7 @@ fun HomeScreen(
                 )
             }
         },
-        floatingActionButtonPosition = FabPosition.Center
+        floatingActionButtonPosition = FabPosition.End
     ) { contentPadding ->
         HomeBody(
             navigateToRentalDetails = navigateToRentalDetails,
@@ -258,17 +260,19 @@ fun HomeBody(
                     when (uiState) {
                         HomeUiState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
                         HomeUiState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
-                        is HomeUiState.Success -> items(
-                            count = uiState.rentalResults.take(4).reversed().size,
-
-                            key = { index -> uiState.rentalResults[index].id }
-                        ) { index ->
-                            val rentalItem = uiState.rentalResults[index]
-                            PopularCard(
-                                rental = rentalItem,
-                                modifier = Modifier
-                                    .clickable { navigateToRentalDetails(rentalItem.id) }
-                            )
+                        is HomeUiState.Success -> {
+                            items(
+                                uiState.rentalResults.takeLast(4).reversed()
+//                            count = uiState.rentalResults.take(4).reversed().size,
+//                            key = { index -> uiState.rentalResults[index].id }
+                            ) { rental ->
+//                                val rentalItem = uiState.rentalResults[index]
+                                PopularCard(
+                                    rental = rental,
+                                    modifier = Modifier
+                                        .clickable { navigateToRentalDetails(rental.id) }
+                                )
+                            }
                         }
                     }
                 }
@@ -344,17 +348,28 @@ fun PopularCard(
                 .padding(8.dp)
         ) {
             Text(
-                text = rental.name,
+                text = everyFirstLetterCapitalize(rental.name),
                 fontSize = 15.sp,
-                style = MaterialTheme.typography.displayMedium
+                style = MaterialTheme.typography.displayMedium,
+                softWrap = false,
+                maxLines = 1,
+                textAlign = TextAlign.Center,
             )
             Text(
                 text = "${rental.price}Ksh/ Month",
-                style = MaterialTheme.typography.bodyLarge
+                fontSize = 15.sp,
+                style = MaterialTheme.typography.bodyLarge,
+                softWrap = false,
+                maxLines = 1,
+                textAlign = TextAlign.Center,
             )
             Text(
                 text = rental.type,
-                style = MaterialTheme.typography.bodyLarge
+                fontSize = 15.sp,
+                style = MaterialTheme.typography.bodyLarge,
+                softWrap = false,
+                maxLines = 1,
+                textAlign = TextAlign.Center,
             )
         }
     }
