@@ -40,6 +40,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,6 +50,7 @@ import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.model.local.RentalEntity
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.FavButton
+import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
 import com.saddict.rentalfinder.utils.header
 import com.saddict.rentalfinder.utils.utilscreens.CarouselSlider
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
@@ -231,20 +233,31 @@ fun ExploreCard(
         }
         Column(
             modifier = Modifier
-                .padding(4.dp)
+                .padding(top = 10.dp, bottom = 5.dp, start = 5.dp, end = 5.dp)
         ) {
             Text(
-                text = rental.name,
+                text = everyFirstLetterCapitalize(rental.name),
                 fontSize = 15.sp,
                 style = MaterialTheme.typography.displayMedium,
+                softWrap = false,
+                maxLines = 1,
+                textAlign = TextAlign.Center,
             )
             Text(
                 text = "${rental.price}Ksh/ Month",
-                style = MaterialTheme.typography.bodyLarge
+                fontSize = 15.sp,
+                style = MaterialTheme.typography.bodyLarge,
+                softWrap = false,
+                maxLines = 1,
+                textAlign = TextAlign.Center,
             )
             Text(
                 text = rental.type,
-                style = MaterialTheme.typography.bodyLarge
+                fontSize = 15.sp,
+                style = MaterialTheme.typography.bodyLarge,
+                softWrap = false,
+                maxLines = 1,
+                textAlign = TextAlign.Center,
             )
         }
     }
