@@ -2,11 +2,13 @@
     <string name="app_name">rentalfinder</string>
     <string name="app_name_2">RFA</string>
     <string name="app_name_3">Rental Finder</string>
+    <!--    -->
     <string name="back_button">go back</string>
     <string name="close_icon">close icon</string>
     <string name="search_icon">search icon</string>
     <string name="menu_icon">menu icon</string>
     <string name="add_favourite">add to favourite</string>
+    <!--    -->
     <string name="home">home</string>
     <string name="favourites">favourites</string>
     <string name="explore"> explore</string>
@@ -22,25 +24,24 @@
     <string name="register">register</string>
     <string name="profile">profile</string>
     <string name="categories">categories</string>
+    <!--    -->
     <string name="bedsitter">bedsitter</string>
     <string name="single">single</string>
     <string name="double_room">double</string>
     <string name="bedroom">bedroom</string>
     <string name="bedroom1">1 bedroom</string>
     <string name="bedroom2">2 bedroom</string>
+    <!--    -->
     <string name="rooms_available">available</string>
     <string name="popular_near">popular nearest you</string>
     <string name="recommended">recommended for you</string>
     <string name="see_all">see all</string>
     <string name="change_picture">change picture</string>
+    <!--    -->
     <string name="name">full name</string>
     <string name="email">email</string>
     <string name="password">password</string>
     <string name="phone_number">phone number</string>
-    <string name="save_changes">save changes</string>
-    <string name="general">general</string>
-    <string name="security">security</string>
-    <string name="biometric">biometric</string>
     <string name="first_name">first name</string>
     <string name="last_name">last name</string>
     <string name="username">username</string>
@@ -48,12 +49,18 @@
     <string name="date_of_birth">date of birth</string>
     <string name="gender">gender</string>
     <string name="phone">phone</string>
+    <!--    -->
+    <string name="save_changes">save changes</string>
+    <string name="general">general</string>
+    <string name="security">security</string>
+    <string name="biometric">biometric</string>
     <string name="have_account">Have an account?</string>
     <string name="login_here">Login Here</string>
     <string name="no_account">Don\'t have an account?</string>
     <string name="reg_here">Register Here</string>
     <string name="required_fields">required</string>
     <string name="rental_details">rental details</string>
+    <string name="rental_manage_details">rental manage details</string>
     <string name="rental_entry">rental entry</string>
     <string name="rating">rating</string>
     <string name="ksh">price(kshs)</string>
@@ -71,11 +78,14 @@
     <string name="rental_total_units">rental total units</string>
     <string name="rental_total_units_enter">enter your rental total units</string>
     <string name="rental_description">rental description</string>
-    <string name="rental_description_enter">describe your rental with at most 255 words</string>
+    <!--    <string name="rental_description_enter">describe your rental with at most 255 words</string>-->
+    <string name="rental_description_enter">describe rental</string>
     <string name="available">are there rooms available?</string>
     <string name="choose_image">choose image</string>
     <string name="post_rental">post rental</string>
     <string name="rental_image">rental image</string>
     <string name="upload_image">upload image</string>
     <string name="edit">edit</string>
+    <string name="my_rentals">my rentals</string>
+    <string name="total">total</string>
 </resources>
