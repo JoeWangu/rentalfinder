@@ -13,13 +13,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +29,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -86,6 +89,7 @@ fun RegisterScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterBody(
     navigateToLogin: () -> Unit,
@@ -97,6 +101,8 @@ fun RegisterBody(
     enabled: Boolean = true
 ) {
     var passwordVisibility by remember { mutableStateOf(false) }
+    var gender by remember { mutableStateOf(registerDetails.gender) }
+    var isGenderExpanded by remember { mutableStateOf(false) }
     val ctx = LocalContext.current
     val coroutine = rememberCoroutineScope()
     Column(
@@ -329,27 +335,78 @@ fun RegisterBody(
             }
         }
         Spacer(modifier = Modifier.padding(8.dp))
-        OutlinedTextField(
-            value = registerDetails.gender.toString(),
-            onValueChange = { onValueChange(registerDetails.copy(gender = it)) },
-            label = { Text(text = stringResource(id = R.string.gender)) },
-            placeholder = { Text(text = stringResource(id = R.string.gender)) },
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.None,
-                autoCorrect = false,
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
-            ),
-            singleLine = true,
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Face,
-                    contentDescription = null
-                )
-            },
-            shape = MaterialTheme.shapes.large,
+//        OutlinedTextField(
+//            value = registerDetails.gender.toString(),
+//            onValueChange = { onValueChange(registerDetails.copy(gender = it)) },
+//            label = { Text(text = stringResource(id = R.string.gender)) },
+//            placeholder = { Text(text = stringResource(id = R.string.gender)) },
+//            keyboardOptions = KeyboardOptions(
+//                capitalization = KeyboardCapitalization.None,
+//                autoCorrect = false,
+//                keyboardType = KeyboardType.Text,
+//                imeAction = ImeAction.Done
+//            ),
+//            singleLine = true,
+//            leadingIcon = {
+//                Icon(
+//                    imageVector = Icons.Default.Face,
+//                    contentDescription = null
+//                )
+//            },
+//            shape = MaterialTheme.shapes.large,
+//            modifier = Modifier
+//        )
+        ExposedDropdownMenuBox(
+            expanded = isGenderExpanded,
+            onExpandedChange = { isGenderExpanded = it },
             modifier = Modifier
-        )
+//                .weight(1f)
+        ) {
+            TextField(
+                value = gender!!,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isGenderExpanded)
+                },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                modifier = Modifier
+                    .menuAnchor()
+            )
+            ExposedDropdownMenu(
+                expanded = isGenderExpanded,
+                onDismissRequest = { isGenderExpanded = false }
+            ) {
+                DropdownMenuItem(
+                    text = {
+                        Text(text = "Male")
+                    },
+                    onClick = {
+                        gender = "Male"
+                        isGenderExpanded = false
+                    }
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(text = "Female")
+                    },
+                    onClick = {
+                        gender = "Female"
+                        isGenderExpanded = false
+                    }
+                )
+                DropdownMenuItem(
+                    text = {
+                        Text(text = "Others")
+                    },
+                    onClick = {
+                        gender = "Others"
+                        isGenderExpanded = false
+                    }
+                )
+            }
+        }
+
         Spacer(modifier = Modifier.padding(8.dp))
         OutlinedButton(
             onClick = {
