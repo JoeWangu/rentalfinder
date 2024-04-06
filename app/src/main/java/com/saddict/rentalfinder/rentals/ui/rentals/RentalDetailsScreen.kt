@@ -1,5 +1,7 @@
 package com.saddict.rentalfinder.rentals.ui.rentals
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,10 +18,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -33,7 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
@@ -50,6 +51,7 @@ import com.saddict.rentalfinder.rentals.model.local.RentalEntity
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.FavButton
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
+import com.saddict.rentalfinder.utils.toastUtil
 
 object RentalDetailsNavigationDestination : NavigationDestination {
     override val route: String = "rentaldetails"
@@ -61,7 +63,7 @@ object RentalDetailsNavigationDestination : NavigationDestination {
 @Composable
 fun RentalDetailsScreen(
     navigateUp: () -> Unit,
-    navigateToEditRental: (Int) -> Unit,
+//    navigateToEditRental: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RentalDetailsViewModel = hiltViewModel(),
     uiState: State<RenDetailsUiState> = viewModel.uiState.collectAsState(),
@@ -84,9 +86,9 @@ fun RentalDetailsScreen(
                     .padding(20.dp)
             ) {
                 Text(
-                    text = "${everyFirstLetterCapitalize(rental.name)} | ${
+                    text = "${everyFirstLetterCapitalize(rental.title)} | ${
                         everyFirstLetterCapitalize(
-                            rental.type
+                            rental.category
                         )
                     }",
                     style = MaterialTheme.typography.displaySmall,
@@ -94,7 +96,7 @@ fun RentalDetailsScreen(
                 )
                 PropertyRow(
                     rentalTotalUnits = "${rental.totalUnits.toString()} (rooms)",
-                    rentalRating = rental.rating.toString(),
+                    contact = rental.authorPhoneNumber.toString(),
                     rentalPrice = rental.price.toString()
                 )
                 Divider(
@@ -105,26 +107,55 @@ fun RentalDetailsScreen(
                 )
                 PropertyInfo(
                     rentalLocation = rental.location.toString(),
-                    rentalType = rental.type,
+                    rentalType = rental.category,
                     rentalPosted = rental.datePosted,
                     rentalDescription = rental.description
                 )
             }
         }
-        FloatingActionButton(
-            onClick = { navigateToEditRental(uiState.value.rentalDetails.id) },
-            shape = MaterialTheme.shapes.extraSmall,
-            modifier = Modifier
-                .padding(dimensionResource(id = R.dimen.padding_large))
-                .align(Alignment.BottomEnd)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = stringResource(R.string.edit),
+        rental.authorPhoneNumber?.let {
+            PhoneCallButton(
+                phoneNumber = it,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 5.dp, bottom = 30.dp)
             )
         }
     }
 }
+
+@Composable
+fun PhoneCallButton(
+    phoneNumber: String,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    Column(modifier = modifier) {
+        Button(onClick = {
+            // on below line we are opening the dialer of our 
+            // phone and passing phone number.
+            // Use format with "tel:" and phoneNumber created is
+            // stored in u.
+            val u = Uri.parse("tel:$phoneNumber")
+
+            // Create the intent and set the data for the
+            // intent as the phone number.
+            val i = Intent(Intent.ACTION_DIAL, u)
+            try {
+                // Launch the Phone app's dialer with a phone
+                // number to dial a call.
+                context.startActivity(i)
+            } catch (s: SecurityException) {
+                // show() method display the toast with
+                // exception message.
+                context.toastUtil("An error occurred")
+            }
+        }) {
+            Text(text = "Book Now")
+        }
+    }
+}
+
 
 @Composable
 fun PropertyImage(
@@ -197,7 +228,7 @@ fun PropertyImage(
 @Composable
 fun PropertyRow(
     rentalTotalUnits: String,
-    rentalRating: String,
+    contact: String,
     rentalPrice: String,
     modifier: Modifier = Modifier
 ) {
@@ -215,7 +246,7 @@ fun PropertyRow(
                 text = rentalTotalUnits
             )
             Text(
-                text = stringResource(id = R.string.rooms_available).capitalize(Locale.current),
+                text = stringResource(id = R.string.total).capitalize(Locale.current),
                 modifier = Modifier
                     .alpha(0.3F)
             )
@@ -229,10 +260,10 @@ fun PropertyRow(
             modifier = Modifier
         ) {
             Text(
-                text = rentalRating
+                text = contact
             )
             Text(
-                text = "House ${stringResource(id = R.string.rating).capitalize(Locale.current)}",
+                text = stringResource(id = R.string.contact).capitalize(Locale.current),
                 modifier = Modifier
                     .alpha(0.3F)
             )
@@ -284,13 +315,13 @@ fun PropertyInfo(
             )
             Spacer(modifier = Modifier.weight(1F))
             Text(
-                text =
-                when (rentalLocation) {
-                    "N" -> "Ngomongo"
-                    "D" -> "Diaspora"
-                    "M" -> "Mjini"
-                    else -> "Not Added"
-                },
+                text = rentalLocation,
+//                when (rentalLocation) {
+//                    "N" -> "Ngomongo"
+//                    "D" -> "Diaspora"
+//                    "M" -> "Mjini"
+//                    else -> "Not Added"
+//                },
                 modifier = Modifier
                     .alpha(0.4F)
             )
