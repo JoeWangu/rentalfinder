@@ -18,12 +18,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -49,7 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.model.remote.RentalResults
+import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.ErrorPlaceholderCardItem
 import com.saddict.rentalfinder.utils.FavButton
@@ -73,7 +70,6 @@ fun HomeScreen(
     selectedBottomItem: Int,
     onItemSelected: (Int) -> Unit,
     navigateToRentalDetails: (Int) -> Unit,
-    navigateToRentalEntry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -96,19 +92,6 @@ fun HomeScreen(
                 onItemSelected = onItemSelected
             )
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { navigateToRentalEntry() },
-                shape = MaterialTheme.shapes.extraSmall,
-                modifier = Modifier
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null
-                )
-            }
-        },
-        floatingActionButtonPosition = FabPosition.End
     ) { contentPadding ->
         HomeBody(
             navigateToRentalDetails = navigateToRentalDetails,
@@ -348,7 +331,7 @@ fun PopularCard(
                 .padding(8.dp)
         ) {
             Text(
-                text = everyFirstLetterCapitalize(rental.name),
+                text = everyFirstLetterCapitalize(rental.title),
                 fontSize = 15.sp,
                 style = MaterialTheme.typography.displayMedium,
                 softWrap = false,
@@ -364,7 +347,7 @@ fun PopularCard(
                 textAlign = TextAlign.Center,
             )
             Text(
-                text = rental.type,
+                text = rental.category,
                 fontSize = 15.sp,
                 style = MaterialTheme.typography.bodyLarge,
                 softWrap = false,
