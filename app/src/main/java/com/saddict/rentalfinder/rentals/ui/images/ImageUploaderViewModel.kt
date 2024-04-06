@@ -55,7 +55,7 @@ class ImageUploaderViewModel @Inject constructor(
                 try {
                     _uiState.emit(UploadImageUiState.Loading)
                     val part = createPartFromBitmap(context, bitmap, uri)
-                    val upload = remoteDataSource.postImage(
+                    val upload = remoteDataSource.uploadImage(
                         part
                     )
                     if (upload.isSuccessful) {

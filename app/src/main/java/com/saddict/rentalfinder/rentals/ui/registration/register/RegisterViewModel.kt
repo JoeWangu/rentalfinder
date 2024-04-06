@@ -92,7 +92,7 @@ data class RegisterDetails(
     val phoneNumber: String = "",
     val address: String = "",
     val dob: String? = "1996-04-24",
-    val gender: String? = "M"
+    val gender: String? = "Male"
 )
 
 fun RegisterDetails.toRegisterUser(): RegisterUser {

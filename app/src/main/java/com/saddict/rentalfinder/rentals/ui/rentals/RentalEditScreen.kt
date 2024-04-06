@@ -40,6 +40,10 @@ fun RentalEditScreen(
     uiState: RenEntryUiState = editViewModel.editUiState,
     editDetails: EntryDetails = uiState.renEntry,
 ) {
+    val state = rememberScrollState()
+    val ctx = LocalContext.current
+    val coroutine = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             RFATopBar(
@@ -48,10 +52,7 @@ fun RentalEditScreen(
                 navigateUp = navigateUp
             )
         }
-    ) {
-        val state = rememberScrollState()
-        val ctx = LocalContext.current
-        val coroutine = rememberCoroutineScope()
+    ) { innerPadding ->
         RentalEntryBody(
             navigateToImagePicker = navigateToImagePicker,
             navigateToImageUploader = navigateToImageUploader,
@@ -61,7 +62,7 @@ fun RentalEditScreen(
             onValueChange = editViewModel::updateUiState,
             saveButtonEnabled = editViewModel.editUiState.isEntryValid,
             modifier = modifier
-                .padding(it)
+                .padding(innerPadding)
                 .verticalScroll(state = state),
             saveButtonOnClick = {
                 coroutine.launch {
@@ -69,19 +70,19 @@ fun RentalEditScreen(
                     editViewModel.uiState.collect { state ->
                         when (state) {
                             EditRentalUiState.Loading -> {
-                                ctx.toastUtil("please wait! posting rental")
+                                ctx.toastUtil("please wait! updating rental")
                             }
 
                             EditRentalUiState.Error -> {
-                                ctx.toastUtil("sorry could not post rental")
+                                ctx.toastUtil("sorry could not update rental")
                             }
 
                             EditRentalUiState.SuccessError -> {
-                                ctx.toastUtil("an error occured when posting")
+                                ctx.toastUtil("an error occured when updating")
                             }
 
                             is EditRentalUiState.Success -> {
-                                ctx.toastUtilLong("successfully posted")
+                                ctx.toastUtilLong("successfully updated")
                                 delay(1_000L)
                                 navigateToHome()
                             }

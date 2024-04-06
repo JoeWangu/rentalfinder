@@ -9,5 +9,5 @@ import javax.inject.Inject
 class RentalImageViewModel @Inject constructor(
     repository: Repository
 ) : ViewModel() {
-    val getAllImages = repository.getAllImages()
+    val getAllImages = repository.getPagedImages()
 }

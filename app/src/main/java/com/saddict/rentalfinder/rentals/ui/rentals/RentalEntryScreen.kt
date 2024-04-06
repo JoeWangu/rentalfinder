@@ -151,14 +151,14 @@ fun RentalEntryBody(
                 .padding(top = 8.dp, start = 8.dp, end = 8.dp)
                 .fillMaxSize()
         ) {
-            var renType by remember { mutableStateOf(entryDetails.type) }
+            var renCategory by remember { mutableStateOf(entryDetails.category) }
+            var isCategoryExpanded by remember { mutableStateOf(false) }
             var location by remember { mutableStateOf(entryDetails.location) }
-            var isTypeExpanded by remember { mutableStateOf(false) }
             var isLocationExpanded by remember { mutableStateOf(false) }
             var radioSelected by remember { mutableStateOf(entryDetails.available) }
             OutlinedTextField(
-                value = entryDetails.name,
-                onValueChange = { onValueChange(entryDetails.copy(name = it)) },
+                value = entryDetails.title,
+                onValueChange = { onValueChange(entryDetails.copy(title = it)) },
                 label = { Text(text = stringResource(id = R.string.rental_name)) },
                 placeholder = { Text(text = stringResource(id = R.string.rental_name_enter)) },
                 keyboardOptions = KeyboardOptions(
@@ -268,8 +268,12 @@ fun RentalEntryBody(
                 )
                 Spacer(modifier = Modifier.weight(1F))
                 Switch(
-                    checked = radioSelected,
-                    onCheckedChange = { radioSelected = it }
+                    checked = entryDetails.available,
+                    onCheckedChange = {
+                        radioSelected = it
+//                        entryDetails.available = it
+                        onValueChange(entryDetails.copy(available = it))
+                    }
                 )
             }
             Row(
@@ -277,51 +281,79 @@ fun RentalEntryBody(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 ExposedDropdownMenuBox(
-                    expanded = isTypeExpanded,
-                    onExpandedChange = { isTypeExpanded = it },
+                    expanded = isCategoryExpanded,
+                    onExpandedChange = { isCategoryExpanded = it },
                     modifier = Modifier
                         .weight(1f)
                 ) {
                     TextField(
-                        value = renType,
+                        value = renCategory,
                         onValueChange = {},
                         readOnly = true,
                         trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isTypeExpanded)
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCategoryExpanded)
                         },
                         colors = ExposedDropdownMenuDefaults.textFieldColors(),
                         modifier = Modifier
                             .menuAnchor()
                     )
                     ExposedDropdownMenu(
-                        expanded = isTypeExpanded,
-                        onDismissRequest = { isTypeExpanded = false }
+                        expanded = isCategoryExpanded,
+                        onDismissRequest = { isCategoryExpanded = false }
                     ) {
                         DropdownMenuItem(
                             text = {
-                                Text(text = "Single")
+                                Text(text = "bedSitter")
                             },
                             onClick = {
-                                renType = "single"
-                                isTypeExpanded = false
+                                renCategory = "bedsitter"
+                                isCategoryExpanded = false
+//                                entryDetails.category = "bedsitter"
+                                onValueChange(entryDetails.copy(category = renCategory))
                             }
                         )
                         DropdownMenuItem(
                             text = {
-                                Text(text = "BedSitter")
+                                Text(text = "single")
                             },
                             onClick = {
-                                renType = "bedsitter"
-                                isTypeExpanded = false
+                                renCategory = "single"
+                                isCategoryExpanded = false
+//                                entryDetails.category = "single"
+                                onValueChange(entryDetails.copy(category = renCategory))
                             }
                         )
                         DropdownMenuItem(
                             text = {
-                                Text(text = "1 Bedroom")
+                                Text(text = "double")
                             },
                             onClick = {
-                                renType = "1 bedroom"
-                                isTypeExpanded = false
+                                renCategory = "double"
+                                isCategoryExpanded = false
+//                                entryDetails.category = "double"
+                                onValueChange(entryDetails.copy(category = renCategory))
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = "1 bedroom")
+                            },
+                            onClick = {
+                                renCategory = "1 bedroom"
+                                isCategoryExpanded = false
+//                                entryDetails.category = "1 bedroom"
+                                onValueChange(entryDetails.copy(category = renCategory))
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = "2 bedroom")
+                            },
+                            onClick = {
+                                renCategory = "2 bedroom"
+                                isCategoryExpanded = false
+//                                entryDetails.category = "2 bedroom"
+                                onValueChange(entryDetails.copy(category = renCategory))
                             }
                         )
                     }
@@ -353,8 +385,10 @@ fun RentalEntryBody(
                                 Text(text = "Mjini")
                             },
                             onClick = {
-                                location = "M"
+                                location = "Mjini"
                                 isLocationExpanded = false
+//                                entryDetails.location = "Mjini"
+                                onValueChange(entryDetails.copy(location = location))
                             }
                         )
                         DropdownMenuItem(
@@ -362,8 +396,10 @@ fun RentalEntryBody(
                                 Text(text = "Ngomongo")
                             },
                             onClick = {
-                                location = "N"
+                                location = "Ngomongo"
                                 isLocationExpanded = false
+//                                entryDetails.location = "Ngomongo"
+                                onValueChange(entryDetails.copy(location = location))
                             }
                         )
                         DropdownMenuItem(
@@ -371,8 +407,10 @@ fun RentalEntryBody(
                                 Text(text = "Diaspora")
                             },
                             onClick = {
-                                location = "D"
+                                location = "Diaspora"
                                 isLocationExpanded = false
+//                                entryDetails.location = "Diaspora"
+                                onValueChange(entryDetails.copy(location = location))
                             }
                         )
                     }

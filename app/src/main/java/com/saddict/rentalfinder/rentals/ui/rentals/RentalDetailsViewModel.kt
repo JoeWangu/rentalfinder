@@ -22,7 +22,7 @@ class RentalDetailsViewModel @Inject constructor(
     private val rentalId: Int =
         checkNotNull(savedStateHandle[RentalDetailsNavigationDestination.RENTALIDARG])
     val uiState: StateFlow<RenDetailsUiState> =
-        localDataSource.fetchOneRentals(rentalId)
+        localDataSource.fetchOneRental(rentalId)
             .filterNotNull()
             .map { RenDetailsUiState(rentalDetails = it) }
             .stateIn(
@@ -35,18 +35,26 @@ class RentalDetailsViewModel @Inject constructor(
 data class RenDetailsUiState(
     val rentalDetails: RentalEntity = RentalEntity(
         id = 0,
-        name = "",
         image = 1,
-        price = "",
-        description = "",
-        type = "",
-        location = "",
-        available = false,
-        rating = 0,
+        price = 1.0f,
         totalUnits = 0,
+        title = "",
+        description = "",
+        category = "",
+        location = "",
         datePosted = "",
         dateModified = "",
+        timePosted = "",
+        timeModified = "",
+        available = true,
+        isActive = true,
+        authorId = 1,
+        authorFirstName = "",
+        authorPhoneNumber = "",
+        authorEmail = "",
         imageUrl = "",
-        imageName = ""
+        imageName = "",
+        avgRating = 0,
+        author = ""
     )
 )

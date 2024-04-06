@@ -7,9 +7,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saddict.rentalfinder.rentals.data.local.RentalDatabase
+import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
+import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
 import com.saddict.rentalfinder.rentals.model.local.RentalEntity
-import com.saddict.rentalfinder.rentals.network.RentalService
+import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
+import com.saddict.rentalfinder.utils.mapToEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,7 +23,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 sealed interface EditRentalUiState {
-    data object Success : EditRentalUiState
+    data class Success(val rental: RentalResults) : EditRentalUiState
     data object Error : EditRentalUiState
     data object SuccessError : EditRentalUiState
     data object Loading : EditRentalUiState
@@ -30,30 +32,31 @@ sealed interface EditRentalUiState {
 @HiltViewModel
 class RentalEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val appApi: RentalService,
-    private val appDatabase: RentalDatabase
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource
 ) : ViewModel() {
     var editUiState by mutableStateOf(RenEntryUiState())
         private set
-    private val rentalId: Int =
-        checkNotNull(savedStateHandle[RentalEditNavigationDestination.RENTALIDARG])
     private val _uiState = MutableSharedFlow<EditRentalUiState>()
     val uiState: SharedFlow<EditRentalUiState> = _uiState
 
-    fun updateUiState(editDetails: EntryDetails) {
-        editUiState = RenEntryUiState(
-            renEntry = editDetails,
-            isEntryValid = validateInput(editDetails)
-        )
-    }
+    private val rentalId: Int =
+        checkNotNull(savedStateHandle[RentalEditNavigationDestination.RENTALIDARG])
 
     init {
         viewModelScope.launch {
-            editUiState = appDatabase.rentalDao().fetchOneRentals(rentalId)
+            editUiState = localDataSource.fetchOneRental(rentalId)
                 .filterNotNull()
                 .first()
                 .toRentalEditUiState(true)
         }
+    }
+
+    fun updateUiState(entryDetails: EntryDetails) {
+        editUiState = RenEntryUiState(
+            renEntry = entryDetails,
+            isEntryValid = validateInput(entryDetails)
+        )
     }
 
     suspend fun updateRental() {
@@ -62,50 +65,54 @@ class RentalEditViewModel @Inject constructor(
                 try {
                     _uiState.emit(EditRentalUiState.Loading)
                     if (validateInput()) {
-                        val post = appApi.updateRental(
+//                        Log.d("updateRentalsTag", "updateRental: ${editUiState.renEntry.toCreateRental()}")
+                        val post = remoteDataSource.updateRental(
                             id = rentalId,
                             body = editUiState.renEntry.toCreateRental()
                         )
 //                            remoteDataSource.postRental(entryUiState.renEntry.toCreateRental())
                         val response = post.body()
                         if (post.isSuccessful) {
-                            _uiState.emit(EditRentalUiState.Success)
-                            Log.d("Success", response.toString())
+                            _uiState.emit(EditRentalUiState.Success(response!!))
+                            Log.d("Success Updating", response.toString())
+//                            if (response != null) {
+                            localDataSource.insertOneRental(response.mapToEntity())
+//                            }
                         } else {
                             val errorBody = post.raw()
                             _uiState.emit(EditRentalUiState.SuccessError)
-                            Log.e("post error", "post not successful $errorBody")
+                            Log.e("update error", "post not successful $errorBody")
                         }
                     }
                 } catch (e: Exception) {
                     _uiState.emit(EditRentalUiState.Error)
-                    Log.e("PostRentalError", "cannot post rental $e")
+                    Log.e("UpdateRentalError", "cannot post rental $e")
                 }
             }
         }
     }
 
-    private fun validateInput(uiState: EntryDetails = editUiState.renEntry): Boolean {
-        return uiState.name.isNotBlank() && uiState.location.isNotBlank()
-                && uiState.description.isNotBlank() && uiState.type.isNotBlank()
-                && uiState.price.isNotBlank()
+    private fun validateInput(entryDetails: EntryDetails = editUiState.renEntry): Boolean {
+        return entryDetails.title.isNotBlank() && entryDetails.location.isNotBlank()
+                && entryDetails.description.isNotBlank() && entryDetails.category.isNotBlank()
+                && entryDetails.price.isNotBlank()
     }
 }
 
-fun RentalEntity.toEditDetails(): EntryDetails = EntryDetails(
-    name = name,
+fun RentalEntity.toEntryDetails(): EntryDetails = EntryDetails(
     image = image ?: 1,
-    price = price ?: "no price",
+    price = price.toString(),
+    total_units = totalUnits.toString(),
+    title = title,
     description = description,
-    type = type,
-    location = location ?: "no price",
+    category = category,
+    location = location.toString(),
     available = available,
-    rating = rating.toString(),
-    total_units = totalUnits.toString()
+    isActive = isActive,
 )
 
 fun RentalEntity.toRentalEditUiState(isEntryValid: Boolean = false):
         RenEntryUiState = RenEntryUiState(
-    renEntry = this.toEditDetails(),
+    renEntry = this.toEntryDetails(),
     isEntryValid = isEntryValid
 )

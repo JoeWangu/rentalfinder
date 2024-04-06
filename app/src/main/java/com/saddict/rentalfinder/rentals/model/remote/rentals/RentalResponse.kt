@@ -1,10 +1,10 @@
-package com.saddict.rentalfinder.rentals.model.remote
+package com.saddict.rentalfinder.rentals.model.remote.rentals
 
 import androidx.annotation.Keep
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @Keep
-data class Rental(
+data class RentalResponse(
     @JsonProperty("count")
     val count: Int,
     @JsonProperty("next")

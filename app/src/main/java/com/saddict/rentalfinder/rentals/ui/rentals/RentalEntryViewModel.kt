@@ -6,9 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
-import com.saddict.rentalfinder.rentals.model.remote.CreateRental
-import com.saddict.rentalfinder.rentals.model.remote.RentalResults
+import com.saddict.rentalfinder.rentals.model.remote.rentals.CreateRental
+import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
+import com.saddict.rentalfinder.utils.mapToEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,12 +28,18 @@ sealed interface CreateRentalUiState {
 
 @HiltViewModel
 class RentalEntryViewModel @Inject constructor(
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource
 ) : ViewModel() {
-    private val _uiState = MutableSharedFlow<CreateRentalUiState>()
-    val uiState: SharedFlow<CreateRentalUiState> = _uiState
     var entryUiState by mutableStateOf(RenEntryUiState())
         private set
+    private val _uiState = MutableSharedFlow<CreateRentalUiState>()
+    val uiState: SharedFlow<CreateRentalUiState> = _uiState
+
+    fun updateUiState(entryDetails: EntryDetails) {
+        entryUiState =
+            RenEntryUiState(renEntry = entryDetails, isEntryValid = validateInput(entryDetails))
+    }
 
     fun postRental() {
         viewModelScope.launch {
@@ -39,12 +47,15 @@ class RentalEntryViewModel @Inject constructor(
                 try {
                     _uiState.emit(CreateRentalUiState.Loading)
                     if (validateInput()) {
-                        val post =
-                            remoteDataSource.postRental(entryUiState.renEntry.toCreateRental())
+//                        Log.d("createRentalsTag", "${entryUiState.renEntry.toCreateRental()}")
+                        val post = remoteDataSource.postRental(
+                            entryUiState.renEntry.toCreateRental()
+                        )
                         val response = post.body()
                         if (post.isSuccessful) {
                             _uiState.emit(CreateRentalUiState.Success(response!!))
                             Log.d("Success", response.toString())
+                            localDataSource.insertOneRental(response.mapToEntity())
                         } else {
                             val errorBody = post.raw()
                             _uiState.emit(CreateRentalUiState.SuccessError)
@@ -59,17 +70,10 @@ class RentalEntryViewModel @Inject constructor(
         }
     }
 
-    fun updateUiState(uiState: EntryDetails) {
-        entryUiState = RenEntryUiState(
-            renEntry = uiState,
-            isEntryValid = validateInput(uiState)
-        )
-    }
-
-    private fun validateInput(uiState: EntryDetails = entryUiState.renEntry): Boolean {
-        return uiState.name.isNotBlank() && uiState.location.isNotBlank()
-                && uiState.description.isNotBlank() && uiState.type.isNotBlank()
-                && uiState.price.isNotBlank()
+    private fun validateInput(entryDetails: EntryDetails = entryUiState.renEntry): Boolean {
+        return entryDetails.title.isNotBlank() && entryDetails.location.isNotBlank()
+                && entryDetails.description.isNotBlank() && entryDetails.category.isNotBlank()
+                && entryDetails.price.isNotBlank()
     }
 }
 
@@ -79,27 +83,26 @@ data class RenEntryUiState(
 )
 
 data class EntryDetails(
-    val name: String = "",
     val image: Int = 1,
     val price: String = "",
-    val description: String = "",
-    val type: String = "single",
-    val location: String = "M",
-    val available: Boolean = false,
-    val rating: String = "3",
     @Suppress("PropertyName")
     val total_units: String = "",
+    val title: String = "",
+    val description: String = "",
+    val category: String = "single",
+    val location: String = "Mjini",
+    val available: Boolean = true,
+    val isActive: Boolean = true,
 )
 
 fun EntryDetails.toCreateRental(): CreateRental = CreateRental(
-    name = name,
     image = image,
-    price = price,
+    price = price.toFloat(),
+    total_units = total_units.toInt(),
+    title = title,
     description = description,
-    type = type,
+    category = category,
     location = location,
     available = available,
-    rating = rating,
-    total_units = total_units.toInt(),
+    is_active = isActive,
 )
-//image = 8

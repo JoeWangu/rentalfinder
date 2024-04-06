@@ -9,5 +9,5 @@ import javax.inject.Inject
 class ExploreViewModel @Inject constructor(
     repository: Repository
 ) : ViewModel() {
-    val getAllRentals = repository.getAllRentals()
+    val getAllRentals = repository.getPagedRentals()
 }

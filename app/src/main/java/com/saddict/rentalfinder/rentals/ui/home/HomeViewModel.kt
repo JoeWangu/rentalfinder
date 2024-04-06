@@ -3,9 +3,9 @@ package com.saddict.rentalfinder.rentals.ui.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saddict.rentalfinder.rentals.data.local.RentalDatabase
-import com.saddict.rentalfinder.rentals.model.remote.RentalResults
-import com.saddict.rentalfinder.rentals.network.RentalService
+import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
+import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
+import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
 import com.saddict.rentalfinder.utils.mapToEntity
 import com.saddict.rentalfinder.utils.mapToResults
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,8 +26,9 @@ sealed interface HomeUiState {
 //@SuppressLint("StaticFieldLeak")
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val appApi: RentalService,
-    private val appDatabase: RentalDatabase
+    private val appApi: RemoteDataSource,
+    private val appDao: LocalDataSource,
+//    private val appDatabase: RentalDatabase
 ) : ViewModel() {
     private val _uiState = MutableSharedFlow<HomeUiState>()
     val uiState: SharedFlow<HomeUiState> = _uiState
@@ -38,17 +39,17 @@ class HomeViewModel @Inject constructor(
                 try {
                     _uiState.emit(HomeUiState.Loading)
                     val items =
-                        appDatabase.rentalDao().fetchRentals().first().map { it.mapToResults() }
+                        appDao.fetchRentals().first().map { it.mapToResults() }
                     if (items.isNotEmpty()) {
                         _uiState.emit(HomeUiState.Success(items))
                     } else {
-                        val response = appApi.getRentals("json", 1).results
-                        appDatabase.rentalDao().insertAllRentals(response.map { it.mapToEntity() })
+                        val response = appApi.getRentals(1).results
+                        appDao.insertRentals(response.map { it.mapToEntity() })
                         _uiState.emit(HomeUiState.Success(response))
                     }
                 } catch (e: Exception) {
                     _uiState.emit(HomeUiState.Error)
-                    Log.e("Home Items", "Could not load home items")
+                    Log.e("Home Items", "Could not load home items ${e.cause}")
                 }
             }
         }
