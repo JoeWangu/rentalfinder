@@ -38,12 +38,16 @@ import com.saddict.rentalfinder.rentals.ui.registration.login.LoginDestination
 import com.saddict.rentalfinder.rentals.ui.registration.login.LoginScreen
 import com.saddict.rentalfinder.rentals.ui.registration.register.RegisterDestination
 import com.saddict.rentalfinder.rentals.ui.registration.register.RegisterScreen
+import com.saddict.rentalfinder.rentals.ui.rentals.ManageRentalsDestination
+import com.saddict.rentalfinder.rentals.ui.rentals.ManageRentalsScreen
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalDetailsNavigationDestination
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalDetailsScreen
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalEditNavigationDestination
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalEditScreen
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalEntryNavigationDestination
 import com.saddict.rentalfinder.rentals.ui.rentals.RentalEntryScreen
+import com.saddict.rentalfinder.rentals.ui.rentals.RentalManageDetailsNavigationDestination
+import com.saddict.rentalfinder.rentals.ui.rentals.RentalManageDetailsScreen
 import com.saddict.rentalfinder.utils.toastUtil
 
 @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
@@ -82,9 +86,9 @@ fun RentalsNavGraph(
                         "${RentalDetailsNavigationDestination.route}/${it}"
                     )
                 },
-                navigateToRentalEntry = { navController.navigate(RentalEntryNavigationDestination.route) }
             )
         }
+
         composable(route = ExploreDestination.route) {
 //             Handle back button press
             BackHandler(onBack = {
@@ -109,6 +113,7 @@ fun RentalsNavGraph(
                 },
             )
         }
+
         composable(route = FavouritesDestination.route) {
             BackHandler(onBack = {
                 if (selectedItem > 0) {
@@ -127,6 +132,7 @@ fun RentalsNavGraph(
                 onItemSelected = { selectedItem = it }
             )
         }
+
         composable(route = ProfileDestination.route) {
             BackHandler(onBack = {
                 if (selectedItem > 0) {
@@ -147,20 +153,24 @@ fun RentalsNavGraph(
                 navigateToAddress = {},
                 navigateToSettings = { navController.navigate(SettingsDestination.route) },
                 navigateToHelpCenter = {},
-                navigateToContact = {}
+                navigateToContact = {},
+                navigateToMyRentals = { navController.navigate(ManageRentalsDestination.route) }
             )
         }
+
         composable(route = AccountDestination.route) {
             AccountScreen(
                 navigateUp = { navController.popBackStack() }
             )
         }
+
         composable(route = SettingsDestination.route) {
             SettingsScreen(
                 navigateUp = { navController.popBackStack() },
                 navigateToLogin = { navController.navigate(LoginDestination.route) },
             )
         }
+
         composable(route = LoginDestination.route) {
             BackHandler {
                 if (pressedTime + 2000 > System.currentTimeMillis()) {
@@ -175,6 +185,7 @@ fun RentalsNavGraph(
                 navigateToHome = { navController.navigate(HomeDestination.route) },
             )
         }
+
         composable(route = RegisterDestination.route) {
             RegisterScreen(
                 navigateUp = { navController.popBackStack() },
@@ -182,6 +193,7 @@ fun RentalsNavGraph(
                 navigateToHome = { navController.navigate(HomeDestination.route) },
             )
         }
+
         composable(
             route = RentalDetailsNavigationDestination.routeWithArgs,
             arguments = listOf(navArgument(RentalDetailsNavigationDestination.RENTALIDARG) {
@@ -190,9 +202,10 @@ fun RentalsNavGraph(
         ) {
             RentalDetailsScreen(
                 navigateUp = { navController.popBackStack() },
-                navigateToEditRental = { navController.navigate("${RentalEditNavigationDestination.route}/${it}") }
+//                navigateToEditRental = { navController.navigate("${RentalEditNavigationDestination.route}/${it}") }
             )
         }
+
         composable(
             route = RentalEntryNavigationDestination.route,
             arguments = listOf(
@@ -225,6 +238,7 @@ fun RentalsNavGraph(
                 imageName = imageName
             )
         }
+
         composable(route = RentalImageNavigationDestination.route) {
             RentalImageScreen(
                 navigateUp = { navController.popBackStack() },
@@ -238,11 +252,13 @@ fun RentalsNavGraph(
                 }
             )
         }
+
         composable(route = ImageUploaderNavigationDestination.route) {
             ImageUploaderScreen(
                 navigateUp = { navController.popBackStack() }
             )
         }
+
         composable(
             route = RentalEditNavigationDestination.routeWithArgs,
             arguments = listOf(
@@ -276,6 +292,30 @@ fun RentalsNavGraph(
                 },
                 imageId = imageId,
                 imageName = imageName
+            )
+        }
+
+        composable(route = ManageRentalsDestination.route) {
+            ManageRentalsScreen(
+                navigateUp = { navController.popBackStack() },
+                navigateToRentalDetails = {
+                    navController.navigate(
+                        "${RentalManageDetailsNavigationDestination.route}/${it}"
+                    )
+                },
+                navigateToRentalEntry = { navController.navigate(RentalEntryNavigationDestination.route) }
+            )
+        }
+
+        composable(
+            route = RentalManageDetailsNavigationDestination.routeWithArgs,
+            arguments = listOf(navArgument(RentalManageDetailsNavigationDestination.RENTALIDARG) {
+                type = NavType.IntType
+            })
+        ) {
+            RentalManageDetailsScreen(
+                navigateUp = { navController.popBackStack() },
+                navigateToEditRental = { navController.navigate("${RentalEditNavigationDestination.route}/${it}") }
             )
         }
     }

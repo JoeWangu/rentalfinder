@@ -1,17 +1,18 @@
 package com.saddict.rentalfinder.rentals.network
 
-import com.saddict.rentalfinder.rentals.model.remote.CreateRental
-import com.saddict.rentalfinder.rentals.model.remote.ImageList
-import com.saddict.rentalfinder.rentals.model.remote.Rental
-import com.saddict.rentalfinder.rentals.model.remote.RentalImage
-import com.saddict.rentalfinder.rentals.model.remote.RentalResults
+import com.saddict.rentalfinder.rentals.model.remote.images.ImageResponse
+import com.saddict.rentalfinder.rentals.model.remote.images.RentalImageResults
 import com.saddict.rentalfinder.rentals.model.remote.register.LoginUser
 import com.saddict.rentalfinder.rentals.model.remote.register.LoginUserResponse
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUser
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUserResponse
+import com.saddict.rentalfinder.rentals.model.remote.rentals.CreateRental
+import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResponse
+import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
 import com.saddict.rentalfinder.utils.Constants.CREATE_USER_URL
 import com.saddict.rentalfinder.utils.Constants.LOGIN_URL
 import com.saddict.rentalfinder.utils.Constants.RENTAL_IMAGE_URL
+import com.saddict.rentalfinder.utils.Constants.RENTAL_MANAGE_URL
 import com.saddict.rentalfinder.utils.Constants.RENTAL_URL
 import com.saddict.rentalfinder.utils.Constants.SINGLE_RENTAL_URL
 import okhttp3.MultipartBody
@@ -39,12 +40,18 @@ interface RentalService {
     suspend fun getRentals(
         @Query("format") format: String,
         @Query("page") page: Int,
-    ): Rental
+    ): RentalResponse
+
+    @GET(RENTAL_MANAGE_URL)
+    suspend fun getManageRentals(
+        @Query("format") format: String,
+        @Query("page") page: Int,
+    ): RentalResponse
 
     @GET(SINGLE_RENTAL_URL)
     suspend fun getSingleRental(@Path("id") id: Int): RentalResults
 
-    @POST(RENTAL_URL)
+    @POST(RENTAL_MANAGE_URL)
     suspend fun postRental(@Body body: CreateRental): Response<RentalResults>
 
     @PUT(SINGLE_RENTAL_URL)
@@ -57,9 +64,9 @@ interface RentalService {
     suspend fun getImages(
         @Query("format") format: String,
         @Query("page") page: Int,
-    ): ImageList
+    ): ImageResponse
 
     @Multipart
     @POST(RENTAL_IMAGE_URL)
-    suspend fun uploadImage(@Part image: MultipartBody.Part): Response<RentalImage>
+    suspend fun uploadImage(@Part image: MultipartBody.Part): Response<RentalImageResults>
 }

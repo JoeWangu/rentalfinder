@@ -2,8 +2,10 @@ package com.saddict.rentalfinder.rentals.di
 
 import android.content.Context
 import androidx.room.Room
-import com.saddict.rentalfinder.rentals.data.local.RentalDao
 import com.saddict.rentalfinder.rentals.data.local.RentalDatabase
+import com.saddict.rentalfinder.rentals.data.local.dao.ImageDao
+import com.saddict.rentalfinder.rentals.data.local.dao.ManageRentalDao
+import com.saddict.rentalfinder.rentals.data.local.dao.RentalDao
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSourceImpl
 import dagger.Module
@@ -31,7 +33,27 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideLocalDataSource(productDao: RentalDao): LocalDataSource {
-        return LocalDataSourceImpl(productDao)
+    fun providesManageRentalDao(rentalDatabase: RentalDatabase): ManageRentalDao {
+        return rentalDatabase.manageRentalDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesImageDao(rentalDatabase: RentalDatabase): ImageDao {
+        return rentalDatabase.imageDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalDataSource(
+        rentalDao: RentalDao,
+        imageDao: ImageDao,
+        manageRentalDao: ManageRentalDao
+    ): LocalDataSource {
+        return LocalDataSourceImpl(
+            rentalDao = rentalDao,
+            imageDao = imageDao,
+            manageRentalDao = manageRentalDao
+        )
     }
 }

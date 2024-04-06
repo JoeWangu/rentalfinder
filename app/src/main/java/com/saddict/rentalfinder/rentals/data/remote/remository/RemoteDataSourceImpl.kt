@@ -1,14 +1,14 @@
 package com.saddict.rentalfinder.rentals.data.remote.remository
 
-import com.saddict.rentalfinder.rentals.model.remote.CreateRental
-import com.saddict.rentalfinder.rentals.model.remote.ImageList
-import com.saddict.rentalfinder.rentals.model.remote.Rental
-import com.saddict.rentalfinder.rentals.model.remote.RentalImage
-import com.saddict.rentalfinder.rentals.model.remote.RentalResults
+import com.saddict.rentalfinder.rentals.model.remote.images.ImageResponse
+import com.saddict.rentalfinder.rentals.model.remote.images.RentalImageResults
 import com.saddict.rentalfinder.rentals.model.remote.register.LoginUser
 import com.saddict.rentalfinder.rentals.model.remote.register.LoginUserResponse
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUser
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUserResponse
+import com.saddict.rentalfinder.rentals.model.remote.rentals.CreateRental
+import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResponse
+import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
 import com.saddict.rentalfinder.rentals.network.RentalService
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -25,8 +25,12 @@ class RemoteDataSourceImpl @Inject constructor(
         return rentalService.registerUser(user)
     }
 
-    override suspend fun getRentals(page: Int): Rental {
-        return rentalService.getRentals("json", page)
+    override suspend fun getRentals(page: Int): RentalResponse {
+        return rentalService.getRentals(format = "json", page = page)
+    }
+
+    override suspend fun getManageRentals(page: Int): RentalResponse {
+        return rentalService.getManageRentals(format = "json", page = page)
     }
 
     override suspend fun getSingleRental(id: Int): RentalResults {
@@ -41,11 +45,11 @@ class RemoteDataSourceImpl @Inject constructor(
         return rentalService.updateRental(id, body)
     }
 
-    override suspend fun getImages(page: Int): ImageList {
-        return rentalService.getImages("json", page = page)
+    override suspend fun getImages(page: Int): ImageResponse {
+        return rentalService.getImages(format = "json", page = page)
     }
 
-    override suspend fun postImage(image: MultipartBody.Part): Response<RentalImage> {
+    override suspend fun uploadImage(image: MultipartBody.Part): Response<RentalImageResults> {
         return rentalService.uploadImage(image)
     }
 }
