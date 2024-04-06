@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
@@ -60,6 +61,7 @@ fun ProfileScreen(
     navigateToSettings: () -> Unit,
     navigateToHelpCenter: () -> Unit,
     navigateToContact: () -> Unit,
+    navigateToMyRentals: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -74,9 +76,9 @@ fun ProfileScreen(
         },
         bottomBar = {
             RFABottomBar(
-                navigateToHome = { navigateToHome() },
-                navigateToExplore = { navigateToExplore() },
-                navigateToFavourites = { navigateToFavourites() },
+                navigateToHome = navigateToHome,
+                navigateToExplore = navigateToExplore,
+                navigateToFavourites = navigateToFavourites,
                 navigateToProfile = {},
                 selectedItem = selectedItem,
                 onItemSelected = onItemSelected
@@ -84,11 +86,12 @@ fun ProfileScreen(
         }
     ) { innerPadding ->
         ProfileBody(
-            navigateToMyAccount = { navigateToMyAccount() },
-            navigateToAddress = { navigateToAddress() },
-            navigateToSettings = { navigateToSettings() },
-            navigateToHelpCenter = { navigateToHelpCenter() },
-            navigateToContact = { navigateToContact() },
+            navigateToMyAccount = navigateToMyAccount,
+            navigateToAddress = navigateToAddress,
+            navigateToSettings = navigateToSettings,
+            navigateToHelpCenter = navigateToHelpCenter,
+            navigateToContact = navigateToContact,
+            navigateToMyRentals = navigateToMyRentals,
             modifier = Modifier
                 .padding(innerPadding)
         )
@@ -102,6 +105,7 @@ fun ProfileBody(
     navigateToSettings: () -> Unit,
     navigateToHelpCenter: () -> Unit,
     navigateToContact: () -> Unit,
+    navigateToMyRentals: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val profileMenu = listOf(
@@ -109,14 +113,16 @@ fun ProfileBody(
         R.string.address,
         R.string.settings,
         R.string.help_center,
-        R.string.contact
+        R.string.contact,
+        R.string.my_rentals,
     )
     val profileIcons = listOf(
         Icons.Default.AccountCircle,
         Icons.Default.LocationOn,
         Icons.Default.Settings,
         Icons.Default.Info,
-        Icons.Default.Phone
+        Icons.Default.Phone,
+        Icons.Default.List,
     )
     Column(
         modifier = modifier
@@ -190,6 +196,10 @@ fun ProfileBody(
 
                         4 -> {
                             navigateToContact()
+                        }
+
+                        5 -> {
+                            navigateToMyRentals()
                         }
                     }
                 },
