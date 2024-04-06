@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Keep
 @Entity(tableName = "rental_remote_keys")
-data class RentalRemoteKeys(
+data class RentalRemoteKeysEntity(
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     @ColumnInfo(name = "next_page")
