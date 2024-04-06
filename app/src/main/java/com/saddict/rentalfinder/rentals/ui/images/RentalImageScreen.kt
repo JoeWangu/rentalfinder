@@ -1,8 +1,10 @@
 package com.saddict.rentalfinder.rentals.ui.images
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,7 +32,7 @@ import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.model.remote.RentalImage
+import com.saddict.rentalfinder.rentals.model.remote.images.RentalImageResults
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.mapToRentalImage
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
@@ -43,7 +46,7 @@ object RentalImageNavigationDestination : NavigationDestination {
 @Composable
 fun RentalImageScreen(
     navigateUp: () -> Unit,
-    onImageClick: (RentalImage) -> Unit,
+    onImageClick: (RentalImageResults) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -64,11 +67,28 @@ fun RentalImageScreen(
 
 @Composable
 fun RentalImageBody(
-    onImageClick: (RentalImage) -> Unit,
+    onImageClick: (RentalImageResults) -> Unit,
     modifier: Modifier = Modifier,
     imagesViewModel: RentalImageViewModel = hiltViewModel(),
 ) {
     val images = imagesViewModel.getAllImages.collectAsLazyPagingItems()
+    if (images.itemCount == 0) {
+        Column(
+            modifier = modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "No images found, please upload",
+                fontSize = 20.sp,
+                modifier = Modifier
+            )
+            Image(
+                painter = painterResource(id = R.drawable.ic_connection_error),
+                contentDescription = null
+            )
+        }
+    }
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(all = 12.dp),
