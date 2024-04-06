@@ -47,7 +47,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.model.local.RentalEntity
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.FavButton
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
@@ -191,7 +190,10 @@ fun ExploreBody(
                 key = { it.id }
             ) { items ->
                 ExploreCard(
-                    items,
+                    imageUrl = items.imageUrl,
+                    title = items.title,
+                    price = items.price ?: 0f,
+                    category = items.category,
                     modifier = Modifier
                         .clickable { navigateToRentalDetails(items.id) }
                 )
@@ -202,7 +204,10 @@ fun ExploreBody(
 
 @Composable
 fun ExploreCard(
-    rental: RentalEntity,
+    imageUrl: String,
+    title: String,
+    price: Float,
+    category: String,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -212,7 +217,7 @@ fun ExploreCard(
     ) {
         Box(modifier = Modifier) {
             AsyncImage(
-                model = rental.imageUrl,
+                model = imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 error = painterResource(id = R.drawable.ic_broken_image),
@@ -236,7 +241,7 @@ fun ExploreCard(
                 .padding(top = 10.dp, bottom = 5.dp, start = 5.dp, end = 5.dp)
         ) {
             Text(
-                text = everyFirstLetterCapitalize(rental.name),
+                text = everyFirstLetterCapitalize(title),
                 fontSize = 15.sp,
                 style = MaterialTheme.typography.displayMedium,
                 softWrap = false,
@@ -244,7 +249,7 @@ fun ExploreCard(
                 textAlign = TextAlign.Center,
             )
             Text(
-                text = "${rental.price}Ksh/ Month",
+                text = "${price}Ksh/ Month",
                 fontSize = 15.sp,
                 style = MaterialTheme.typography.bodyLarge,
                 softWrap = false,
@@ -252,7 +257,7 @@ fun ExploreCard(
                 textAlign = TextAlign.Center,
             )
             Text(
-                text = rental.type,
+                text = category,
                 fontSize = 15.sp,
                 style = MaterialTheme.typography.bodyLarge,
                 softWrap = false,
