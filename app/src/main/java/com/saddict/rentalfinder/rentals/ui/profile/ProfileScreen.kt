@@ -12,15 +12,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -122,17 +122,17 @@ fun ProfileBody(
         Icons.Default.Settings,
         Icons.Default.Info,
         Icons.Default.Phone,
-        Icons.Default.List,
+        Icons.AutoMirrored.Filled.List,
     )
     Column(
         modifier = modifier
             .padding(8.dp)
     ) {
-        Divider(
-            thickness = 2.dp,
-            color = Color.DarkGray,
+        HorizontalDivider(
             modifier = Modifier
-                .padding(bottom = 8.dp)
+                .padding(bottom = 8.dp),
+            thickness = 2.dp,
+            color = Color.DarkGray
         )
         Row(
             modifier = Modifier
@@ -165,17 +165,17 @@ fun ProfileBody(
                 )
             }
         }
-        Divider(
-            thickness = 2.dp,
-            color = Color.DarkGray,
+        HorizontalDivider(
             modifier = Modifier
-                .padding(top = 8.dp)
+                .padding(top = 8.dp),
+            thickness = 2.dp,
+            color = Color.DarkGray
         )
         profileMenu.forEachIndexed { index, profileItem ->
             ProfileRow(
                 profileIcon = profileIcons[index],
                 profileText = stringResource(id = profileItem),
-                trailingProfileIcon = Icons.Default.KeyboardArrowRight,
+                trailingProfileIcon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 onClickProfileRow = {
                     when (index) {
                         0 -> {

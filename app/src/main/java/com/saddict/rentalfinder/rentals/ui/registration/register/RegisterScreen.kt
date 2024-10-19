@@ -384,6 +384,7 @@ fun RegisterBody(
                     onClick = {
                         gender = "Male"
                         isGenderExpanded = false
+                        onValueChange(registerDetails.copy(gender = "Male"))
                     }
                 )
                 DropdownMenuItem(
@@ -393,6 +394,7 @@ fun RegisterBody(
                     onClick = {
                         gender = "Female"
                         isGenderExpanded = false
+                        onValueChange(registerDetails.copy(gender = "Female"))
                     }
                 )
                 DropdownMenuItem(
@@ -402,6 +404,7 @@ fun RegisterBody(
                     onClick = {
                         gender = "Others"
                         isGenderExpanded = false
+                        onValueChange(registerDetails.copy(gender = "Others"))
                     }
                 )
             }

@@ -212,7 +212,8 @@ fun ExploreCard(
 ) {
     Card(
         modifier = modifier
-            .padding(8.dp),
+            .padding(8.dp)
+            .size(180.dp),
         shape = MaterialTheme.shapes.extraSmall
     ) {
         Box(modifier = Modifier) {
@@ -238,12 +239,12 @@ fun ExploreCard(
         }
         Column(
             modifier = Modifier
-                .padding(top = 10.dp, bottom = 5.dp, start = 5.dp, end = 5.dp)
+                .padding(top = 5.dp, bottom = 5.dp, start = 5.dp)
         ) {
             Text(
                 text = everyFirstLetterCapitalize(title),
                 fontSize = 15.sp,
-                style = MaterialTheme.typography.displayMedium,
+//                style = MaterialTheme.typography.displayMedium,
                 softWrap = false,
                 maxLines = 1,
                 textAlign = TextAlign.Center,
@@ -251,7 +252,7 @@ fun ExploreCard(
             Text(
                 text = "${price}Ksh/ Month",
                 fontSize = 15.sp,
-                style = MaterialTheme.typography.bodyLarge,
+//                style = MaterialTheme.typography.bodyLarge,
                 softWrap = false,
                 maxLines = 1,
                 textAlign = TextAlign.Center,
@@ -259,7 +260,7 @@ fun ExploreCard(
             Text(
                 text = category,
                 fontSize = 15.sp,
-                style = MaterialTheme.typography.bodyLarge,
+//                style = MaterialTheme.typography.bodyLarge,
                 softWrap = false,
                 maxLines = 1,
                 textAlign = TextAlign.Center,

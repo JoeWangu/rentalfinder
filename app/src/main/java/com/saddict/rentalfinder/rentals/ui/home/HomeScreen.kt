@@ -2,29 +2,24 @@ package com.saddict.rentalfinder.rentals.ui.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -40,16 +35,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
+import com.saddict.rentalfinder.rentals.ui.explore.ExploreCard
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.ErrorPlaceholderCardItem
-import com.saddict.rentalfinder.utils.FavButton
 import com.saddict.rentalfinder.utils.LoadingPlaceholderCardItem
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
@@ -175,7 +167,7 @@ fun HomeBody(
                         text = everyFirstLetterCapitalize(stringResource(id = R.string.see_all))
                     )
                     Icon(
-                        imageVector = Icons.Default.KeyboardArrowRight,
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = stringResource(id = R.string.see_all)
                     )
                 }
@@ -196,8 +188,11 @@ fun HomeBody(
                             key = { index -> uiState.rentalResults[index].id }
                         ) { index ->
                             val rentalItem = uiState.rentalResults[index]
-                            PopularCard(
-                                rental = rentalItem,
+                            ExploreCard(
+                                imageUrl = rentalItem.imageDetail.imageUrl,
+                                title = rentalItem.title,
+                                price = rentalItem.price ?: 0f,
+                                category = rentalItem.category,
                                 modifier = Modifier
                                     .clickable { navigateToRentalDetails(rentalItem.id) }
                             )
@@ -227,7 +222,7 @@ fun HomeBody(
                         text = everyFirstLetterCapitalize(stringResource(id = R.string.see_all))
                     )
                     Icon(
-                        imageVector = Icons.Default.KeyboardArrowRight,
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = stringResource(id = R.string.see_all)
                     )
                 }
@@ -250,8 +245,11 @@ fun HomeBody(
 //                            key = { index -> uiState.rentalResults[index].id }
                             ) { rental ->
 //                                val rentalItem = uiState.rentalResults[index]
-                                PopularCard(
-                                    rental = rental,
+                                ExploreCard(
+                                    imageUrl = rental.imageDetail.imageUrl,
+                                    title = rental.title,
+                                    price = rental.price ?: 0f,
+                                    category = rental.category,
                                     modifier = Modifier
                                         .clickable { navigateToRentalDetails(rental.id) }
                                 )
@@ -294,66 +292,68 @@ fun CategoryCard(
     }
 }
 
-@Composable
-fun PopularCard(
-    rental: RentalResults,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .padding(8.dp)
-            .size(180.dp),
-        shape = MaterialTheme.shapes.extraSmall
-    ) {
-        Box(modifier = Modifier) {
-            AsyncImage(
-                model = rental.imageDetail.imageUrl,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                error = painterResource(id = R.drawable.ic_broken_image),
-                placeholder = painterResource(id = R.drawable.loading_img),
-                modifier = Modifier
-                    .height(100.dp)
-            )
-            Surface(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .offset(x = (-5).dp, y = 13.dp)
-                    .size(30.dp)
-                    .clickable {/*TODO*/ },
-                shape = CircleShape
-            ) {
-                FavButton(modifier = Modifier)
-            }
-        }
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
-        ) {
-            Text(
-                text = everyFirstLetterCapitalize(rental.title),
-                fontSize = 15.sp,
-                style = MaterialTheme.typography.displayMedium,
-                softWrap = false,
-                maxLines = 1,
-                textAlign = TextAlign.Center,
-            )
-            Text(
-                text = "${rental.price}Ksh/ Month",
-                fontSize = 15.sp,
-                style = MaterialTheme.typography.bodyLarge,
-                softWrap = false,
-                maxLines = 1,
-                textAlign = TextAlign.Center,
-            )
-            Text(
-                text = rental.category,
-                fontSize = 15.sp,
-                style = MaterialTheme.typography.bodyLarge,
-                softWrap = false,
-                maxLines = 1,
-                textAlign = TextAlign.Center,
-            )
-        }
-    }
-}
+//@Composable
+//fun PopularCard(
+//    rental: RentalResults,
+//    modifier: Modifier = Modifier
+//) {
+//    Card(
+//        modifier = modifier
+//            .padding(8.dp)
+//            .size(180.dp),
+//        shape = MaterialTheme.shapes.extraSmall
+//    ) {
+//        Box(modifier = Modifier) {
+//            AsyncImage(
+//                model = rental.imageDetail.imageUrl,
+//                contentDescription = null,
+//                contentScale = ContentScale.Crop,
+//                error = painterResource(id = R.drawable.ic_broken_image),
+//                placeholder = painterResource(id = R.drawable.loading_img),
+//                modifier = Modifier
+//                    .height(100.dp)
+//            )
+//            Surface(
+//                modifier = Modifier
+//                    .align(Alignment.BottomEnd)
+//                    .offset(x = (-5).dp, y = 13.dp)
+//                    .size(30.dp)
+//                    .clickable {/*TODO*/ },
+//                shape = CircleShape
+//            ) {
+//                FavButton(modifier = Modifier)
+//            }
+//        }
+//        Column(
+//            modifier = Modifier
+//                .padding(start = 3.dp),
+////            verticalArrangement = Arrangement.spacedBy((-10).dp),
+////            horizontalAlignment = Alignment.Start
+//        ) {
+//            Text(
+//                text = everyFirstLetterCapitalize(rental.title),
+//                fontSize = 15.sp,
+////                style = MaterialTheme.typography.displayMedium,
+////                softWrap = false,
+////                maxLines = 1,
+////                textAlign = TextAlign.Center,
+//            )
+//            Text(
+//                text = "${rental.price}Ksh/ Month",
+//                fontSize = 15.sp,
+////                style = MaterialTheme.typography.bodyLarge,
+////                softWrap = false,
+////                maxLines = 1,
+////                textAlign = TextAlign.Center,
+//            )
+//            Text(
+//                text = rental.category,
+//                fontSize = 15.sp,
+////                style = MaterialTheme.typography.bodyLarge,
+////                softWrap = false,
+////                maxLines = 1,
+////                textAlign = TextAlign.Center,
+//            )
+//        }
+//    }
+//}

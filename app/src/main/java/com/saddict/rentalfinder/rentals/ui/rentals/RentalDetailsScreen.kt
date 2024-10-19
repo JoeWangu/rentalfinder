@@ -18,9 +18,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -99,11 +99,11 @@ fun RentalDetailsScreen(
                     contact = rental.authorPhoneNumber.toString(),
                     rentalPrice = rental.price.toString()
                 )
-                Divider(
-                    thickness = 2.dp,
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(top = 8.dp, bottom = 8.dp)
-                        .alpha(0.2F)
+                        .alpha(0.2F),
+                    thickness = 2.dp
                 )
                 PropertyInfo(
                     rentalLocation = rental.location.toString(),
@@ -184,7 +184,7 @@ fun PropertyImage(
         ) {
             IconButton(onClick = { navigateUp() }) {
                 Icon(
-                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = null,
                     tint = Color.Black
                 )
@@ -251,10 +251,10 @@ fun PropertyRow(
                     .alpha(0.3F)
             )
         }
-        Divider(
-            thickness = 1.dp,
+        HorizontalDivider(
             modifier = Modifier
-                .size(width = 1.dp, height = 35.dp)
+                .size(width = 1.dp, height = 45.dp),
+            thickness = 50.dp,
         )
         Column(
             modifier = Modifier
@@ -268,10 +268,10 @@ fun PropertyRow(
                     .alpha(0.3F)
             )
         }
-        Divider(
-            thickness = 1.dp,
+        HorizontalDivider(
             modifier = Modifier
-                .size(width = 1.dp, height = 35.dp)
+                .size(width = 1.dp, height = 45.dp),
+            thickness = 50.dp,
         )
         Column(
             modifier = Modifier
@@ -326,11 +326,11 @@ fun PropertyInfo(
                     .alpha(0.4F)
             )
         }
-        Divider(
-            thickness = 1.dp,
+        HorizontalDivider(
             modifier = Modifier
                 .padding(top = 8.dp, bottom = 8.dp)
-                .alpha(0.2F)
+                .alpha(0.2F),
+            thickness = 1.dp
         )
         Row {
             Text(
@@ -343,11 +343,11 @@ fun PropertyInfo(
                     .alpha(0.4F)
             )
         }
-        Divider(
-            thickness = 1.dp,
+        HorizontalDivider(
             modifier = Modifier
                 .padding(top = 8.dp, bottom = 8.dp)
-                .alpha(0.2F)
+                .alpha(0.2F),
+            thickness = 1.dp
         )
         Row {
             Text(

@@ -50,7 +50,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.4"
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
     packaging {
         resources {
@@ -61,7 +61,7 @@ android {
 
 dependencies {
 
-    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    implementation(platform("androidx.compose:compose-bom:2024.04.00"))
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -73,7 +73,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-util:1.5.4")
+    implementation("androidx.compose.ui:ui-util:1.6.5")
 //    implementation("androidx.compose.material:material-icons-extended")
 
 //    PAGER
@@ -97,7 +97,7 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
 
 //    NAVIGATION
-    val navVersion = "2.7.6"
+    val navVersion = "2.7.7"
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
 //    PREFERENCES DATASTORE
@@ -105,9 +105,9 @@ dependencies {
 //    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
 
 //    DAGGER HILT
-    implementation("com.google.dagger:hilt-android:2.48.1")
-    ksp("com.google.dagger:hilt-compiler:2.48.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    ksp("com.google.dagger:hilt-compiler:2.51.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
 //    PAGING
     val pagingVersion = "3.2.1"
@@ -119,7 +119,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 
 //    ANDROID UI INSTRUMENTATION TESTS
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.00"))
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
