@@ -164,3 +164,48 @@ fun isOnline(context: Context): Boolean {
     }
     return false
 }
+
+/*
+@Composable
+fun ShowCustomDialog(
+    messages: String, // List of  messages
+    onDismiss: () -> Unit, // Callback to dismiss the dialog
+    title: String
+) {
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            color = MaterialTheme.colorScheme.background,
+            tonalElevation = 8.dp,
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+//                    text = "Registration Errors",
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Display each message in a separate line
+//                errorMessages.forEach { message ->
+                Text(
+                    text = messages,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+//                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = { onDismiss() },
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("OK")
+                }
+            }
+        }
+    }
+}*/
