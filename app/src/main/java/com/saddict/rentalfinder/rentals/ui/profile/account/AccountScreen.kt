@@ -188,7 +188,7 @@ fun AccountBody(
                 },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
                 ),
@@ -217,7 +217,7 @@ fun AccountBody(
                 },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
                 ),
@@ -246,7 +246,7 @@ fun AccountBody(
                 },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Next
                 ),
@@ -287,7 +287,7 @@ fun AccountBody(
                 },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
@@ -297,7 +297,7 @@ fun AccountBody(
                     .padding(top = 8.dp, bottom = 0.dp, start = 16.dp, end = 16.dp)
             )
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { /* TODO account page save user details*/ },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp, bottom = 0.dp, start = 16.dp, end = 16.dp),
