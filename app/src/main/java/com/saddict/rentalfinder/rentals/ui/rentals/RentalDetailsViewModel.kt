@@ -4,7 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
-import com.saddict.rentalfinder.rentals.model.local.RentalEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
+import com.saddict.rentalfinder.rentals.model.remote.UserProfileDetails
 import com.saddict.rentalfinder.utils.Constants.TIMEOUT_MILLIS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,7 +42,7 @@ data class RenDetailsUiState(
         title = "",
         description = "",
         category = "",
-        location = "",
+//        location = "",
         datePosted = "",
         dateModified = "",
         timePosted = "",
@@ -49,9 +50,15 @@ data class RenDetailsUiState(
         available = true,
         isActive = true,
         authorId = 1,
-        authorFirstName = "",
-        authorPhoneNumber = "",
         authorEmail = "",
+        authorUsername = "",
+        authorProfileDetails = UserProfileDetails(""),
+//        authorFirstName = "",
+//        authorLastName = "",
+//        authorPhoneNumber = "",
+//        authorAddress = "",
+//        authorDob = "",
+//        authorGender = "",
         imageUrl = "",
         imageName = "",
         avgRating = 0,

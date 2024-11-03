@@ -21,8 +21,8 @@ data class RentalResults(
     val description: String,
     @JsonProperty("category")
     val category: String,
-    @JsonProperty("location")
-    val location: String?,
+//    @JsonProperty("location")
+//    val location: String?,
     @JsonProperty("date_posted")
     val datePosted: String,
     @JsonProperty("date_modified")
