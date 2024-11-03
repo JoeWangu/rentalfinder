@@ -153,7 +153,7 @@ fun ProfileBody(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Onam Sarker",
+                    text = "Welcome User",
                     style = MaterialTheme.typography.bodyLarge,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
@@ -161,7 +161,7 @@ fun ProfileBody(
                         .padding(bottom = 4.dp),
                 )
                 Text(
-                    text = "0123-456-800"
+                    text = "07-00-000-000"
                 )
             }
         }
