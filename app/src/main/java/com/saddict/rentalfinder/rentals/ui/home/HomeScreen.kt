@@ -162,7 +162,7 @@ fun HomeBody(
 
                 Spacer(modifier = Modifier.weight(1F))
 
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = { /* TODO see all action */ }) {
                     Text(
                         text = everyFirstLetterCapitalize(stringResource(id = R.string.see_all))
                     )
@@ -217,7 +217,7 @@ fun HomeBody(
 
                 Spacer(modifier = Modifier.weight(1F))
 
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = { /* TODO see all action */ }) {
                     Text(
                         text = everyFirstLetterCapitalize(stringResource(id = R.string.see_all))
                     )
@@ -318,7 +318,7 @@ fun CategoryCard(
 //                    .align(Alignment.BottomEnd)
 //                    .offset(x = (-5).dp, y = 13.dp)
 //                    .size(30.dp)
-//                    .clickable {/*TODO*/ },
+//                    .clickable {/*TODOs*/ },
 //                shape = CircleShape
 //            ) {
 //                FavButton(modifier = Modifier)
