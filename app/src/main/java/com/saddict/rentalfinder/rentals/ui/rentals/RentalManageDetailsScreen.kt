@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.model.local.RentalEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
 
@@ -72,7 +72,7 @@ fun RentalManageDetailsScreen(
                 )
                 PropertyRow(
                     rentalTotalUnits = "${rental.totalUnits.toString()} (rooms)",
-                    contact = rental.authorPhoneNumber.toString(),
+                    contact = rental.authorProfileDetails.phoneNumber.toString(),
                     rentalPrice = rental.price.toString()
                 )
                 HorizontalDivider(
@@ -82,7 +82,7 @@ fun RentalManageDetailsScreen(
                     thickness = 2.dp
                 )
                 PropertyInfo(
-                    rentalLocation = rental.location.toString(),
+//                    rentalLocation = rental.location.toString(),
                     rentalType = rental.category,
                     rentalPosted = rental.datePosted,
                     rentalDescription = rental.description

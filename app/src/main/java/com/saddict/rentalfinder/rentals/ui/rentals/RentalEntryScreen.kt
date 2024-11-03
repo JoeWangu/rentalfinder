@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -163,7 +164,7 @@ fun RentalEntryBody(
                 placeholder = { Text(text = stringResource(id = R.string.rental_name_enter)) },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
                 ),
@@ -179,7 +180,7 @@ fun RentalEntryBody(
                 placeholder = { Text(text = stringResource(id = R.string.rental_price_enter)) },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
                 ),
@@ -195,7 +196,7 @@ fun RentalEntryBody(
                 placeholder = { Text(text = stringResource(id = R.string.rental_total_units_enter)) },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
                 ),
@@ -211,7 +212,7 @@ fun RentalEntryBody(
                 placeholder = { Text(text = stringResource(id = R.string.choose_image)) },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
                 ),
@@ -247,7 +248,7 @@ fun RentalEntryBody(
                 placeholder = { Text(text = stringResource(id = R.string.rental_description_enter)) },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
                 ),
@@ -276,15 +277,16 @@ fun RentalEntryBody(
                     }
                 )
             }
-            Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+            Spacer(modifier = Modifier.padding(8.dp))
+//            Row(
+//                modifier = Modifier,
+//                horizontalArrangement = Arrangement.spacedBy(8.dp)
+//            ) {
                 ExposedDropdownMenuBox(
                     expanded = isCategoryExpanded,
                     onExpandedChange = { isCategoryExpanded = it },
-                    modifier = Modifier
-                        .weight(1f)
+//                    modifier = Modifier
+//                        .weight(1f)
                 ) {
                     TextField(
                         value = renCategory,
@@ -295,7 +297,7 @@ fun RentalEntryBody(
                         },
                         colors = ExposedDropdownMenuDefaults.textFieldColors(),
                         modifier = Modifier
-                            .menuAnchor()
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled)
                     )
                     ExposedDropdownMenu(
                         expanded = isCategoryExpanded,
@@ -358,12 +360,12 @@ fun RentalEntryBody(
                         )
                     }
                 }
-
+            Spacer(modifier = Modifier.padding(8.dp))
                 ExposedDropdownMenuBox(
                     expanded = isLocationExpanded,
                     onExpandedChange = { isLocationExpanded = it },
-                    modifier = Modifier
-                        .weight(1f)
+//                    modifier = Modifier
+//                        .weight(1f)
                 ) {
                     TextField(
                         value = location,
@@ -374,7 +376,7 @@ fun RentalEntryBody(
                         },
                         colors = ExposedDropdownMenuDefaults.textFieldColors(),
                         modifier = Modifier
-                            .menuAnchor()
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled)
                     )
                     ExposedDropdownMenu(
                         expanded = isLocationExpanded,
@@ -415,7 +417,8 @@ fun RentalEntryBody(
                         )
                     }
                 }
-            }
+//            }
+            Spacer(modifier = Modifier.padding(16.dp))
             OutlinedButton(
                 onClick = saveButtonOnClick,
                 contentPadding = PaddingValues(start = 64.dp, end = 64.dp),
