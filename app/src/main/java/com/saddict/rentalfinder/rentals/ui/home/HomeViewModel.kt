@@ -49,7 +49,7 @@ class HomeViewModel @Inject constructor(
                     }
                 } catch (e: Exception) {
                     _uiState.emit(HomeUiState.Error)
-                    Log.e("Home Items", "Could not load home items ${e.cause}")
+                    Log.e("Home Items", "Could not load home items ${e.message}")
                 }
             }
         }

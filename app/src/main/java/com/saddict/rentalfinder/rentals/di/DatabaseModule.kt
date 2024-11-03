@@ -6,6 +6,8 @@ import com.saddict.rentalfinder.rentals.data.local.RentalDatabase
 import com.saddict.rentalfinder.rentals.data.local.dao.ImageDao
 import com.saddict.rentalfinder.rentals.data.local.dao.ManageRentalDao
 import com.saddict.rentalfinder.rentals.data.local.dao.RentalDao
+import com.saddict.rentalfinder.rentals.data.local.dao.UserDao
+import com.saddict.rentalfinder.rentals.data.local.dao.UserProfileDao
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSourceImpl
 import dagger.Module
@@ -22,7 +24,21 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): RentalDatabase {
         return Room.databaseBuilder(context, RentalDatabase::class.java, "rental_database")
+//            ToDO: 1. add migration later 2.remove fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration()
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesUserProfileDao(rentalDatabase: RentalDatabase): UserProfileDao {
+        return rentalDatabase.userProfileDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesUserDao(rentalDatabase: RentalDatabase): UserDao {
+        return rentalDatabase.userDao()
     }
 
     @Provides
@@ -46,11 +62,15 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideLocalDataSource(
+        userProfileDao: UserProfileDao,
+        userDao: UserDao,
         rentalDao: RentalDao,
+        manageRentalDao: ManageRentalDao,
         imageDao: ImageDao,
-        manageRentalDao: ManageRentalDao
     ): LocalDataSource {
         return LocalDataSourceImpl(
+            userProfileDao = userProfileDao,
+            userDao = userDao,
             rentalDao = rentalDao,
             imageDao = imageDao,
             manageRentalDao = manageRentalDao

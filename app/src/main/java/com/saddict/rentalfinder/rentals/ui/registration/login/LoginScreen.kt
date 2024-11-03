@@ -102,7 +102,7 @@ fun LoginBody(
             placeholder = { Text(text = stringResource(id = R.string.email)) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,
-                autoCorrect = false,
+                autoCorrectEnabled = false,
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
             ),
@@ -124,7 +124,7 @@ fun LoginBody(
             placeholder = { Text(text = stringResource(id = R.string.password)) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,
-                autoCorrect = false,
+                autoCorrectEnabled = false,
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),

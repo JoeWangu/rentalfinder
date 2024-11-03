@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.saddict.rentalfinder.rentals.model.local.RentalEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

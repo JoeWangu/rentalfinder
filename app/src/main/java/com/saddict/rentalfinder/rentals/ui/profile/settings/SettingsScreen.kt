@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -107,7 +107,7 @@ fun SettingsBody(
                     ProfileRow(
                         profileIcon = null,
                         profileText = items,
-                        trailingProfileIcon = Icons.Default.KeyboardArrowRight,
+                        trailingProfileIcon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         onClickProfileRow = {
                             when (index) {
                                 0 -> {}
@@ -136,7 +136,7 @@ fun SettingsBody(
                     ProfileRow(
                         profileIcon = null,
                         profileText = items,
-                        trailingProfileIcon = Icons.Default.KeyboardArrowRight,
+                        trailingProfileIcon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         onClickProfileRow = {
                             when (index) {
                                 0 -> {}

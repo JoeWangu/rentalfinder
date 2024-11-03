@@ -3,9 +3,9 @@ package com.saddict.rentalfinder.rentals.ui.explore
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+//import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+//import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -14,26 +14,26 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
+//import androidx.compose.material.icons.Icons
+//import androidx.compose.material.icons.filled.Check
+//import androidx.compose.material.icons.filled.Close
+//import androidx.compose.material.icons.filled.Menu
+//import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
+//import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
+//import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+//import androidx.compose.runtime.getValue
+//import androidx.compose.runtime.mutableStateListOf
+//import androidx.compose.runtime.mutableStateOf
+//import androidx.compose.runtime.remember
+//import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -100,7 +100,7 @@ fun ExploreScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+//@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExploreBody(
     navigateToRentalDetails: (Int) -> Unit,
@@ -108,9 +108,9 @@ fun ExploreBody(
     exploreViewModel: ExploreViewModel = hiltViewModel(),
 ) {
     val rentals = exploreViewModel.getAllRentals.collectAsLazyPagingItems()
-    var searchtext by remember { mutableStateOf("") }
-    var active by remember { mutableStateOf(false) }
-    val searchItems = remember { mutableStateListOf("first text", "second text") }
+//    var searchtext by remember { mutableStateOf("") }
+//    var active by remember { mutableStateOf(false) }
+//    val searchItems = remember { mutableStateListOf("first text", "second text") }
     val imageList = listOf(
         R.drawable.proxy_image_1,
         R.drawable.proxy_image_2,
@@ -121,66 +121,66 @@ fun ExploreBody(
         modifier = modifier
             .fillMaxSize()
     ) {
-        SearchBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 16.dp, start = 16.dp),
-            query = searchtext,
-            onQueryChange = { searchtext = it },
-            onSearch = {
-                searchItems.add(searchtext)
-                active = false
-                searchtext = ""
-            },
-            active = active,
-            onActiveChange = { active = it },
-            placeholder = {
-                Text(
-                    text = "Search",
-                    style = MaterialTheme.typography.labelSmall
-                )
-            },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = stringResource(id = R.string.search_icon)
-                )
-            },
-            trailingIcon = {
-                if (active) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(id = R.string.close_icon),
-                        modifier = Modifier
-                            .clickable {
-                                if (searchtext.isNotEmpty()) {
-                                    searchtext = ""
-                                } else {
-                                    active = false
-                                }
-                            }
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = stringResource(id = R.string.menu_icon),
-                        modifier = Modifier
-                            .clickable { }
-                    )
-                }
-            },
-        ) {
-            searchItems.forEach {
-                Row(modifier = Modifier.padding(14.dp)) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = null,
-                        modifier = Modifier.padding(end = 10.dp)
-                    )
-                    Text(text = it)
-                }
-            }
-        }
+//        SearchBar(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(end = 16.dp, start = 16.dp),
+//            query = searchtext,
+//            onQueryChange = { searchtext = it },
+//            onSearch = {
+//                searchItems.add(searchtext)
+//                active = false
+//                searchtext = ""
+//            },
+//            active = active,
+//            onActiveChange = { active = it },
+//            placeholder = {
+//                Text(
+//                    text = "Search",
+//                    style = MaterialTheme.typography.labelSmall
+//                )
+//            },
+//            leadingIcon = {
+//                Icon(
+//                    imageVector = Icons.Default.Search,
+//                    contentDescription = stringResource(id = R.string.search_icon)
+//                )
+//            },
+//            trailingIcon = {
+//                if (active) {
+//                    Icon(
+//                        imageVector = Icons.Default.Close,
+//                        contentDescription = stringResource(id = R.string.close_icon),
+//                        modifier = Modifier
+//                            .clickable {
+//                                if (searchtext.isNotEmpty()) {
+//                                    searchtext = ""
+//                                } else {
+//                                    active = false
+//                                }
+//                            }
+//                    )
+//                } else {
+//                    Icon(
+//                        imageVector = Icons.Default.Menu,
+//                        contentDescription = stringResource(id = R.string.menu_icon),
+//                        modifier = Modifier
+//                            .clickable { }
+//                    )
+//                }
+//            },
+//        ) {
+//            searchItems.forEach {
+//                Row(modifier = Modifier.padding(14.dp)) {
+//                    Icon(
+//                        imageVector = Icons.Default.Check,
+//                        contentDescription = null,
+//                        modifier = Modifier.padding(end = 10.dp)
+//                    )
+//                    Text(text = it)
+//                }
+//            }
+//        }
         LazyVerticalGrid(columns = GridCells.Fixed(2)) {
             header {
                 CarouselSlider(imageList = imageList)
@@ -212,7 +212,8 @@ fun ExploreCard(
 ) {
     Card(
         modifier = modifier
-            .padding(8.dp),
+            .padding(8.dp)
+            .size(180.dp),
         shape = MaterialTheme.shapes.extraSmall
     ) {
         Box(modifier = Modifier) {
@@ -238,12 +239,12 @@ fun ExploreCard(
         }
         Column(
             modifier = Modifier
-                .padding(top = 10.dp, bottom = 5.dp, start = 5.dp, end = 5.dp)
+                .padding(top = 5.dp, bottom = 5.dp, start = 5.dp)
         ) {
             Text(
                 text = everyFirstLetterCapitalize(title),
                 fontSize = 15.sp,
-                style = MaterialTheme.typography.displayMedium,
+//                style = MaterialTheme.typography.displayMedium,
                 softWrap = false,
                 maxLines = 1,
                 textAlign = TextAlign.Center,
@@ -251,7 +252,7 @@ fun ExploreCard(
             Text(
                 text = "${price}Ksh/ Month",
                 fontSize = 15.sp,
-                style = MaterialTheme.typography.bodyLarge,
+//                style = MaterialTheme.typography.bodyLarge,
                 softWrap = false,
                 maxLines = 1,
                 textAlign = TextAlign.Center,
@@ -259,7 +260,7 @@ fun ExploreCard(
             Text(
                 text = category,
                 fontSize = 15.sp,
-                style = MaterialTheme.typography.bodyLarge,
+//                style = MaterialTheme.typography.bodyLarge,
                 softWrap = false,
                 maxLines = 1,
                 textAlign = TextAlign.Center,

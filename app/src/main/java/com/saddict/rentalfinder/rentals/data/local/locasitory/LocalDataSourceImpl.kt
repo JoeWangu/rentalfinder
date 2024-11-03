@@ -4,17 +4,50 @@ import androidx.paging.PagingSource
 import com.saddict.rentalfinder.rentals.data.local.dao.ImageDao
 import com.saddict.rentalfinder.rentals.data.local.dao.ManageRentalDao
 import com.saddict.rentalfinder.rentals.data.local.dao.RentalDao
-import com.saddict.rentalfinder.rentals.model.local.ImageEntity
-import com.saddict.rentalfinder.rentals.model.local.RentalEntity
-import com.saddict.rentalfinder.rentals.model.local.RentalManageEntity
+import com.saddict.rentalfinder.rentals.data.local.dao.UserDao
+import com.saddict.rentalfinder.rentals.data.local.dao.UserProfileDao
+import com.saddict.rentalfinder.rentals.model.local.images.ImageEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalManageEntity
+import com.saddict.rentalfinder.rentals.model.remote.User
+import com.saddict.rentalfinder.rentals.model.remote.UserProfile
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class LocalDataSourceImpl @Inject constructor(
+    private val userProfileDao: UserProfileDao,
+    private val userDao: UserDao,
     private val rentalDao: RentalDao,
-    private val imageDao: ImageDao,
     private val manageRentalDao: ManageRentalDao,
+    private val imageDao: ImageDao,
 ) : LocalDataSource {
+    //    user profile
+    override suspend fun insertUserProfile(userProfile: UserProfile) {
+        return userProfileDao.insertUserProfile(userProfile)
+    }
+
+    override fun fetchUserProfile(): Flow<UserProfile> {
+        return userProfileDao.fetchUserProfile()
+    }
+
+    override suspend fun deleteUserProfile() {
+        return userProfileDao.deleteUserProfile()
+    }
+
+    //    user
+    override suspend fun insertUser(user: User) {
+        return userDao.insertUser(user)
+    }
+
+    override fun fetchUser(): Flow<User> {
+        return userDao.fetchUser()
+    }
+
+    override suspend fun deleteUser() {
+        return userDao.deleteUser()
+    }
+
+    //    rentals
     override suspend fun insertRentals(rentals: List<RentalEntity>) {
         return rentalDao.insertRentals(rentals)
     }
