@@ -8,10 +8,10 @@ import androidx.room.withTransaction
 import com.saddict.rentalfinder.rentals.data.local.RentalDatabase
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
-import com.saddict.rentalfinder.rentals.model.local.RentalEntity
-import com.saddict.rentalfinder.rentals.model.local.RentalManageEntity
-import com.saddict.rentalfinder.rentals.model.local.RentalManageRemoteKeysEntity
-import com.saddict.rentalfinder.rentals.model.local.RentalRemoteKeysEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalManageEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalManageRemoteKeysEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalRemoteKeysEntity
 import com.saddict.rentalfinder.utils.mapToEntity
 import com.saddict.rentalfinder.utils.mapToManageEntity
 import javax.inject.Inject

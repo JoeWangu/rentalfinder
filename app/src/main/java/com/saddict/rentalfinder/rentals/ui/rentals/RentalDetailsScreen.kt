@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.model.local.RentalEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.FavButton
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
@@ -96,7 +96,7 @@ fun RentalDetailsScreen(
                 )
                 PropertyRow(
                     rentalTotalUnits = "${rental.totalUnits.toString()} (rooms)",
-                    contact = rental.authorPhoneNumber.toString(),
+                    contact = rental.authorProfileDetails.phoneNumber ?: "Not Added",
                     rentalPrice = rental.price.toString()
                 )
                 HorizontalDivider(
@@ -105,15 +105,15 @@ fun RentalDetailsScreen(
                         .alpha(0.2F),
                     thickness = 2.dp
                 )
-                PropertyInfo(
-                    rentalLocation = rental.location.toString(),
-                    rentalType = rental.category,
-                    rentalPosted = rental.datePosted,
-                    rentalDescription = rental.description
-                )
+//                PropertyInfo(
+//                    rentalLocation = rental.location.toString(),
+//                    rentalType = rental.category,
+//                    rentalPosted = rental.datePosted,
+//                    rentalDescription = rental.description
+//                )
             }
         }
-        rental.authorPhoneNumber?.let {
+        rental.authorProfileDetails.phoneNumber?.let {
             PhoneCallButton(
                 phoneNumber = it,
                 modifier = Modifier
@@ -193,7 +193,7 @@ fun PropertyImage(
             Surface(
                 modifier = Modifier
                     .size(30.dp)
-                    .clickable {/*TODO*/ }
+                    .clickable {/* TODO favourite button action */ }
                     .offset(x = (-15).dp, y = 5.dp),
                 shape = CircleShape,
                 color = Color.Black
@@ -291,7 +291,7 @@ fun PropertyRow(
 
 @Composable
 fun PropertyInfo(
-    rentalLocation: String,
+//    rentalLocation: String,
     rentalType: String,
     rentalPosted: String,
     rentalDescription: String,
@@ -313,18 +313,18 @@ fun PropertyInfo(
             Text(
                 text = stringResource(id = R.string.location).capitalize(Locale.current),
             )
-            Spacer(modifier = Modifier.weight(1F))
-            Text(
-                text = rentalLocation,
-//                when (rentalLocation) {
-//                    "N" -> "Ngomongo"
-//                    "D" -> "Diaspora"
-//                    "M" -> "Mjini"
-//                    else -> "Not Added"
-//                },
-                modifier = Modifier
-                    .alpha(0.4F)
-            )
+//            Spacer(modifier = Modifier.weight(1F))
+//            Text(
+//                text = rentalLocation,
+////                when (rentalLocation) {
+////                    "N" -> "Ngomongo"
+////                    "D" -> "Diaspora"
+////                    "M" -> "Mjini"
+////                    else -> "Not Added"
+////                },
+//                modifier = Modifier
+//                    .alpha(0.4F)
+//            )
         }
         HorizontalDivider(
             modifier = Modifier

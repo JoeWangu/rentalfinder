@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
-import com.saddict.rentalfinder.rentals.model.local.RentalEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
 import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
 import com.saddict.rentalfinder.utils.mapToEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -106,7 +106,7 @@ fun RentalEntity.toEntryDetails(): EntryDetails = EntryDetails(
     title = title,
     description = description,
     category = category,
-    location = location.toString(),
+//    location = location.toString(),
     available = available,
     isActive = isActive,
 )

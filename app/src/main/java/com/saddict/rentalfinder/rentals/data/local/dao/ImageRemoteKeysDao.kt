@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.saddict.rentalfinder.rentals.model.local.ImageRemoteKeysEntity
+import com.saddict.rentalfinder.rentals.model.local.images.ImageRemoteKeysEntity
 
 @Dao
 interface ImageRemoteKeysDao {
