@@ -1,4 +1,4 @@
-package com.saddict.rentalfinder.rentals.model.local
+package com.saddict.rentalfinder.rentals.model.local.images
 
 import androidx.annotation.Keep
 import androidx.room.ColumnInfo
