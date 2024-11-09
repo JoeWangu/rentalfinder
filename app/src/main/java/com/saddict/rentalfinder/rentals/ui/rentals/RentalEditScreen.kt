@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.saddict.rentalfinder.R
+import com.saddict.rentalfinder.rentals.ui.location.LocationViewModel
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.toastUtil
 import com.saddict.rentalfinder.utils.toastUtilLong
@@ -37,6 +38,7 @@ fun RentalEditScreen(
     imageName: String,
     modifier: Modifier = Modifier,
     editViewModel: RentalEditViewModel = hiltViewModel(),
+    locationViewModel: LocationViewModel = hiltViewModel(),
     uiState: RenEntryUiState = editViewModel.editUiState,
     editDetails: EntryDetails = uiState.renEntry,
 ) {
@@ -61,6 +63,7 @@ fun RentalEditScreen(
             entryDetails = editDetails,
             onValueChange = editViewModel::updateUiState,
             saveButtonEnabled = editViewModel.editUiState.isEntryValid,
+            locationViewModel = locationViewModel,
             modifier = modifier
                 .padding(innerPadding)
                 .verticalScroll(state = state),
