@@ -19,6 +19,7 @@
 
     <!--     usesCleartextTraffic   uses http and not https android:usesCleartextTraffic="true"-->
     <!--    changed allowbackup - default=true -->
+    <!--        android:theme="@style/Theme.Rentalfinder"-->
     <application
         android:name=".RentalApp"
         android:allowBackup="false"
@@ -28,12 +29,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Rentalfinder"
+        android:theme="@style/Theme.SplashScreen"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Rentalfinder">
+            android:theme="@style/Theme.Rentalfinder.MySplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
