@@ -2,6 +2,10 @@ package com.saddict.rentalfinder.rentals.model.remote.rentals
 
 import androidx.annotation.Keep
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.saddict.rentalfinder.rentals.model.remote.CityResults
+import com.saddict.rentalfinder.rentals.model.remote.CountryResults
+import com.saddict.rentalfinder.rentals.model.remote.NeighborhoodResults
+import com.saddict.rentalfinder.rentals.model.remote.StateResults
 import com.saddict.rentalfinder.rentals.model.remote.User
 import com.saddict.rentalfinder.rentals.model.remote.images.RentalImageResults
 
@@ -43,4 +47,12 @@ data class RentalResults(
     val avgRating: Int,
     @JsonProperty("author")
     val author: String,
+    @JsonProperty("country")
+    val country: CountryResults?,
+    @JsonProperty("state")
+    val state: StateResults?,
+    @JsonProperty("city")
+    val city: CityResults?,
+    @JsonProperty("neighborhood")
+    val neighborhood: NeighborhoodResults?,
 )
