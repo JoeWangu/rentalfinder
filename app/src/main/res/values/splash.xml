@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Rentalfinder.MySplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/rfa_logo_1</item>
+        <item name="postSplashScreenTheme">@style/Theme.Rentalfinder</item>
+    </style>
+</resources>
