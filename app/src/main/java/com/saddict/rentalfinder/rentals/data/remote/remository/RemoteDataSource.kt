@@ -42,8 +42,8 @@ interface RemoteDataSource {
     suspend fun uploadImage(image: MultipartBody.Part): Response<RentalImageResults>
 
     //    LOCATION DATA
-    suspend fun getCountries(): List<Country>
-    suspend fun getStates(countryId: Int): List<State>
-    suspend fun getCities(stateId: Int, countryId: Int): List<City>
-    suspend fun getNeighborhoods(cityId: Int): List<Neighborhood>
+    suspend fun getCountries(): Country
+    suspend fun getStates(countryId: Int): State
+    suspend fun getCities(stateId: Int?, countryId: Int): City
+    suspend fun getNeighborhoods(cityId: Int): Neighborhood
 }

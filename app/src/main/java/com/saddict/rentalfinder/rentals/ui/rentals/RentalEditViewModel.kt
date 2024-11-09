@@ -59,7 +59,7 @@ class RentalEditViewModel @Inject constructor(
         )
     }
 
-    suspend fun updateRental() {
+    fun updateRental() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
@@ -93,9 +93,8 @@ class RentalEditViewModel @Inject constructor(
     }
 
     private fun validateInput(entryDetails: EntryDetails = editUiState.renEntry): Boolean {
-        return entryDetails.title.isNotBlank() && entryDetails.location.isNotBlank()
-                && entryDetails.description.isNotBlank() && entryDetails.category.isNotBlank()
-                && entryDetails.price.isNotBlank()
+        return entryDetails.title.isNotBlank() && entryDetails.description.isNotBlank()
+                && entryDetails.category.isNotBlank() && entryDetails.price.isNotBlank()
     }
 }
 
@@ -109,6 +108,10 @@ fun RentalEntity.toEntryDetails(): EntryDetails = EntryDetails(
 //    location = location.toString(),
     available = available,
     isActive = isActive,
+//    country = country,
+//    state = state,
+//    city = city,
+//    neighborhood = neighborhood,
 )
 
 fun RentalEntity.toRentalEditUiState(isEntryValid: Boolean = false):

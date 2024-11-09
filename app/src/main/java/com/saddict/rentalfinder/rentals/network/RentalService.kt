@@ -1,5 +1,16 @@
 package com.saddict.rentalfinder.rentals.network
 
+import com.saddict.rentalfinder.prop.Constants.CREATE_USER_URL
+import com.saddict.rentalfinder.prop.Constants.LOGIN_URL
+import com.saddict.rentalfinder.prop.Constants.RENTAL_CITY_URL
+import com.saddict.rentalfinder.prop.Constants.RENTAL_COUNTRY_URL
+import com.saddict.rentalfinder.prop.Constants.RENTAL_IMAGE_URL
+import com.saddict.rentalfinder.prop.Constants.RENTAL_MANAGE_URL
+import com.saddict.rentalfinder.prop.Constants.RENTAL_NEIGHBORHOOD_URL
+import com.saddict.rentalfinder.prop.Constants.RENTAL_STATE_URL
+import com.saddict.rentalfinder.prop.Constants.RENTAL_URL
+import com.saddict.rentalfinder.prop.Constants.SINGLE_RENTAL_URL
+import com.saddict.rentalfinder.prop.Constants.USER_PROFILE_URL
 import com.saddict.rentalfinder.rentals.model.remote.City
 import com.saddict.rentalfinder.rentals.model.remote.Country
 import com.saddict.rentalfinder.rentals.model.remote.Neighborhood
@@ -14,17 +25,6 @@ import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUserRespon
 import com.saddict.rentalfinder.rentals.model.remote.rentals.CreateRental
 import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResponse
 import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
-import com.saddict.rentalfinder.utils.Constants.CREATE_USER_URL
-import com.saddict.rentalfinder.utils.Constants.LOGIN_URL
-import com.saddict.rentalfinder.utils.Constants.RENTAL_CITY_URL
-import com.saddict.rentalfinder.utils.Constants.RENTAL_COUNTRY_URL
-import com.saddict.rentalfinder.utils.Constants.RENTAL_IMAGE_URL
-import com.saddict.rentalfinder.utils.Constants.RENTAL_MANAGE_URL
-import com.saddict.rentalfinder.utils.Constants.RENTAL_NEIGHBORHOOD_URL
-import com.saddict.rentalfinder.utils.Constants.RENTAL_STATE_URL
-import com.saddict.rentalfinder.utils.Constants.RENTAL_URL
-import com.saddict.rentalfinder.utils.Constants.SINGLE_RENTAL_URL
-import com.saddict.rentalfinder.utils.Constants.USER_PROFILE_URL
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -106,17 +106,17 @@ interface RentalService {
 
     //  LOCATION API METHODS
     @GET(RENTAL_COUNTRY_URL)
-    suspend fun getCountries(): List<Country>
+    suspend fun getCountries(): Country
 
     @GET(RENTAL_STATE_URL)
-    suspend fun getStates(@Query("country") countryId: Int): List<State>
+    suspend fun getStates(@Query("country") countryId: Int): State
 
     @GET(RENTAL_CITY_URL)
     suspend fun getCities(
-        @Query("state") stateId: Int,
+        @Query("state") stateId: Int?,
         @Query("country") countryId: Int
-    ): List<City>
+    ): City
 
     @GET(RENTAL_NEIGHBORHOOD_URL)
-    suspend fun getNeighborhoods(@Query("city") cityId: Int): List<Neighborhood>
+    suspend fun getNeighborhoods(@Query("city") cityId: Int): Neighborhood
 }

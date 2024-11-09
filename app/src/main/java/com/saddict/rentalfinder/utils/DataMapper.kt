@@ -44,6 +44,10 @@ fun RentalEntity.mapToResults(): RentalResults {
         ),
         avgRating = avgRating,
         author = author,
+        country = null,
+        state = null,
+        city = null,
+        neighborhood = null
     )
 }
 

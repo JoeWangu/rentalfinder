@@ -57,4 +57,8 @@ data class RentalEntity(
     @ColumnInfo(name = "avg_rating")
     val avgRating: Int,
     val author: String,
+//    val country: String,
+//    val state: String,
+//    val city: String,
+//    val neighborhood: String,
 )

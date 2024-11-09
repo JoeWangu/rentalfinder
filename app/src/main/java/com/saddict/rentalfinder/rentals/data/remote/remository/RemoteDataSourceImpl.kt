@@ -99,19 +99,19 @@ class RemoteDataSourceImpl @Inject constructor(
     }
 
     //    LOCATION DATA
-    override suspend fun getCountries(): List<Country> {
+    override suspend fun getCountries(): Country {
         return rentalService.getCountries()
     }
 
-    override suspend fun getStates(countryId: Int): List<State> {
+    override suspend fun getStates(countryId: Int): State {
         return rentalService.getStates(countryId)
     }
 
-    override suspend fun getCities(stateId: Int, countryId: Int): List<City> {
+    override suspend fun getCities(stateId: Int?, countryId: Int): City {
         return rentalService.getCities(stateId, countryId)
     }
 
-    override suspend fun getNeighborhoods(cityId: Int): List<Neighborhood> {
+    override suspend fun getNeighborhoods(cityId: Int): Neighborhood {
         return rentalService.getNeighborhoods(cityId)
     }
 }

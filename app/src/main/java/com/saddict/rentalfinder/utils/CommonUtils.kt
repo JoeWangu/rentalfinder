@@ -42,7 +42,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.preferencesDataStore
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.utils.Constants.TOKEN
+import com.saddict.rentalfinder.prop.Constants.TOKEN
 
 @Composable
 fun FavButton(modifier: Modifier = Modifier) {

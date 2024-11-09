@@ -28,7 +28,9 @@ class Repository @Inject constructor(
             config = PagingConfig(
                 pageSize = 10,
                 prefetchDistance = 1,
-                initialLoadSize = 20
+                initialLoadSize = 20,
+                enablePlaceholders = true,
+                maxSize = 100
             ),
             remoteMediator = RentalRemoteMediator(
                 remoteDataSource = remoteDataSource,
@@ -46,7 +48,9 @@ class Repository @Inject constructor(
             config = PagingConfig(
                 pageSize = 10,
                 prefetchDistance = 1,
-                initialLoadSize = 20
+                initialLoadSize = 20,
+                enablePlaceholders = true,
+                maxSize = 100
             ),
             remoteMediator = RentalManageRemoteMediator(
                 remoteDataSource = remoteDataSource,
@@ -64,7 +68,9 @@ class Repository @Inject constructor(
             config = PagingConfig(
                 pageSize = 10,
                 prefetchDistance = 1,
-                initialLoadSize = 20
+                initialLoadSize = 20,
+                enablePlaceholders = true,
+                maxSize = 100
             ),
             remoteMediator = ImageRemoteMediator(
                 remoteDataSource = remoteDataSource,

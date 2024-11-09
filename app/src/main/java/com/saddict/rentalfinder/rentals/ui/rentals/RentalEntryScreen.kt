@@ -42,6 +42,8 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.saddict.rentalfinder.R
+import com.saddict.rentalfinder.rentals.ui.location.LocationSelector
+import com.saddict.rentalfinder.rentals.ui.location.LocationViewModel
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.toastUtil
 import com.saddict.rentalfinder.utils.toastUtilLong
@@ -65,6 +67,7 @@ fun RentalEntryScreen(
     imageName: String,
     modifier: Modifier = Modifier,
     entryViewModel: RentalEntryViewModel = hiltViewModel(),
+    locationViewModel: LocationViewModel = hiltViewModel(),
     uiState: RenEntryUiState = entryViewModel.entryUiState,
     entryDetails: EntryDetails = uiState.renEntry,
     onValueChange: (EntryDetails) -> Unit = entryViewModel::updateUiState,
@@ -93,6 +96,7 @@ fun RentalEntryScreen(
             onValueChange = onValueChange,
             entryDetails = entryDetails,
             saveButtonEnabled = entryViewModel.entryUiState.isEntryValid,
+            locationViewModel = locationViewModel,
             saveButtonOnClick = {
                 coroutine.launch {
                     entryViewModel.postRental()
@@ -134,6 +138,7 @@ fun RentalEntryBody(
     saveButtonEnabled: Boolean,
     saveButtonOnClick: () -> Unit,
     entryDetails: EntryDetails,
+    locationViewModel: LocationViewModel,
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
@@ -154,9 +159,10 @@ fun RentalEntryBody(
         ) {
             var renCategory by remember { mutableStateOf(entryDetails.category) }
             var isCategoryExpanded by remember { mutableStateOf(false) }
-            var location by remember { mutableStateOf(entryDetails.location) }
-            var isLocationExpanded by remember { mutableStateOf(false) }
+//            var location by remember { mutableStateOf(entryDetails.location) }
+//            var isLocationExpanded by remember { mutableStateOf(false) }
             var radioSelected by remember { mutableStateOf(entryDetails.available) }
+//            var countrySelected by remember { mutableIntStateOf(entryDetails.country) }
             OutlinedTextField(
                 value = entryDetails.title,
                 onValueChange = { onValueChange(entryDetails.copy(title = it)) },
@@ -282,141 +288,170 @@ fun RentalEntryBody(
 //                modifier = Modifier,
 //                horizontalArrangement = Arrangement.spacedBy(8.dp)
 //            ) {
-                ExposedDropdownMenuBox(
+            ExposedDropdownMenuBox(
+                expanded = isCategoryExpanded,
+                onExpandedChange = { isCategoryExpanded = it },
+//                    modifier = Modifier
+//                        .weight(1f)
+            ) {
+                TextField(
+                    value = renCategory,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCategoryExpanded)
+                    },
+                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                    modifier = Modifier
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled)
+                )
+                ExposedDropdownMenu(
                     expanded = isCategoryExpanded,
-                    onExpandedChange = { isCategoryExpanded = it },
-//                    modifier = Modifier
-//                        .weight(1f)
+                    onDismissRequest = { isCategoryExpanded = false }
                 ) {
-                    TextField(
-                        value = renCategory,
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isCategoryExpanded)
+                    DropdownMenuItem(
+                        text = {
+                            Text(text = "bedSitter")
                         },
-                        colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                        modifier = Modifier
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled)
-                    )
-                    ExposedDropdownMenu(
-                        expanded = isCategoryExpanded,
-                        onDismissRequest = { isCategoryExpanded = false }
-                    ) {
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = "bedSitter")
-                            },
-                            onClick = {
-                                renCategory = "bedsitter"
-                                isCategoryExpanded = false
+                        onClick = {
+                            renCategory = "bedsitter"
+                            isCategoryExpanded = false
 //                                entryDetails.category = "bedsitter"
-                                onValueChange(entryDetails.copy(category = renCategory))
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = "single")
-                            },
-                            onClick = {
-                                renCategory = "single"
-                                isCategoryExpanded = false
-//                                entryDetails.category = "single"
-                                onValueChange(entryDetails.copy(category = renCategory))
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = "double")
-                            },
-                            onClick = {
-                                renCategory = "double"
-                                isCategoryExpanded = false
-//                                entryDetails.category = "double"
-                                onValueChange(entryDetails.copy(category = renCategory))
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = "1 bedroom")
-                            },
-                            onClick = {
-                                renCategory = "1 bedroom"
-                                isCategoryExpanded = false
-//                                entryDetails.category = "1 bedroom"
-                                onValueChange(entryDetails.copy(category = renCategory))
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = "2 bedroom")
-                            },
-                            onClick = {
-                                renCategory = "2 bedroom"
-                                isCategoryExpanded = false
-//                                entryDetails.category = "2 bedroom"
-                                onValueChange(entryDetails.copy(category = renCategory))
-                            }
-                        )
-                    }
-                }
-            Spacer(modifier = Modifier.padding(8.dp))
-                ExposedDropdownMenuBox(
-                    expanded = isLocationExpanded,
-                    onExpandedChange = { isLocationExpanded = it },
-//                    modifier = Modifier
-//                        .weight(1f)
-                ) {
-                    TextField(
-                        value = location,
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isLocationExpanded)
-                        },
-                        colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                        modifier = Modifier
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled)
+                            onValueChange(entryDetails.copy(category = renCategory))
+                        }
                     )
-                    ExposedDropdownMenu(
-                        expanded = isLocationExpanded,
-                        onDismissRequest = { isLocationExpanded = false }
-                    ) {
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = "Mjini")
-                            },
-                            onClick = {
-                                location = "Mjini"
-                                isLocationExpanded = false
-//                                entryDetails.location = "Mjini"
-                                onValueChange(entryDetails.copy(location = location))
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = "Ngomongo")
-                            },
-                            onClick = {
-                                location = "Ngomongo"
-                                isLocationExpanded = false
-//                                entryDetails.location = "Ngomongo"
-                                onValueChange(entryDetails.copy(location = location))
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = "Diaspora")
-                            },
-                            onClick = {
-                                location = "Diaspora"
-                                isLocationExpanded = false
-//                                entryDetails.location = "Diaspora"
-                                onValueChange(entryDetails.copy(location = location))
-                            }
-                        )
-                    }
+                    DropdownMenuItem(
+                        text = {
+                            Text(text = "single")
+                        },
+                        onClick = {
+                            renCategory = "single"
+                            isCategoryExpanded = false
+//                                entryDetails.category = "single"
+                            onValueChange(entryDetails.copy(category = renCategory))
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(text = "double")
+                        },
+                        onClick = {
+                            renCategory = "double"
+                            isCategoryExpanded = false
+//                                entryDetails.category = "double"
+                            onValueChange(entryDetails.copy(category = renCategory))
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(text = "1 bedroom")
+                        },
+                        onClick = {
+                            renCategory = "1 bedroom"
+                            isCategoryExpanded = false
+//                                entryDetails.category = "1 bedroom"
+                            onValueChange(entryDetails.copy(category = renCategory))
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = {
+                            Text(text = "2 bedroom")
+                        },
+                        onClick = {
+                            renCategory = "2 bedroom"
+                            isCategoryExpanded = false
+//                                entryDetails.category = "2 bedroom"
+                            onValueChange(entryDetails.copy(category = renCategory))
+                        }
+                    )
                 }
+            }
+            Spacer(modifier = Modifier.padding(8.dp))
+            LocationSelector(
+                selectCountry = {
+                    onValueChange(
+                        entryDetails.copy(
+                            country = it.id,
+                            state = null,
+                            city = null,
+                            neighborhood = null
+                        )
+                    )
+                },
+                selectState = {
+                    onValueChange(
+                        entryDetails.copy(
+                            state = it.id,
+                            city = null,
+                            neighborhood = null
+                        )
+                    )
+                },
+                selectCity = {
+                    onValueChange(entryDetails.copy(city = it.id, neighborhood = null))
+                },
+                selectNeighborhood = {
+                    onValueChange(entryDetails.copy(neighborhood = it.id))
+                },
+                locationViewModel,
+                modifier = Modifier
+            )
+//                ExposedDropdownMenuBox(
+//                    expanded = isLocationExpanded,
+//                    onExpandedChange = { isLocationExpanded = it },
+////                    modifier = Modifier
+////                        .weight(1f)
+//                ) {
+//                    TextField(
+//                        value = location,
+//                        onValueChange = {},
+//                        readOnly = true,
+//                        trailingIcon = {
+//                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isLocationExpanded)
+//                        },
+//                        colors = ExposedDropdownMenuDefaults.textFieldColors(),
+//                        modifier = Modifier
+//                            .menuAnchor(MenuAnchorType.PrimaryNotEditable, enabled)
+//                    )
+//                    ExposedDropdownMenu(
+//                        expanded = isLocationExpanded,
+//                        onDismissRequest = { isLocationExpanded = false }
+//                    ) {
+//                        DropdownMenuItem(
+//                            text = {
+//                                Text(text = "Mjini")
+//                            },
+//                            onClick = {
+//                                location = "Mjini"
+//                                isLocationExpanded = false
+////                                entryDetails.location = "Mjini"
+//                                onValueChange(entryDetails.copy(location = location))
+//                            }
+//                        )
+//                        DropdownMenuItem(
+//                            text = {
+//                                Text(text = "Ngomongo")
+//                            },
+//                            onClick = {
+//                                location = "Ngomongo"
+//                                isLocationExpanded = false
+////                                entryDetails.location = "Ngomongo"
+//                                onValueChange(entryDetails.copy(location = location))
+//                            }
+//                        )
+//                        DropdownMenuItem(
+//                            text = {
+//                                Text(text = "Diaspora")
+//                            },
+//                            onClick = {
+//                                location = "Diaspora"
+//                                isLocationExpanded = false
+////                                entryDetails.location = "Diaspora"
+//                                onValueChange(entryDetails.copy(location = location))
+//                            }
+//                        )
+//                    }
+//                }
 //            }
             Spacer(modifier = Modifier.padding(16.dp))
             OutlinedButton(
