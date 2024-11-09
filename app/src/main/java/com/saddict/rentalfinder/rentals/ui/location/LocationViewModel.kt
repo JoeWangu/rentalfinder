@@ -63,10 +63,10 @@ class LocationViewModel @Inject constructor(
         fetchStates(country.id)
     }
 
-    private fun fetchStates(countryId: Int) {
+    private fun fetchStates(countryId: Int?) {
         viewModelScope.launch {
             try {
-                val states = remoteDataSource.getStates(countryId).results
+                val states = remoteDataSource.getStates(countryId!!).results
                 if (states.isNotEmpty()) {
                     _states.value = states
                 } else {
@@ -87,10 +87,10 @@ class LocationViewModel @Inject constructor(
         fetchCities(state.id, country.id)
     }
 
-    private fun fetchCities(stateId: Int?, countryId: Int) {
+    private fun fetchCities(stateId: Int?, countryId: Int?) {
         viewModelScope.launch {
             try {
-                _cities.value = remoteDataSource.getCities(stateId, countryId).results
+                _cities.value = remoteDataSource.getCities(stateId, countryId!!).results
             } catch (e: Exception) {
                 Log.e(TAG, "fetchCities: ${e.message}", e)
             }
@@ -104,10 +104,10 @@ class LocationViewModel @Inject constructor(
         fetchNeighborhoods(city.id)
     }
 
-    private fun fetchNeighborhoods(cityId: Int) {
+    private fun fetchNeighborhoods(cityId: Int?) {
         viewModelScope.launch {
             try {
-                _neighborhoods.value = remoteDataSource.getNeighborhoods(cityId).results
+                _neighborhoods.value = remoteDataSource.getNeighborhoods(cityId!!).results
             } catch (e: Exception) {
                 Log.e(TAG, "fetchNeighborhoods: ${e.message}", e)
             }

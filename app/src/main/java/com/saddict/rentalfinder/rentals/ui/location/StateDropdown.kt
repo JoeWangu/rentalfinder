@@ -56,7 +56,7 @@ fun StateDropdown(
             }) {
             states.forEach { state ->
                 DropdownMenuItem(text = {
-                    Text(text = state.name)
+                    Text(text = state.name!!)
                 },
                     onClick = {
                         isDropDownExpanded.value = false

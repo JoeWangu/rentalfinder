@@ -33,7 +33,7 @@ import com.saddict.rentalfinder.utils.UserProfileTypeConverter
         RentalManageRemoteKeysEntity::class,
         ImageRemoteKeysEntity::class,
     ],
-    version = 3,
+    version = 1,
     exportSchema = false
 )
 @TypeConverters(UserProfileTypeConverter::class, UserProfileDetailsConverter::class)

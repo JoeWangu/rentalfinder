@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ fun LocationSelector(
     selectState: (state: StateResults) -> Unit,
     selectCity: (city: CityResults) -> Unit,
     selectNeighborhood: (neighborhood: NeighborhoodResults) -> Unit,
+//    stateIsNotEmpty: Boolean,
     viewModel: LocationViewModel,
     modifier: Modifier = Modifier
 ) {
@@ -45,11 +47,13 @@ fun LocationSelector(
             viewModel = viewModel,
             modifier = Modifier
         )
-        StateDropdown(
-            selectState = selectState,
-            viewModel = viewModel,
-            modifier = Modifier
-        )
+        if (viewModel.states.collectAsState(initial = emptyList()).value.isNotEmpty()) {
+            StateDropdown(
+                selectState = selectState,
+                viewModel = viewModel,
+                modifier = Modifier
+            )
+        }
         CityDropdown(
             selectCity = selectCity,
             viewModel = viewModel,

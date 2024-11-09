@@ -3,6 +3,10 @@ package com.saddict.rentalfinder.utils
 import com.saddict.rentalfinder.rentals.model.local.images.ImageEntity
 import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
 import com.saddict.rentalfinder.rentals.model.local.rentals.RentalManageEntity
+import com.saddict.rentalfinder.rentals.model.remote.CityResults
+import com.saddict.rentalfinder.rentals.model.remote.CountryResults
+import com.saddict.rentalfinder.rentals.model.remote.NeighborhoodResults
+import com.saddict.rentalfinder.rentals.model.remote.StateResults
 import com.saddict.rentalfinder.rentals.model.remote.User
 import com.saddict.rentalfinder.rentals.model.remote.UserProfileDetails
 import com.saddict.rentalfinder.rentals.model.remote.images.RentalImageResults
@@ -44,10 +48,10 @@ fun RentalEntity.mapToResults(): RentalResults {
         ),
         avgRating = avgRating,
         author = author,
-        country = null,
-        state = null,
-        city = null,
-        neighborhood = null
+        country = CountryResults(countryId, countryName, countryCode),
+        state = StateResults(stateId, stateName, countryId),
+        city = CityResults(cityId, cityName, stateId, countryId),
+        neighborhood = NeighborhoodResults(neighborhoodId, neighborhoodName, cityId)
     )
 }
 
@@ -81,6 +85,15 @@ fun RentalResults.mapToEntity(): RentalEntity {
         imageName = imageDetail.imageName,
         avgRating = avgRating,
         author = author,
+        countryName = country?.name,
+        stateName = state?.name,
+        cityName = city?.name,
+        neighborhoodName = neighborhood?.name,
+        countryId = country?.id,
+        stateId = state?.id,
+        cityId = city?.id,
+        neighborhoodId = neighborhood?.id,
+        countryCode = country?.code,
     )
 }
 

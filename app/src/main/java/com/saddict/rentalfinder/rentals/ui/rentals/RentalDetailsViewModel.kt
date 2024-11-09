@@ -62,6 +62,15 @@ data class RenDetailsUiState(
         imageUrl = "",
         imageName = "",
         avgRating = 0,
-        author = ""
+        author = "",
+        countryName = "",
+        stateName = "",
+        cityName = "",
+        neighborhoodName = "",
+        countryId = 0,
+        stateId = 0,
+        cityId = 0,
+        neighborhoodId = 0,
+        countryCode = ""
     )
 )

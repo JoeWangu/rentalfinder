@@ -125,6 +125,9 @@ dependencies {
     implementation("androidx.paging:paging-compose:$pagingVersion")
     implementation("androidx.room:room-paging:$roomVersion")
 
+//    SPLASH API
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
 //    LOCAL UNIT TESTS
     testImplementation("junit:junit:4.13.2")
 
