@@ -108,10 +108,10 @@ fun RentalEntity.toEntryDetails(): EntryDetails = EntryDetails(
 //    location = location.toString(),
     available = available,
     isActive = isActive,
-//    country = country,
-//    state = state,
-//    city = city,
-//    neighborhood = neighborhood,
+    country = countryId,
+    state = stateId,
+    city = cityId,
+    neighborhood = neighborhoodId,
 )
 
 fun RentalEntity.toRentalEditUiState(isEntryValid: Boolean = false):

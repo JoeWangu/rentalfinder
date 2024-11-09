@@ -57,8 +57,22 @@ data class RentalEntity(
     @ColumnInfo(name = "avg_rating")
     val avgRating: Int,
     val author: String,
-//    val country: String,
-//    val state: String,
-//    val city: String,
-//    val neighborhood: String,
+    @ColumnInfo(name = "country_name")
+    val countryName: String?,
+    @ColumnInfo(name = "state_name")
+    val stateName: String?,
+    @ColumnInfo(name = "city_name")
+    val cityName: String?,
+    @ColumnInfo(name = "neighborhood_name")
+    val neighborhoodName: String?,
+    @ColumnInfo(name = "country_id")
+    val countryId: Int?,
+    @ColumnInfo(name = "state_id")
+    val stateId: Int?,
+    @ColumnInfo(name = "city_id")
+    val cityId: Int?,
+    @ColumnInfo(name = "neighborhood_id")
+    val neighborhoodId: Int?,
+    @ColumnInfo(name = "country_code")
+    val countryCode: String?,
 )
