@@ -1,0 +1,27 @@
+package com.saddict.rentalfinder.utils
+
+object Constants {
+    //    USER CONSTANTS
+//    const val USERS_URL = ""
+    const val USER_PROFILE_URL = ""
+    const val CREATE_USER_URL = ""
+    const val LOGIN_URL = ""
+
+    //    RENTAL CONSTANTS
+    const val RENTAL_URL = ""
+    const val RENTAL_MANAGE_URL = ""
+    const val SINGLE_RENTAL_URL = ""
+    const val RENTAL_IMAGE_URL = ""
+    const val RENTAL_COUNTRY_URL = ""
+    const val RENTAL_CITY_URL = ""
+    const val RENTAL_STATE_URL = ""
+    const val RENTAL_NEIGHBORHOOD_URL = ""
+
+//    const val RENTAL_EXTRA_IMAGE_URL = ""
+//    const val RENTAL_RATINGS = ""
+//    const val RENTAL_FAVORITES = ""
+
+    //    const val LOGOUT_URL = ""
+    const val TOKEN = ""
+    const val TIMEOUT_MILLIS = 5_000L
+}

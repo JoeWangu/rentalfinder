@@ -7,8 +7,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.saddict.rentalfinder.R
-import com.saddict.rentalfinder.rentals.model.local.RentalEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
 
@@ -72,17 +72,17 @@ fun RentalManageDetailsScreen(
                 )
                 PropertyRow(
                     rentalTotalUnits = "${rental.totalUnits.toString()} (rooms)",
-                    contact = rental.authorPhoneNumber.toString(),
+                    contact = rental.authorProfileDetails.phoneNumber.toString(),
                     rentalPrice = rental.price.toString()
                 )
-                Divider(
-                    thickness = 2.dp,
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(top = 8.dp, bottom = 8.dp)
-                        .alpha(0.2F)
+                        .alpha(0.2F),
+                    thickness = 2.dp
                 )
                 PropertyInfo(
-                    rentalLocation = rental.location.toString(),
+//                    rentalLocation = rental.location.toString(),
                     rentalType = rental.category,
                     rentalPosted = rental.datePosted,
                     rentalDescription = rental.description

@@ -1,4 +1,4 @@
-package com.saddict.rentalfinder.rentals.model.local
+package com.saddict.rentalfinder.rentals.model.local.rentals
 
 import androidx.annotation.Keep
 import androidx.room.ColumnInfo
@@ -6,8 +6,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Keep
-@Entity(tableName = "rentals")
-data class RentalEntity(
+@Entity(tableName = "manage_rentals")
+data class RentalManageEntity(
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     val image: Int?,
@@ -17,7 +17,7 @@ data class RentalEntity(
     val title: String,
     val description: String,
     val category: String,
-    val location: String?,
+//    val location: String?,
     @ColumnInfo(name = "date_posted")
     val datePosted: String,
     @ColumnInfo(name = "time_modified")
@@ -31,10 +31,10 @@ data class RentalEntity(
     val isActive: Boolean,
     @ColumnInfo(name = "author_id")
     val authorId: Int,
-    @ColumnInfo(name = "author_first_name")
-    val authorFirstName: String?,
-    @ColumnInfo(name = "author_phone_number")
-    val authorPhoneNumber: String?,
+//    @ColumnInfo(name = "author_first_name")
+//    val authorFirstName: String?,
+//    @ColumnInfo(name = "author_phone_number")
+//    val authorPhoneNumber: String?,
     @ColumnInfo(name = "author_email")
     val authorEmail: String,
     @ColumnInfo(name = "image_detail")

@@ -10,9 +10,9 @@ import com.saddict.rentalfinder.rentals.data.manager.ImageRemoteMediator
 import com.saddict.rentalfinder.rentals.data.manager.RentalManageRemoteMediator
 import com.saddict.rentalfinder.rentals.data.manager.RentalRemoteMediator
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
-import com.saddict.rentalfinder.rentals.model.local.ImageEntity
-import com.saddict.rentalfinder.rentals.model.local.RentalEntity
-import com.saddict.rentalfinder.rentals.model.local.RentalManageEntity
+import com.saddict.rentalfinder.rentals.model.local.images.ImageEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
+import com.saddict.rentalfinder.rentals.model.local.rentals.RentalManageEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -28,7 +28,9 @@ class Repository @Inject constructor(
             config = PagingConfig(
                 pageSize = 10,
                 prefetchDistance = 1,
-                initialLoadSize = 20
+                initialLoadSize = 20,
+                enablePlaceholders = true,
+                maxSize = 100
             ),
             remoteMediator = RentalRemoteMediator(
                 remoteDataSource = remoteDataSource,
@@ -46,7 +48,9 @@ class Repository @Inject constructor(
             config = PagingConfig(
                 pageSize = 10,
                 prefetchDistance = 1,
-                initialLoadSize = 20
+                initialLoadSize = 20,
+                enablePlaceholders = true,
+                maxSize = 100
             ),
             remoteMediator = RentalManageRemoteMediator(
                 remoteDataSource = remoteDataSource,
@@ -64,7 +68,9 @@ class Repository @Inject constructor(
             config = PagingConfig(
                 pageSize = 10,
                 prefetchDistance = 1,
-                initialLoadSize = 20
+                initialLoadSize = 20,
+                enablePlaceholders = true,
+                maxSize = 100
             ),
             remoteMediator = ImageRemoteMediator(
                 remoteDataSource = remoteDataSource,

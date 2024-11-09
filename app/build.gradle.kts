@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 //repositories{
@@ -15,12 +16,12 @@ android {
     }
     
     namespace = "com.saddict.rentalfinder"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.saddict.rentalfinder"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -50,7 +51,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.4"
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
     packaging {
         resources {
@@ -61,34 +62,43 @@ android {
 
 dependencies {
 
-    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    implementation(platform("androidx.compose:compose-bom:2024.10.01"))
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.core:core-ktx:1.15.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.activity:activity-compose:1.9.3")
+
+//    GOOGLE
+    val googleCreds = "1.3.0"
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("androidx.credentials:credentials:$googleCreds")
+    implementation("androidx.credentials:credentials-play-services-auth:$googleCreds")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
 //    UI
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-util:1.5.4")
-//    implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.compose.ui:ui-util")
+    implementation("androidx.compose.material:material-icons-extended")
 
 //    PAGER
-    implementation("com.google.accompanist:accompanist-pager:0.12.0")
+    implementation("com.google.accompanist:accompanist-pager:0.36.0")
 
 //     RETROFIT
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-jackson:2.9.0")
+    val retrofitVersion = "2.11.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-jackson:2.11.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.1")
 
 //    OKHTTP3
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
 //    COIL
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
 //    ROOM
     val roomVersion = "2.6.1"
@@ -97,20 +107,20 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
 
 //    NAVIGATION
-    val navVersion = "2.7.6"
+    val navVersion = "2.8.3"
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
 //    PREFERENCES DATASTORE
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 //    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
 
 //    DAGGER HILT
-    implementation("com.google.dagger:hilt-android:2.48.1")
-    ksp("com.google.dagger:hilt-compiler:2.48.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("com.google.dagger:hilt-android:2.52")
+    ksp("com.google.dagger:hilt-compiler:2.52")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
 //    PAGING
-    val pagingVersion = "3.2.1"
+    val pagingVersion = "3.3.2"
     implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
     implementation("androidx.paging:paging-compose:$pagingVersion")
     implementation("androidx.room:room-paging:$roomVersion")
@@ -119,9 +129,9 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 
 //    ANDROID UI INSTRUMENTATION TESTS
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.10.01"))
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
 //    DEBUG

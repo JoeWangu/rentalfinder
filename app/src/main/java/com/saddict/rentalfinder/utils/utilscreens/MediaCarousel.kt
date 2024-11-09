@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -31,16 +33,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
+//import com.google.accompanist.pager.ExperimentalPagerApi
+//import com.google.accompanist.pager.HorizontalPager
+//import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
 // ----------------- IMAGE SLIDER FROM YOUTUBE ------------------ //
-@OptIn(ExperimentalPagerApi::class)
+//@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun CarouselSlider(imageList: List<Int>, modifier: Modifier = Modifier) {
-    val pagerState = rememberPagerState(pageCount = imageList.size)
+//    val pagerState = rememberPagerState(pageCount = imageList.size)
+    val pagerState = rememberPagerState(initialPage = 1) { imageList.size }
     val scope = rememberCoroutineScope()
     Column(
         modifier = modifier,
@@ -71,6 +74,27 @@ fun CarouselSlider(imageList: List<Int>, modifier: Modifier = Modifier) {
                     )
                 }
             }
+//            HorizontalPager(
+//                state = pagerState,
+//                modifier = Modifier
+//                    .wrapContentSize()
+//            ) { currentPage ->
+//                Card(
+//                    modifier = Modifier
+//                        .wrapContentSize()
+//                        .padding(10.dp),
+//                    elevation = CardDefaults.cardElevation(8.dp),
+//                    shape = MaterialTheme.shapes.small
+//                ) {
+//                    Image(
+//                        painter = painterResource(id = imageList[currentPage]),
+//                        contentDescription = null,
+//                        contentScale = ContentScale.Crop,
+//                        modifier = Modifier
+//                            .height(100.dp)
+//                    )
+//                }
+//            }
             IconButton(
                 onClick = {
                     val nextPage = pagerState.currentPage + 1
@@ -90,7 +114,7 @@ fun CarouselSlider(imageList: List<Int>, modifier: Modifier = Modifier) {
                 )
             ) {
                 Icon(
-                    imageVector = Icons.Filled.KeyboardArrowRight,
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxSize(),
@@ -116,7 +140,7 @@ fun CarouselSlider(imageList: List<Int>, modifier: Modifier = Modifier) {
                 )
             ) {
                 Icon(
-                    imageVector = Icons.Filled.KeyboardArrowLeft,
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxSize(),
