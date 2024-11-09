@@ -55,7 +55,7 @@ fun CountryDropdown(
             }) {
             countries.forEach { country ->
                 DropdownMenuItem(text = {
-                    Text(text = country.name)
+                    Text(text = country.name!!)
                 },
                     onClick = {
                         isDropDownExpanded.value = false

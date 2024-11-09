@@ -55,7 +55,7 @@ fun CityDropdown(
             }) {
             cities.forEach { city ->
                 DropdownMenuItem(text = {
-                    Text(text = city.name)
+                    Text(text = city.name!!)
                 },
                     onClick = {
                         isDropDownExpanded.value = false

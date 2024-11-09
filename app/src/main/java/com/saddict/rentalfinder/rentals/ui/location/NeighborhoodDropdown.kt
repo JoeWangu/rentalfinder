@@ -55,7 +55,7 @@ fun NeighborhoodDropdown(
             }) {
             neighborhoods.forEach { neighborhoods ->
                 DropdownMenuItem(text = {
-                    Text(text = neighborhoods.name)
+                    Text(text = neighborhoods.name!!)
                 },
                     onClick = {
                         isDropDownExpanded.value = false
