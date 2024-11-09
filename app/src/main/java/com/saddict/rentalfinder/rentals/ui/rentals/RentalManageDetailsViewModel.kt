@@ -3,8 +3,8 @@ package com.saddict.rentalfinder.rentals.ui.rentals
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.saddict.rentalfinder.prop.Constants
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
-import com.saddict.rentalfinder.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
