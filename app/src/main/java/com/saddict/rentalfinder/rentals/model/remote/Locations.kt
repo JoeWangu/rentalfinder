@@ -18,11 +18,11 @@ data class Country(
 @Keep
 data class CountryResults(
     @JsonProperty("id")
-    val id: Int,
+    val id: Int?,
     @JsonProperty("name")
-    val name: String,
+    val name: String?,
     @JsonProperty("code")
-    val code: String
+    val code: String?
 )
 
 @Keep
@@ -40,11 +40,11 @@ data class State(
 @Keep
 data class StateResults(
     @JsonProperty("id")
-    val id: Int,
+    val id: Int?,
     @JsonProperty("name")
-    val name: String,
+    val name: String?,
     @JsonProperty("country")
-    val country: Int
+    val country: Int?
 )
 
 @Keep
@@ -62,13 +62,13 @@ data class City(
 @Keep
 data class CityResults(
     @JsonProperty("id")
-    val id: Int,
+    val id: Int?,
     @JsonProperty("name")
-    val name: String,
+    val name: String?,
     @JsonProperty("state")
     val state: Int?,
     @JsonProperty("country")
-    val country: Int
+    val country: Int?
 )
 
 @Keep
@@ -86,9 +86,9 @@ data class Neighborhood(
 @Keep
 data class NeighborhoodResults(
     @JsonProperty("id")
-    val id: Int,
+    val id: Int?,
     @JsonProperty("name")
-    val name: String,
+    val name: String?,
     @JsonProperty("city")
-    val city: Int
+    val city: Int?
 )
