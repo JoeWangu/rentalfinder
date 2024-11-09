@@ -1,12 +1,12 @@
 package com.saddict.rentalfinder.rentals.di
 
+import com.saddict.rentalfinder.prop.Constants.CREATE_USER_URL
+import com.saddict.rentalfinder.prop.Constants.LOGIN_URL
 import com.saddict.rentalfinder.prop.Prop.Prop.BASE_URL
 import com.saddict.rentalfinder.rentals.data.manager.PreferenceDataStore
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSourceImpl
 import com.saddict.rentalfinder.rentals.network.RentalService
-import com.saddict.rentalfinder.utils.Constants.CREATE_USER_URL
-import com.saddict.rentalfinder.utils.Constants.LOGIN_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
