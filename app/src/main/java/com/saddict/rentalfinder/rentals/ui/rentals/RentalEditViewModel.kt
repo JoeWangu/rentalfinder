@@ -59,7 +59,7 @@ class RentalEditViewModel @Inject constructor(
         )
     }
 
-    suspend fun updateRental() {
+    fun updateRental() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
