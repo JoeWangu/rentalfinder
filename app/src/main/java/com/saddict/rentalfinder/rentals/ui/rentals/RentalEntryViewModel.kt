@@ -10,6 +10,7 @@ import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
 import com.saddict.rentalfinder.rentals.model.remote.rentals.CreateRental
 import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
+import com.saddict.rentalfinder.utils.mapToEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -44,22 +45,22 @@ class RentalEntryViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
-//                    _uiState.emit(CreateRentalUiState.Loading)
+                    _uiState.emit(CreateRentalUiState.Loading)
                     if (validateInput()) {
                         Log.d("createRentalsTag", "${entryUiState.renEntry.toCreateRental()}")
-//                        val post = remoteDataSource.postRental(
-//                            entryUiState.renEntry.toCreateRental()
-//                        )
-//                        val response = post.body()
-//                        if (post.isSuccessful) {
-//                            _uiState.emit(CreateRentalUiState.Success(response!!))
-//                            Log.d("Success", response.toString())
-//                            localDataSource.insertOneRental(response.mapToEntity())
-//                        } else {
-//                            val errorBody = post.raw()
-//                            _uiState.emit(CreateRentalUiState.SuccessError)
-//                            Log.e("post error", "post not successful $errorBody")
-//                        }
+                        val post = remoteDataSource.postRental(
+                            entryUiState.renEntry.toCreateRental()
+                        )
+                        val response = post.body()
+                        if (post.isSuccessful) {
+                            _uiState.emit(CreateRentalUiState.Success(response!!))
+                            Log.d("Success", response.toString())
+                            localDataSource.insertOneRental(response.mapToEntity())
+                        } else {
+                            val errorBody = post.raw()
+                            _uiState.emit(CreateRentalUiState.SuccessError)
+                            Log.e("post error", "post not successful $errorBody")
+                        }
                     }
                 } catch (e: Exception) {
                     _uiState.emit(CreateRentalUiState.Error)
