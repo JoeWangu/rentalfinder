@@ -70,6 +70,11 @@ fun RentalDetailsScreen(
     rental: RentalEntity = uiState.value.rentalDetails,
 ) {
     val state = rememberScrollState()
+    val rentalLocation = if (rental.cityName == null || rental.neighborhoodName == null) {
+        "Not Provided"
+    } else {
+        "${rental.cityName}, ${rental.neighborhoodName}"
+    }
     Box(modifier = modifier) {
         Column(
             modifier = Modifier
@@ -96,7 +101,7 @@ fun RentalDetailsScreen(
                 )
                 PropertyRow(
                     rentalTotalUnits = "${rental.totalUnits.toString()} (rooms)",
-                    contact = rental.authorProfileDetails.phoneNumber ?: "Not Added",
+                    contact = rental.authorPhoneNumber ?: "Not Added",
                     rentalPrice = rental.price.toString()
                 )
                 HorizontalDivider(
@@ -105,17 +110,26 @@ fun RentalDetailsScreen(
                         .alpha(0.2F),
                     thickness = 2.dp
                 )
-//                PropertyInfo(
-//                    rentalLocation = rental.location.toString(),
-//                    rentalType = rental.category,
-//                    rentalPosted = rental.datePosted,
-//                    rentalDescription = rental.description
-//                )
+                PropertyInfo(
+                    rentalLocation = rentalLocation,
+                    rentalType = rental.category,
+                    rentalPosted = rental.datePosted,
+                    rentalDescription = rental.description
+                )
             }
         }
-        rental.authorProfileDetails.phoneNumber?.let {
+        if (rental.authorPhoneNumber.isNullOrBlank()) {
             PhoneCallButton(
-                phoneNumber = it,
+                phoneNumber = "",
+                enabled = false,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 5.dp, bottom = 30.dp)
+            )
+        } else {
+            PhoneCallButton(
+                phoneNumber = rental.authorPhoneNumber,
+                enabled = true,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 5.dp, bottom = 30.dp)
@@ -127,6 +141,7 @@ fun RentalDetailsScreen(
 @Composable
 fun PhoneCallButton(
     phoneNumber: String,
+    enabled: Boolean,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -148,9 +163,9 @@ fun PhoneCallButton(
             } catch (s: SecurityException) {
                 // show() method display the toast with
                 // exception message.
-                context.toastUtil("An error occurred")
+                context.toastUtil("An error occurred ${s.message}")
             }
-        }) {
+        }, enabled = enabled) {
             Text(text = "Book Now")
         }
     }
@@ -291,7 +306,7 @@ fun PropertyRow(
 
 @Composable
 fun PropertyInfo(
-//    rentalLocation: String,
+    rentalLocation: String,
     rentalType: String,
     rentalPosted: String,
     rentalDescription: String,
@@ -313,7 +328,11 @@ fun PropertyInfo(
             Text(
                 text = stringResource(id = R.string.location).capitalize(Locale.current),
             )
-//            Spacer(modifier = Modifier.weight(1F))
+            Spacer(modifier = Modifier.weight(1F))
+            Text(
+                text = rentalLocation,
+                modifier = Modifier.alpha(0.4F)
+            )
 //            Text(
 //                text = rentalLocation,
 ////                when (rentalLocation) {
