@@ -72,7 +72,7 @@ fun RentalManageDetailsScreen(
                 )
                 PropertyRow(
                     rentalTotalUnits = "${rental.totalUnits.toString()} (rooms)",
-                    contact = rental.authorProfileDetails.phoneNumber.toString(),
+                    contact = rental.authorPhoneNumber ?: "Not Added",
                     rentalPrice = rental.price.toString()
                 )
                 HorizontalDivider(
@@ -82,7 +82,7 @@ fun RentalManageDetailsScreen(
                     thickness = 2.dp
                 )
                 PropertyInfo(
-//                    rentalLocation = rental.location.toString(),
+                    rentalLocation = "${rental.cityName}, ${rental.neighborhoodName}",
                     rentalType = rental.category,
                     rentalPosted = rental.datePosted,
                     rentalDescription = rental.description
