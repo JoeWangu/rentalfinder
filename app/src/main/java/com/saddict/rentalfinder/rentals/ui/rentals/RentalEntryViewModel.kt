@@ -96,6 +96,11 @@ data class EntryDetails(
     val state: Int? = null,
     val city: Int? = null,
     val neighborhood: Int? = null,
+    val countryName: String? = null,
+    val stateName: String? = null,
+    val cityName: String? = null,
+    val neighborhoodName: String? = null,
+    val countryCode: String? = null,
 )
 
 fun EntryDetails.toCreateRental(): CreateRental = CreateRental(

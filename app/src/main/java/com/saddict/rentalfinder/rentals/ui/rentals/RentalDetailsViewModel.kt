@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.saddict.rentalfinder.prop.Constants.TIMEOUT_MILLIS
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
-import com.saddict.rentalfinder.rentals.model.remote.UserProfileDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -52,7 +51,7 @@ data class RenDetailsUiState(
         authorId = 1,
         authorEmail = "",
         authorUsername = "",
-        authorProfileDetails = UserProfileDetails(""),
+        authorPhoneNumber = "",
 //        authorFirstName = "",
 //        authorLastName = "",
 //        authorPhoneNumber = "",

@@ -112,6 +112,11 @@ fun RentalEntity.toEntryDetails(): EntryDetails = EntryDetails(
     state = stateId,
     city = cityId,
     neighborhood = neighborhoodId,
+    countryName = countryName,
+    stateName = stateName,
+    cityName = cityName,
+    neighborhoodName = neighborhoodName,
+    countryCode = countryCode
 )
 
 fun RentalEntity.toRentalEditUiState(isEntryValid: Boolean = false):

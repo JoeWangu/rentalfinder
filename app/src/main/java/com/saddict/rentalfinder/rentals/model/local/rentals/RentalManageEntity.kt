@@ -17,7 +17,6 @@ data class RentalManageEntity(
     val title: String,
     val description: String,
     val category: String,
-//    val location: String?,
     @ColumnInfo(name = "date_posted")
     val datePosted: String,
     @ColumnInfo(name = "time_modified")
@@ -31,12 +30,12 @@ data class RentalManageEntity(
     val isActive: Boolean,
     @ColumnInfo(name = "author_id")
     val authorId: Int,
-//    @ColumnInfo(name = "author_first_name")
-//    val authorFirstName: String?,
-//    @ColumnInfo(name = "author_phone_number")
-//    val authorPhoneNumber: String?,
     @ColumnInfo(name = "author_email")
     val authorEmail: String,
+    @ColumnInfo(name = "author_username")
+    val authorUsername: String,
+    @ColumnInfo(name = "author_phone_number")
+    val authorPhoneNumber: String?,
     @ColumnInfo(name = "image_detail")
     val imageUrl: String,
     @ColumnInfo(name = "image_name")
@@ -44,4 +43,27 @@ data class RentalManageEntity(
     @ColumnInfo(name = "avg_rating")
     val avgRating: Int,
     val author: String,
+    @ColumnInfo(name = "country_name")
+    val countryName: String?,
+    @ColumnInfo(name = "state_name")
+    val stateName: String?,
+    @ColumnInfo(name = "city_name")
+    val cityName: String?,
+    @ColumnInfo(name = "neighborhood_name")
+    val neighborhoodName: String?,
+    @ColumnInfo(name = "country_id")
+    val countryId: Int?,
+    @ColumnInfo(name = "state_id")
+    val stateId: Int?,
+    @ColumnInfo(name = "city_id")
+    val cityId: Int?,
+    @ColumnInfo(name = "neighborhood_id")
+    val neighborhoodId: Int?,
+    @ColumnInfo(name = "country_code")
+    val countryCode: String?,
+//    @ColumnInfo(name = "author_first_name")
+//    val authorFirstName: String?,
+//    @ColumnInfo(name = "author_phone_number")
+//    val authorPhoneNumber: String?,
+//    val location: String?,
 )
