@@ -11,9 +11,11 @@ import com.saddict.rentalfinder.rentals.model.remote.CountryResults
 import com.saddict.rentalfinder.rentals.model.remote.NeighborhoodResults
 import com.saddict.rentalfinder.rentals.model.remote.StateResults
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,11 +45,13 @@ class LocationViewModel @Inject constructor(
 
     private fun fetchCountries() {
         viewModelScope.launch {
-            try {
-                val countryResponse = remoteDataSource.getCountries()
-                _countries.value = countryResponse.results
-            } catch (e: Exception) {
-                Log.e(TAG, "fetchCountries: ${e.message}", e)
+            withContext(Dispatchers.IO) {
+                try {
+                    val countryResponse = remoteDataSource.getCountries()
+                    _countries.value = countryResponse.results
+                } catch (e: Exception) {
+                    Log.e(TAG, "fetchCountries: ${e.message}", e)
+                }
             }
         }
     }
@@ -65,15 +69,17 @@ class LocationViewModel @Inject constructor(
 
     private fun fetchStates(countryId: Int?) {
         viewModelScope.launch {
-            try {
-                val states = remoteDataSource.getStates(countryId!!).results
-                if (states.isNotEmpty()) {
-                    _states.value = states
-                } else {
-                    fetchCities(null, countryId)
+            withContext(Dispatchers.IO) {
+                try {
+                    val states = remoteDataSource.getStates(countryId!!).results
+                    if (states.isNotEmpty()) {
+                        _states.value = states
+                    } else {
+                        fetchCities(null, countryId)
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "fetchStates: ${e.message}", e)
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "fetchStates: ${e.message}", e)
             }
         }
     }
@@ -89,10 +95,12 @@ class LocationViewModel @Inject constructor(
 
     private fun fetchCities(stateId: Int?, countryId: Int?) {
         viewModelScope.launch {
-            try {
-                _cities.value = remoteDataSource.getCities(stateId, countryId!!).results
-            } catch (e: Exception) {
-                Log.e(TAG, "fetchCities: ${e.message}", e)
+            withContext(Dispatchers.IO) {
+                try {
+                    _cities.value = remoteDataSource.getCities(stateId, countryId!!).results
+                } catch (e: Exception) {
+                    Log.e(TAG, "fetchCities: ${e.message}", e)
+                }
             }
         }
     }
@@ -106,10 +114,12 @@ class LocationViewModel @Inject constructor(
 
     private fun fetchNeighborhoods(cityId: Int?) {
         viewModelScope.launch {
-            try {
-                _neighborhoods.value = remoteDataSource.getNeighborhoods(cityId!!).results
-            } catch (e: Exception) {
-                Log.e(TAG, "fetchNeighborhoods: ${e.message}", e)
+            withContext(Dispatchers.IO) {
+                try {
+                    _neighborhoods.value = remoteDataSource.getNeighborhoods(cityId!!).results
+                } catch (e: Exception) {
+                    Log.e(TAG, "fetchNeighborhoods: ${e.message}", e)
+                }
             }
         }
     }
@@ -117,20 +127,4 @@ class LocationViewModel @Inject constructor(
     fun onNeighborhoodSelected(neighborhood: NeighborhoodResults) {
         selectedNeighborhood.value = neighborhood
     }
-
-//    fun getLocationData(): LocationData {
-//        return LocationData(
-//            country = selectedCountry.value,
-//            state = selectedState.value,
-//            city = selectedCity.value,
-//            neighborhood = selectedNeighborhood.value
-//        )
-//    }
 }
-
-//data class LocationData(
-//    val country: CountryResults?,
-//    val state: State?,
-//    val city: City?,
-//    val neighborhood: Neighborhood?
-//)
