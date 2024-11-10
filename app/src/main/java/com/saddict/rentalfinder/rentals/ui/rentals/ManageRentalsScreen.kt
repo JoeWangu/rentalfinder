@@ -9,12 +9,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -84,6 +86,10 @@ fun ManageRentalsBody(
         modifier = modifier
             .fillMaxSize()
     ) {
+        // Trigger refresh (e.g., on swipe refresh or button press)
+        Button(onClick = { rentals.refresh() }) {
+            Text("Refresh")
+        }
         LazyVerticalGrid(columns = GridCells.Fixed(2)) {
             items(
                 items = rentals.itemSnapshotList.items,
