@@ -32,7 +32,7 @@ fun RentalEntity.mapToResults(): RentalResults {
             id = authorId,
             email = authorEmail,
             username = authorUsername,
-            userProfile = authorProfileDetails,
+            userProfile = UserProfileDetails(null),
 //            firstName = authorFirstName,
 //            lastName = authorLastName,
 //            phoneNumber = authorPhoneNumber,
@@ -74,7 +74,6 @@ fun RentalResults.mapToEntity(): RentalEntity {
         authorId = authorDetail.id,
         authorEmail = authorDetail.email,
         authorUsername = authorDetail.username ?: "",
-        authorProfileDetails = authorDetail.userProfile ?: UserProfileDetails("Not Provided"),
 //        authorFirstName = authorDetail.firstName,
 //        authorLastName = authorDetail.lastName,
 //        authorPhoneNumber = authorDetail.userProfile?.phoneNumber,
@@ -94,6 +93,7 @@ fun RentalResults.mapToEntity(): RentalEntity {
         cityId = city?.id,
         neighborhoodId = neighborhood?.id,
         countryCode = country?.code,
+        authorPhoneNumber = authorDetail.userProfile?.phoneNumber,
     )
 }
 
@@ -121,6 +121,17 @@ fun RentalResults.mapToManageEntity(): RentalManageEntity {
         imageName = imageDetail.imageName,
         avgRating = avgRating,
         author = author,
+        authorUsername = authorDetail.username ?: "",
+        authorPhoneNumber = authorDetail.userProfile?.phoneNumber,
+        countryName = country?.name,
+        stateName = state?.name,
+        cityName = city?.name,
+        neighborhoodName = neighborhood?.name,
+        countryId = country?.id,
+        stateId = state?.id,
+        cityId = city?.id,
+        neighborhoodId = neighborhood?.id,
+        countryCode = country?.code,
     )
 }
 
