@@ -212,7 +212,7 @@ fun RentalEntryBody(
                 enabled = enabled
             )
             OutlinedTextField(
-                value = imageId.toString(),
+                value = imageName,
                 onValueChange = { onValueChange(entryDetails.copy(image = imageId)) },
                 label = { Text(text = stringResource(id = R.string.choose_image)) },
                 placeholder = { Text(text = stringResource(id = R.string.choose_image)) },
@@ -228,7 +228,7 @@ fun RentalEntryBody(
                 enabled = enabled,
                 readOnly = true
             )
-            Text(text = imageName)
+//            Text(text = imageName)
             Row {
                 ElevatedButton(
                     onClick = {
