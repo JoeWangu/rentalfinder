@@ -3,15 +3,17 @@ package com.saddict.rentalfinder.rentals.ui.registration.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.data.manager.PreferenceDataStore
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
 import com.saddict.rentalfinder.rentals.data.usecase.LoginUseCase
+import com.saddict.rentalfinder.rentals.model.local.UserEntity
 import com.saddict.rentalfinder.rentals.model.remote.register.LoginUser
 import com.saddict.rentalfinder.rentals.model.remote.register.LoginUserResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -21,39 +23,52 @@ sealed interface LoginUiState {
     data object Error : LoginUiState
     data object NetError : LoginUiState
     data object Loading : LoginUiState
+    data object Idle : LoginUiState
 }
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val preferenceDataStore: PreferenceDataStore,
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource,
 ) : ViewModel() {
-    private val _uiState = MutableSharedFlow<LoginUiState>()
-    val uiState: SharedFlow<LoginUiState> = _uiState
+//    private val _uiState = MutableSharedFlow<LoginUiState>()
+//    val uiState: SharedFlow<LoginUiState> = _uiState
+
+    private val _uiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
+    val uiState: StateFlow<LoginUiState> = _uiState
+
     fun loginUser(
         email: String,
         password: String,
     ) {
         viewModelScope.launch {
+            _uiState.value = LoginUiState.Loading
             withContext(Dispatchers.IO) {
                 try {
-                    _uiState.emit(LoginUiState.Loading)
                     val user = LoginUser(email = email, password = password)
                     val login = LoginUseCase(remoteDataSource).loginUser(user)
                     if (login.isSuccessful) {
                         val response = login.body()
                         val token = login.body()!!.token
                         preferenceDataStore.setToken(token)
+                        val userEntity = UserEntity(
+                            id = 1,
+                            email = email,
+                            username = response?.user ?: ""
+                        )
+                        localDataSource.deleteUser()
+                        localDataSource.insertUser(userEntity)
                         Log.d("Success", response.toString())
-                        _uiState.emit(LoginUiState.Success(response!!))
+                        _uiState.value = LoginUiState.Success(response!!)
                     } else {
-                        _uiState.emit(LoginUiState.Error)
+                        _uiState.value = LoginUiState.Error
                         val errorBody = login.raw()
                         Log.e("NoSuccess", "Error: $errorBody")
                     }
                 } catch (e: Exception) {
                     Log.d("Login Failure", "cannot login the user: $e")
-                    _uiState.emit(LoginUiState.NetError)
+                    _uiState.value = LoginUiState.NetError
                 }
             }
         }

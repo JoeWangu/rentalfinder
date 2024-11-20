@@ -1,24 +1,24 @@
 package com.saddict.rentalfinder.rentals.ui.registration.register
 
-import android.util.Log
 //import android.content.Context
 //import android.os.Handler
 //import android.os.Looper
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.data.manager.PreferenceDataStore
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
 import com.saddict.rentalfinder.rentals.data.usecase.RegisterUseCase
+import com.saddict.rentalfinder.rentals.model.local.UserEntity
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUser
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUserResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -34,16 +34,19 @@ sealed interface RegisterUiState {
     data class Success(val userResponse: RegisterUserResponse) : RegisterUiState
     data object Error : RegisterUiState
     data object Loading : RegisterUiState
+    data object Idle : RegisterUiState
 }
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val preferenceDataStore: PreferenceDataStore,
     private val remoteDataSource: RemoteDataSource,
-//    context: Context
+    private val localDataSource: LocalDataSource,
 ) : ViewModel() {
-    private val _uiState = MutableSharedFlow<RegisterUiState>()
-    val uiState: SharedFlow<RegisterUiState> = _uiState
+
+    private val _uiState = MutableStateFlow<RegisterUiState>(RegisterUiState.Idle)
+    val uiState: StateFlow<RegisterUiState> = _uiState
+
     var registerEntryUiState by mutableStateOf(RegisterEntryUiState())
         private set
 
@@ -52,19 +55,26 @@ class RegisterViewModel @Inject constructor(
 
     fun registerUser() {
         viewModelScope.launch {
+            _uiState.value = RegisterUiState.Loading
             withContext(Dispatchers.IO) {
                 try {
                     if (validateRegisterInput()) {
-                        _uiState.emit(RegisterUiState.Loading)
                         val user = registerEntryUiState.registerDetails.toRegisterUser()
-                        Log.d("register tag", "registerUser: $user")
+//                        Log.d("register tag", "registerUser: $user")
                         val register = RegisterUseCase(remoteDataSource).registerUser(user)
                         if (register.isSuccessful) {
                             val token = register.body()?.token
                             val response = register.body()
                             preferenceDataStore.setToken(token)
-                            Log.d("Success", response.toString())
-                            _uiState.emit(RegisterUiState.Success(response!!))
+                            val userEntity = UserEntity(
+                                id = 1,
+                                email = response?.user?.email ?: "",
+                                username = response?.user?.username ?: ""
+                            )
+                            localDataSource.deleteUser()
+                            localDataSource.insertUser(userEntity)
+//                            Log.d("Success", response.toString())
+                            _uiState.value = RegisterUiState.Success(response!!)
                         } else {
                             // Attempt to read and parse the error body
                             val errorBody = register.errorBody()?.string()
@@ -109,7 +119,7 @@ class RegisterViewModel @Inject constructor(
 //                                }
 //                            } ?: emptyList()
                             _errorMessages.value = errorMessage
-                            _uiState.emit(RegisterUiState.Error)
+                            _uiState.value = RegisterUiState.Error
 //                            Handler(Looper.getMainLooper()).post {
 //                                Toast.makeText(context, "${register.errorBody()?.string()}", Toast.LENGTH_LONG).show()
 //                            }
@@ -117,6 +127,7 @@ class RegisterViewModel @Inject constructor(
                     }
                 } catch (e: Exception) {
                     Log.e("RegisterUserError", "cannot register user $e")
+                    _uiState.value = RegisterUiState.Error
                 }
             }
         }
