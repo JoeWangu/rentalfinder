@@ -88,16 +88,18 @@ fun RentalDetailsScreen(
             )
             Column(
                 modifier = Modifier
-                    .padding(20.dp)
+                    .padding(15.dp)
             ) {
+//                | ${
+//                        everyFirstLetterCapitalize(
+//                            rental.category
+//                        )
+//                    }
                 Text(
-                    text = "${everyFirstLetterCapitalize(rental.title)} | ${
-                        everyFirstLetterCapitalize(
-                            rental.category
-                        )
-                    }",
-                    style = MaterialTheme.typography.displaySmall,
-                    fontFamily = FontFamily(Font(R.font.montserrat_medium))
+                    text = everyFirstLetterCapitalize(rental.title),
+                    style = MaterialTheme.typography.displayLarge,
+                    fontSize = 40.sp
+//                    fontFamily = FontFamily(Font(R.font.montserrat_medium))
                 )
                 PropertyRow(
                     rentalTotalUnits = "${rental.totalUnits.toString()} (rooms)",
@@ -118,23 +120,13 @@ fun RentalDetailsScreen(
                 )
             }
         }
-        if (rental.authorPhoneNumber.isNullOrBlank()) {
-            PhoneCallButton(
-                phoneNumber = "",
-                enabled = false,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 5.dp, bottom = 30.dp)
-            )
-        } else {
-            PhoneCallButton(
-                phoneNumber = rental.authorPhoneNumber,
-                enabled = true,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 5.dp, bottom = 30.dp)
-            )
-        }
+        PhoneCallButton(
+            phoneNumber = rental.authorPhoneNumber ?: "",
+            enabled = !rental.authorPhoneNumber.isNullOrBlank(),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 5.dp, bottom = 30.dp)
+        )
     }
 }
 
@@ -258,10 +250,12 @@ fun PropertyRow(
             modifier = Modifier
         ) {
             Text(
-                text = rentalTotalUnits
+                text = rentalTotalUnits,
+                style = MaterialTheme.typography.labelLarge
             )
             Text(
                 text = stringResource(id = R.string.total).capitalize(Locale.current),
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
                     .alpha(0.3F)
             )
@@ -275,10 +269,13 @@ fun PropertyRow(
             modifier = Modifier
         ) {
             Text(
-                text = contact
+                text = contact,
+                style = MaterialTheme.typography.labelLarge,
+//                fontFamily = FontFamily(Font(R.font.montserrat_medium))
             )
             Text(
                 text = stringResource(id = R.string.contact).capitalize(Locale.current),
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
                     .alpha(0.3F)
             )
@@ -292,10 +289,12 @@ fun PropertyRow(
             modifier = Modifier
         ) {
             Text(
-                text = rentalPrice
+                text = rentalPrice,
+                style = MaterialTheme.typography.labelLarge,
             )
             Text(
                 text = stringResource(id = R.string.ksh).capitalize(Locale.current),
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier
                     .alpha(0.3F)
             )
