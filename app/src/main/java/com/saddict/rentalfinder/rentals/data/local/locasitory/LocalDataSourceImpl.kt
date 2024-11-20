@@ -4,29 +4,45 @@ import androidx.paging.PagingSource
 import com.saddict.rentalfinder.rentals.data.local.dao.ImageDao
 import com.saddict.rentalfinder.rentals.data.local.dao.ManageRentalDao
 import com.saddict.rentalfinder.rentals.data.local.dao.RentalDao
+import com.saddict.rentalfinder.rentals.data.local.dao.RentalUserDao
 import com.saddict.rentalfinder.rentals.data.local.dao.UserDao
 import com.saddict.rentalfinder.rentals.data.local.dao.UserProfileDao
+import com.saddict.rentalfinder.rentals.model.local.UserEntity
+import com.saddict.rentalfinder.rentals.model.local.UserProfileEntity
 import com.saddict.rentalfinder.rentals.model.local.images.ImageEntity
 import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
 import com.saddict.rentalfinder.rentals.model.local.rentals.RentalManageEntity
-import com.saddict.rentalfinder.rentals.model.remote.User
-import com.saddict.rentalfinder.rentals.model.remote.UserProfile
+import com.saddict.rentalfinder.rentals.model.remote.RentalUser
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class LocalDataSourceImpl @Inject constructor(
-    private val userProfileDao: UserProfileDao,
     private val userDao: UserDao,
+    private val userProfileDao: UserProfileDao,
+    private val rentalUserDao: RentalUserDao,
     private val rentalDao: RentalDao,
     private val manageRentalDao: ManageRentalDao,
     private val imageDao: ImageDao,
 ) : LocalDataSource {
-    //    user profile
-    override suspend fun insertUserProfile(userProfile: UserProfile) {
-        return userProfileDao.insertUserProfile(userProfile)
+    //    user
+    override suspend fun insertUser(user: UserEntity) {
+        return userDao.insertUser(user)
     }
 
-    override fun fetchUserProfile(): Flow<UserProfile> {
+    override fun fetchUser(): Flow<UserEntity> {
+        return userDao.getUser()
+    }
+
+    override suspend fun deleteUser() {
+        return userDao.deleteUser()
+    }
+
+    //    user profile
+    override suspend fun insertUserProfile(userProfileEntity: UserProfileEntity) {
+        return userProfileDao.insertUserProfile(userProfileEntity)
+    }
+
+    override fun fetchUserProfile(): Flow<UserProfileEntity> {
         return userProfileDao.fetchUserProfile()
     }
 
@@ -34,17 +50,17 @@ class LocalDataSourceImpl @Inject constructor(
         return userProfileDao.deleteUserProfile()
     }
 
-    //    user
-    override suspend fun insertUser(user: User) {
-        return userDao.insertUser(user)
+    //    rental user
+    override suspend fun insertRentalUser(user: RentalUser) {
+        return rentalUserDao.insertRentalUser(user)
     }
 
-    override fun fetchUser(): Flow<User> {
-        return userDao.fetchUser()
+    override fun fetchRentalUser(): Flow<RentalUser> {
+        return rentalUserDao.fetchRentalUser()
     }
 
-    override suspend fun deleteUser() {
-        return userDao.deleteUser()
+    override suspend fun deleteRentalUser() {
+        return rentalUserDao.deleteRentalUser()
     }
 
     //    rentals

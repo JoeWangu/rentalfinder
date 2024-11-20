@@ -1,23 +1,29 @@
 package com.saddict.rentalfinder.rentals.data.local.locasitory
 
 import androidx.paging.PagingSource
+import com.saddict.rentalfinder.rentals.model.local.UserEntity
+import com.saddict.rentalfinder.rentals.model.local.UserProfileEntity
 import com.saddict.rentalfinder.rentals.model.local.images.ImageEntity
 import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
 import com.saddict.rentalfinder.rentals.model.local.rentals.RentalManageEntity
-import com.saddict.rentalfinder.rentals.model.remote.User
-import com.saddict.rentalfinder.rentals.model.remote.UserProfile
+import com.saddict.rentalfinder.rentals.model.remote.RentalUser
 import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {
+    //    user
+    suspend fun insertUser(user: UserEntity)
+    fun fetchUser(): Flow<UserEntity>
+    suspend fun deleteUser()
+
     //    user profile
-    suspend fun insertUserProfile(userProfile: UserProfile)
-    fun fetchUserProfile(): Flow<UserProfile>
+    suspend fun insertUserProfile(userProfileEntity: UserProfileEntity)
+    fun fetchUserProfile(): Flow<UserProfileEntity>
     suspend fun deleteUserProfile()
 
-    //    user
-    suspend fun insertUser(user: User)
-    fun fetchUser(): Flow<User>
-    suspend fun deleteUser()
+    //    rental user
+    suspend fun insertRentalUser(user: RentalUser)
+    fun fetchRentalUser(): Flow<RentalUser>
+    suspend fun deleteRentalUser()
 
     //    rentals
     suspend fun insertRentals(rentals: List<RentalEntity>)
