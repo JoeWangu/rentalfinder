@@ -1,6 +1,5 @@
 package com.saddict.rentalfinder.rentals.ui.profile
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.List
@@ -25,23 +27,27 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.ImageLoader
+import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
-import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
 
 object ProfileDestination : NavigationDestination {
     override val route: String = "profile"
@@ -64,16 +70,16 @@ fun ProfileScreen(
     navigateToMyRentals: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+//    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         modifier = modifier,
-        topBar = {
-            RFATopBar(
-                title = stringResource(id = R.string.account),
-                canNavigateBack = false,
-                scrollBehavior = scrollBehavior
-            )
-        },
+//        topBar = {
+//            RFATopBar(
+//                title = stringResource(id = R.string.account),
+//                canNavigateBack = false,
+//                scrollBehavior = scrollBehavior
+//            )
+//        },
         bottomBar = {
             RFABottomBar(
                 navigateToHome = navigateToHome,
@@ -106,8 +112,12 @@ fun ProfileBody(
     navigateToHelpCenter: () -> Unit,
     navigateToContact: () -> Unit,
     navigateToMyRentals: () -> Unit,
+    profileViewModel: ProfileScreenViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
+    val user by profileViewModel.profileUiState.collectAsState()
+    val userProfile by profileViewModel.profileDetailsUiState.collectAsState()
+    val scrollState = rememberScrollState()
     val profileMenu = listOf(
         R.string.my_account,
         R.string.address,
@@ -127,41 +137,59 @@ fun ProfileBody(
     Column(
         modifier = modifier
             .padding(8.dp)
+            .verticalScroll(state = scrollState)
     ) {
-        HorizontalDivider(
-            modifier = Modifier
-                .padding(bottom = 8.dp),
-            thickness = 2.dp,
-            color = Color.DarkGray
-        )
+//        HorizontalDivider(
+//            modifier = Modifier
+//                .padding(bottom = 8.dp),
+//            thickness = 2.dp,
+//            color = Color.DarkGray
+//        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(64.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.profile),
+            AsyncImage(
+                model = userProfile.userProfileEntity?.profilePicture,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
+                error = painterResource(id = R.drawable.ic_broken_image),
+                placeholder = painterResource(id = R.drawable.loading_img),
+                imageLoader = ImageLoader.Builder(LocalContext.current)
+                    .crossfade(true)
+                    .build(),
                 modifier = Modifier
                     .size(64.dp)
+//                    .aspectRatio(1f)
                     .padding(8.dp)
+                    .clip(RoundedCornerShape(24.dp))
             )
+//            Image(
+//                painter = painterResource(id = R.drawable.profile),
+//                contentDescription = null,
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier
+//                    .size(64.dp)
+//                    .padding(8.dp)
+//            )
             Column(
                 modifier = Modifier
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Welcome User",
+                    text = "Welcome ${user.user.username}",
                     style = MaterialTheme.typography.bodyLarge,
-                    fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .padding(bottom = 4.dp),
+                        .padding(2.dp),
                 )
                 Text(
-                    text = "07-00-000-000"
+                    text = user.user.email,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier
+                        .padding(2.dp),
                 )
             }
         }
