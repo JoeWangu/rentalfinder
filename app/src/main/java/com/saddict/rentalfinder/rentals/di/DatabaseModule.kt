@@ -6,6 +6,7 @@ import com.saddict.rentalfinder.rentals.data.local.RentalDatabase
 import com.saddict.rentalfinder.rentals.data.local.dao.ImageDao
 import com.saddict.rentalfinder.rentals.data.local.dao.ManageRentalDao
 import com.saddict.rentalfinder.rentals.data.local.dao.RentalDao
+import com.saddict.rentalfinder.rentals.data.local.dao.RentalUserDao
 import com.saddict.rentalfinder.rentals.data.local.dao.UserDao
 import com.saddict.rentalfinder.rentals.data.local.dao.UserProfileDao
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
@@ -31,14 +32,20 @@ object DatabaseModule {
 
     @Provides
     @Singleton
+    fun providesUserDao(rentalDatabase: RentalDatabase): UserDao {
+        return rentalDatabase.userDao()
+    }
+
+    @Provides
+    @Singleton
     fun providesUserProfileDao(rentalDatabase: RentalDatabase): UserProfileDao {
         return rentalDatabase.userProfileDao()
     }
 
     @Provides
     @Singleton
-    fun providesUserDao(rentalDatabase: RentalDatabase): UserDao {
-        return rentalDatabase.userDao()
+    fun providesRentalUserDao(rentalDatabase: RentalDatabase): RentalUserDao {
+        return rentalDatabase.rentalUserDao()
     }
 
     @Provides
@@ -62,15 +69,17 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideLocalDataSource(
-        userProfileDao: UserProfileDao,
         userDao: UserDao,
+        userProfileDao: UserProfileDao,
+        rentalUserDao: RentalUserDao,
         rentalDao: RentalDao,
         manageRentalDao: ManageRentalDao,
         imageDao: ImageDao,
     ): LocalDataSource {
         return LocalDataSourceImpl(
-            userProfileDao = userProfileDao,
             userDao = userDao,
+            userProfileDao = userProfileDao,
+            rentalUserDao = rentalUserDao,
             rentalDao = rentalDao,
             imageDao = imageDao,
             manageRentalDao = manageRentalDao
