@@ -26,10 +26,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
@@ -41,11 +43,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.ui.explore.ExploreCard
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
-import com.saddict.rentalfinder.utils.ErrorPlaceholderCardItem
 import com.saddict.rentalfinder.utils.LoadingPlaceholderCardItem
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
+import com.saddict.rentalfinder.utils.toastUtil
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
+
 
 object HomeDestination : NavigationDestination {
     override val route: String = "home"
@@ -99,11 +102,19 @@ fun HomeBody(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel<HomeViewModel>(),
 ) {
-    LaunchedEffect(key1 = Unit) {
-        homeViewModel.homeItems()
-    }
-    val uiState = homeViewModel.uiState.collectAsState(initial = HomeUiState.Loading).value
+//    LaunchedEffect(key1 = Unit) {
+//        homeViewModel.homeItems()
+//    }
+//    val uiState = homeViewModel.uiState.collectAsState(initial = HomeUiState.Loading).value
+    val uiState by homeViewModel.rentalItems.collectAsState()
     val state = rememberScrollState()
+    val ctx = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        homeViewModel.errorFlow.collect { message ->
+            ctx.toastUtil(message)
+        }
+    }
     val imageList = listOf(
         R.drawable.proxy_image_1,
         R.drawable.proxy_image_2,
@@ -127,21 +138,19 @@ fun HomeBody(
                 .padding(top = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = stringResource(id = R.string.categories).capitalize(Locale.current),
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 12.dp)
-            )
+//            Text(
+//                text = stringResource(id = R.string.categories).capitalize(Locale.current),
+//                style = MaterialTheme.typography.bodyLarge,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(start = 12.dp)
+//            )
             Row {
                 imageList.forEachIndexed { index, image ->
                     CategoryCard(
                         image = image,
                         text = stringResource(id = categoryList[index]),
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier.padding(start = 5.dp)
                     )
                 }
             }
@@ -162,7 +171,10 @@ fun HomeBody(
 
                 Spacer(modifier = Modifier.weight(1F))
 
-                TextButton(onClick = { /* TODO see all action */ }) {
+                TextButton(onClick = {
+                    /* TODO see all action */
+                    ctx.toastUtil("Coming Soon")
+                }) {
                     Text(
                         text = everyFirstLetterCapitalize(stringResource(id = R.string.see_all))
                     )
@@ -180,16 +192,15 @@ fun HomeBody(
                 LazyRow(
                     modifier = Modifier,
                 ) {
-                    when (uiState) {
-                        HomeUiState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
-                        HomeUiState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
-                        is HomeUiState.Success -> items(
-                            count = uiState.rentalResults.take(4).size,
-                            key = { index -> uiState.rentalResults[index].id }
-                        ) { index ->
-                            val rentalItem = uiState.rentalResults[index]
+                    if (uiState.isEmpty()) {
+                        items(count = 4) { LoadingPlaceholderCardItem() }
+                    } else {
+                        items(
+                            count = uiState.take(4).size,
+                            key = { index -> uiState[index].id }) { index ->
+                            val rentalItem = uiState[index]
                             ExploreCard(
-                                imageUrl = rentalItem.imageDetail.imageUrl,
+                                imageUrl = rentalItem.imageUrl,
                                 title = rentalItem.title,
                                 price = rentalItem.price ?: 0f,
                                 category = rentalItem.category,
@@ -198,6 +209,24 @@ fun HomeBody(
                             )
                         }
                     }
+//                    when (uiState) {
+//                        HomeUiState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
+//                        HomeUiState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
+//                        is HomeUiState.Success -> items(
+//                            count = uiState.rentalResults.take(4).size,
+//                            key = { index -> uiState.rentalResults[index].id }
+//                        ) { index ->
+//                            val rentalItem = uiState.rentalResults[index]
+//                            ExploreCard(
+//                                imageUrl = rentalItem.imageDetail.imageUrl,
+//                                title = rentalItem.title,
+//                                price = rentalItem.price ?: 0f,
+//                                category = rentalItem.category,
+//                                modifier = Modifier
+//                                    .clickable { navigateToRentalDetails(rentalItem.id) }
+//                            )
+//                        }
+//                    }
                 }
             }
 // --------------------------- end of popular start of recommended  --------------------- //
@@ -217,7 +246,10 @@ fun HomeBody(
 
                 Spacer(modifier = Modifier.weight(1F))
 
-                TextButton(onClick = { /* TODO see all action */ }) {
+                TextButton(onClick = {
+                    /* TODO see all action */
+                    ctx.toastUtil("Coming Soon")
+                }) {
                     Text(
                         text = everyFirstLetterCapitalize(stringResource(id = R.string.see_all))
                     )
@@ -235,27 +267,46 @@ fun HomeBody(
                 LazyRow(
                     modifier = Modifier,
                 ) {
-                    when (uiState) {
-                        HomeUiState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
-                        HomeUiState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
-                        is HomeUiState.Success -> {
-                            items(
-                                uiState.rentalResults.takeLast(4).reversed()
+                    if (uiState.isEmpty()) {
+                        items(count = 4) { LoadingPlaceholderCardItem() }
+                    } else {
+                        items(
+                            uiState.takeLast(4).reversed()
 //                            count = uiState.rentalResults.take(4).reversed().size,
 //                            key = { index -> uiState.rentalResults[index].id }
-                            ) { rental ->
+                        ) { rental ->
 //                                val rentalItem = uiState.rentalResults[index]
-                                ExploreCard(
-                                    imageUrl = rental.imageDetail.imageUrl,
-                                    title = rental.title,
-                                    price = rental.price ?: 0f,
-                                    category = rental.category,
-                                    modifier = Modifier
-                                        .clickable { navigateToRentalDetails(rental.id) }
-                                )
-                            }
+                            ExploreCard(
+                                imageUrl = rental.imageUrl,
+                                title = rental.title,
+                                price = rental.price ?: 0f,
+                                category = rental.category,
+                                modifier = Modifier
+                                    .clickable { navigateToRentalDetails(rental.id) }
+                            )
                         }
                     }
+//                    when (uiState) {
+//                        HomeUiState.Loading -> items(count = 4) { LoadingPlaceholderCardItem() }
+//                        HomeUiState.Error -> items(count = 4) { ErrorPlaceholderCardItem() }
+//                        is HomeUiState.Success -> {
+//                            items(
+//                                uiState.rentalResults.takeLast(4).reversed()
+////                            count = uiState.rentalResults.take(4).reversed().size,
+////                            key = { index -> uiState.rentalResults[index].id }
+//                            ) { rental ->
+////                                val rentalItem = uiState.rentalResults[index]
+//                                ExploreCard(
+//                                    imageUrl = rental.imageDetail.imageUrl,
+//                                    title = rental.title,
+//                                    price = rental.price ?: 0f,
+//                                    category = rental.category,
+//                                    modifier = Modifier
+//                                        .clickable { navigateToRentalDetails(rental.id) }
+//                                )
+//                            }
+//                        }
+//                    }
                 }
             }
         }
@@ -287,7 +338,7 @@ fun CategoryCard(
         Text(
             text = text.capitalize(Locale.current),
             style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Bold
+//            fontWeight = FontWeight.Bold
         )
     }
 }
