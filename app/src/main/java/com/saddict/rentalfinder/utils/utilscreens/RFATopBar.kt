@@ -16,6 +16,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,8 +40,10 @@ fun RFATopBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.rfa_logo_1),
+                    painter = painterResource(id = R.drawable.rfa_logo),
                     contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.Center,
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.image_size_small))
                         .padding(dimensionResource(id = R.dimen.padding_small))
