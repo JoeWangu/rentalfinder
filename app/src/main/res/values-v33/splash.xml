@@ -2,11 +2,11 @@
 <resources>
 
     <style name="Theme.Rentalfinder.MySplashScreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/brand_primary</item>
+        <item name="windowSplashScreenBackground">@color/brand_primary_light</item>
         <!--        <item name="windowSplashScreenIconBackgroundColor">@color/brand_primary</item>-->
         <item name="windowSplashScreenAnimatedIcon">@drawable/rfa_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.Rentalfinder</item>
-        <!--        <item name="android:windowLightStatusBar">true</item>-->
-        <!--        <item name="windowSplashScreenAnimationDuration">1000</item>-->
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="android:windowSplashScreenBehavior">icon_preferred</item>
     </style>
 </resources>
