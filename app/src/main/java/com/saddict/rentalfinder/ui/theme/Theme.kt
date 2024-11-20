@@ -30,7 +30,7 @@ private val LightColorScheme = lightColorScheme(
 fun RentalfinderTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -53,7 +53,7 @@ fun RentalfinderTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-//        typography = Typography,
+        typography = Typography,
         content = content,
         shapes = shapes
     )
