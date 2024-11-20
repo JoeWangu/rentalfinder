@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.saddict.rentalfinder.rentals.model.remote.CityResults
 import com.saddict.rentalfinder.rentals.model.remote.CountryResults
 import com.saddict.rentalfinder.rentals.model.remote.NeighborhoodResults
+import com.saddict.rentalfinder.rentals.model.remote.RentalUser
 import com.saddict.rentalfinder.rentals.model.remote.StateResults
-import com.saddict.rentalfinder.rentals.model.remote.User
 import com.saddict.rentalfinder.rentals.model.remote.images.RentalImageResults
 
 @Keep
@@ -40,7 +40,7 @@ data class RentalResults(
     @JsonProperty("is_active")
     val isActive: Boolean,
     @JsonProperty("author_detail")
-    val authorDetail: User,
+    val authorDetail: RentalUser,
     @JsonProperty("image_detail")
     val imageDetail: RentalImageResults,
     @JsonProperty("avg_rating")
