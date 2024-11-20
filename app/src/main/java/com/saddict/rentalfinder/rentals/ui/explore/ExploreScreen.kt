@@ -1,6 +1,6 @@
 package com.saddict.rentalfinder.rentals.ui.explore
 
-//import androidx.compose.foundation.layout.Row
+/*//import androidx.compose.foundation.layout.Row
 //import androidx.compose.foundation.layout.fillMaxWidth
 //import androidx.compose.material.icons.Icons
 //import androidx.compose.material.icons.filled.Check
@@ -13,7 +13,7 @@ package com.saddict.rentalfinder.rentals.ui.explore
 //import androidx.compose.runtime.mutableStateListOf
 //import androidx.compose.runtime.mutableStateOf
 //import androidx.compose.runtime.remember
-//import androidx.compose.runtime.setValue
+//import androidx.compose.runtime.setValue*/
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,14 +32,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,7 +50,6 @@ import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
 import com.saddict.rentalfinder.utils.header
 import com.saddict.rentalfinder.utils.utilscreens.CarouselSlider
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
-import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
 
 object ExploreDestination : NavigationDestination {
     override val route: String = "explore"
@@ -71,16 +67,17 @@ fun ExploreScreen(
     navigateToRentalDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+//    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            RFATopBar(
-                title = stringResource(id = R.string.explore),
-                canNavigateBack = false,
-                scrollBehavior = scrollBehavior
-            )
-        },
+        modifier = modifier,
+//            .nestedScroll(scrollBehavior.nestedScrollConnection),
+//        topBar = {
+//            RFATopBar(
+//                title = stringResource(id = R.string.explore),
+//                canNavigateBack = false,
+//                scrollBehavior = scrollBehavior
+//            )
+//        },
         bottomBar = {
             RFABottomBar(
                 navigateToHome = { navigateToHome() },
