@@ -1,14 +1,16 @@
 package com.saddict.rentalfinder.utils
 
+import com.saddict.rentalfinder.rentals.model.local.UserProfileEntity
 import com.saddict.rentalfinder.rentals.model.local.images.ImageEntity
 import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
 import com.saddict.rentalfinder.rentals.model.local.rentals.RentalManageEntity
 import com.saddict.rentalfinder.rentals.model.remote.CityResults
 import com.saddict.rentalfinder.rentals.model.remote.CountryResults
 import com.saddict.rentalfinder.rentals.model.remote.NeighborhoodResults
+import com.saddict.rentalfinder.rentals.model.remote.RentalUser
+import com.saddict.rentalfinder.rentals.model.remote.RentalUserProfileDetails
 import com.saddict.rentalfinder.rentals.model.remote.StateResults
-import com.saddict.rentalfinder.rentals.model.remote.User
-import com.saddict.rentalfinder.rentals.model.remote.UserProfileDetails
+import com.saddict.rentalfinder.rentals.model.remote.UserProfile
 import com.saddict.rentalfinder.rentals.model.remote.images.RentalImageResults
 import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
 
@@ -28,11 +30,11 @@ fun RentalEntity.mapToResults(): RentalResults {
         timeModified = timeModified,
         available = available,
         isActive = isActive,
-        authorDetail = User(
+        authorDetail = RentalUser(
             id = authorId,
             email = authorEmail,
             username = authorUsername,
-            userProfile = UserProfileDetails(null),
+            userProfile = RentalUserProfileDetails(null),
 //            firstName = authorFirstName,
 //            lastName = authorLastName,
 //            phoneNumber = authorPhoneNumber,
@@ -76,7 +78,7 @@ fun RentalResults.mapToEntity(): RentalEntity {
         authorUsername = authorDetail.username ?: "",
 //        authorFirstName = authorDetail.firstName,
 //        authorLastName = authorDetail.lastName,
-//        authorPhoneNumber = authorDetail.userProfile?.phoneNumber,
+//        authorPhoneNumber = authorDetail.userProfileEntity?.phoneNumber,
 //        authorAddress = authorDetail.address,
 //        authorDob = authorDetail.dob,
         imageUrl = imageDetail.imageUrl,
@@ -150,5 +152,44 @@ fun ImageEntity.mapToRentalImage(): RentalImageResults {
         imageName = imageName,
         imageUrl = imageUrl,
         author = author
+    )
+}
+
+fun UserProfile.mapToUserProfileEntity(): UserProfileEntity {
+    return UserProfileEntity(
+        id = 1,
+        firstName = firstName,
+        lastName = lastName,
+        phoneNumber = phoneNumber,
+        dob = dob,
+        gender = gender,
+        address = address,
+        profilePicture = profilePicture,
+        userBio = bio,
+        userCountry = countryDetails.name,
+        userState = stateDetails?.name,
+        userCity = cityDetails?.name,
+        userNeighborhood = neighborhoodDetails?.name
+    )
+}
+
+fun UserProfileEntity.mapToUserProfile(): UserProfile {
+    return UserProfile(
+        firstName = firstName,
+        lastName = lastName,
+        phoneNumber = phoneNumber,
+        dob = dob,
+        gender = gender,
+        address = address,
+        profilePicture = profilePicture,
+        bio = userBio ?: "",
+        country = 1,
+        state = 1,
+        city = 1,
+        neighborhood = 1,
+        countryDetails = CountryResults(1, userCountry, "KE"),
+        stateDetails = StateResults(1, userState, 1),
+        cityDetails = CityResults(1, userCity, 1, 1),
+        neighborhoodDetails = NeighborhoodResults(1, userNeighborhood, 1)
     )
 }
