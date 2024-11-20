@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @Keep
-@Entity(tableName = "user")
-data class User(
+@Entity(tableName = "rental_user")
+data class RentalUser(
     @PrimaryKey(autoGenerate = false)
     @JsonProperty("id")
     val id: Int,
@@ -16,9 +16,9 @@ data class User(
     val email: String,
     @JsonProperty("username")
     val username: String?,
-    @ColumnInfo(name = "user_profile")
+    @ColumnInfo(name = "rental_user_profile")
     @JsonProperty("user_profile")
-    val userProfile: UserProfileDetails?,
+    val userProfile: RentalUserProfileDetails?,
 //    @JsonProperty("first_name")
 //    val firstName: String?,
 //    @JsonProperty("last_name")
@@ -34,8 +34,8 @@ data class User(
 )
 
 @Keep
-data class UserProfileDetails(
-    @ColumnInfo(name = "phone_number")
+data class RentalUserProfileDetails(
+//    @ColumnInfo(name = "phone_number")
     @JsonProperty("phone_number")
     val phoneNumber: String?,
 )
