@@ -25,12 +25,14 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(preferenceDataStore: PreferenceDataStore): OkHttpClient {
+//        ToDo
+//         1.remove logging interceptor
         val loggingInterceptor =
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val requestInterceptor = Interceptor.invoke { chain ->
             val request = chain.request()
             val token = preferenceDataStore.getToken()
-            println("Outgoing request to ${request.url}")
+//            println("Outgoing request to ${request.url}")
             return@invoke if (
                 !request.url.encodedPath.contains(LOGIN_URL) &&
                 !request.url.encodedPath.contains(CREATE_USER_URL)
@@ -49,9 +51,9 @@ object ApiModule {
             .newBuilder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(requestInterceptor)
-            .connectTimeout(120, TimeUnit.SECONDS)
-            .readTimeout(120, TimeUnit.SECONDS)
-            .writeTimeout(120, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
             .retryOnConnectionFailure(true)
             .build()
     }
