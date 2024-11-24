@@ -2,6 +2,7 @@ package com.saddict.rentalfinder.rentals.data.remote.remository
 
 import com.saddict.rentalfinder.rentals.model.remote.City
 import com.saddict.rentalfinder.rentals.model.remote.Country
+import com.saddict.rentalfinder.rentals.model.remote.CreateUserProfile
 import com.saddict.rentalfinder.rentals.model.remote.Neighborhood
 import com.saddict.rentalfinder.rentals.model.remote.State
 import com.saddict.rentalfinder.rentals.model.remote.UserProfile
@@ -20,9 +21,9 @@ import retrofit2.Response
 interface RemoteDataSource {
     //    PROFILE DATA
     suspend fun getUserProfile(): UserProfile?
-    suspend fun createUserProfile(body: UserProfile): Response<UserProfile>
-    suspend fun updateUserProfile(body: UserProfile): Response<UserProfile>
-    suspend fun patchUserProfile(body: UserProfile): Response<UserProfile>
+    suspend fun createUserProfile(body: CreateUserProfile): Response<UserProfile>
+    suspend fun updateUserProfile(body: CreateUserProfile): Response<UserProfile>
+    suspend fun patchUserProfile(body: CreateUserProfile): Response<UserProfile>
     suspend fun deleteUserProfile(): Response<Unit>
 
     //    USER DATA
