@@ -1,10 +1,10 @@
 package com.saddict.rentalfinder.rentals.ui.registration.register
 
+import androidx.compose.runtime.getValue
+//import android.util.Log
 //import android.content.Context
 //import android.os.Handler
 //import android.os.Looper
-import android.util.Log
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -16,6 +16,7 @@ import com.saddict.rentalfinder.rentals.data.usecase.RegisterUseCase
 import com.saddict.rentalfinder.rentals.model.local.UserEntity
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUser
 import com.saddict.rentalfinder.rentals.model.remote.register.RegisterUserResponse
+import com.saddict.rentalfinder.utils.mapToUserProfileEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import retrofit2.HttpException
 import javax.inject.Inject
 
 
@@ -75,6 +77,17 @@ class RegisterViewModel @Inject constructor(
                             localDataSource.insertUser(userEntity)
 //                            Log.d("Success", response.toString())
                             _uiState.value = RegisterUiState.Success(response!!)
+                            launch {
+                                try {
+                                    val userProfile = remoteDataSource.getUserProfile()
+                                        ?.mapToUserProfileEntity()
+                                    if (userProfile != null) {
+                                        localDataSource.insertUserProfile(userProfile)
+                                    }
+                                } catch (_: HttpException) {
+                                } catch (_: Exception) {
+                                }
+                            }
                         } else {
                             // Attempt to read and parse the error body
                             val errorBody = register.errorBody()?.string()
@@ -91,8 +104,8 @@ class RegisterViewModel @Inject constructor(
                                     }
 
                                     errorMessages.toString().trim() // remove last newline
-                                } catch (e: Exception) {
-                                    Log.e("ErrorParsing", "Failed to parse error message: $e")
+                                } catch (_: Exception) {
+//                                    Log.e("ErrorParsing", "Failed to parse error message: $e")
                                     "Unknown error occurred"
                                 }
                             } ?: "Unknown error occurred"
@@ -125,8 +138,8 @@ class RegisterViewModel @Inject constructor(
 //                            }
                         }
                     }
-                } catch (e: Exception) {
-                    Log.e("RegisterUserError", "cannot register user $e")
+                } catch (_: Exception) {
+//                    Log.e("RegisterUserError", "cannot register user $e")
                     _uiState.value = RegisterUiState.Error
                 }
             }
