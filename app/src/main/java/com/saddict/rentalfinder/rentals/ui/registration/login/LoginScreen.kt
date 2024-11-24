@@ -61,7 +61,6 @@ import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.toastUtil
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.collections.set
 
@@ -130,7 +129,6 @@ fun LoginBody(
             is LoginUiState.Success -> {
                 launchLoginActivity.value = false
                 ctx.toastUtil("Login Success")
-                delay(2000L)
                 navigateToHome()
             }
 
