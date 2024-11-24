@@ -12,19 +12,21 @@ import com.saddict.rentalfinder.R
 val Montserrat = FontFamily(Font(R.font.montserrat_medium))
 val Trocchi = FontFamily(Font(R.font.trocchi_regular))
 val Macondo = FontFamily(Font(R.font.macondo_swash_caps_regular))
+val Inter = FontFamily(Font(R.font.inter))
+val Playfair = FontFamily(Font(R.font.playfair_display))
 
 // Set of Material typography styles to start with
 // If a field is commented out it means the default value is not
 // overridden and that value in it is the default
 val Typography = Typography(
     displayLarge = TextStyle(
-        fontFamily = Macondo,
+        fontFamily = Playfair,
         fontWeight = FontWeight.Normal,
         fontSize = 57.sp,
 //        lineHeight = 64.sp,
     ),
     displayMedium = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = Macondo,
 //        fontWeight = FontWeight.Normal,
 //        fontSize = 45.sp,
 //        lineHeight = 52.sp,
@@ -54,37 +56,37 @@ val Typography = Typography(
 //        lineHeight = 32.sp,
     ),
     bodyLarge = TextStyle(
-        fontFamily = Trocchi,
+        fontFamily = Inter,
 //        fontWeight = FontWeight.Normal,
 //        fontSize = 16.sp,
 //        lineHeight = 24.sp,
     ),
     bodyMedium = TextStyle(
-        fontFamily = Trocchi,
+        fontFamily = Inter,
 //        fontWeight = FontWeight.Normal,
 //        fontSize = 14.sp,
 //        lineHeight = 20.sp,
     ),
     bodySmall = TextStyle(
-        fontFamily = Trocchi,
+        fontFamily = Inter,
 //        fontWeight = FontWeight.Normal,
 //        fontSize = 12.sp,
 //        lineHeight = 16.sp,
     ),
     labelLarge = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = Trocchi,
 //        fontWeight = FontWeight.Normal,
 //        fontSize = 16.sp,
 //        lineHeight = 24.sp,
     ),
     labelMedium = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = Trocchi,
 //        fontWeight = FontWeight.Normal,
 //        fontSize = 14.sp,
 //        lineHeight = 20.sp,
     ),
     labelSmall = TextStyle(
-        fontFamily = Montserrat,
+        fontFamily = Trocchi,
 //        fontWeight = FontWeight.Normal,
 //        fontSize = 12.sp,
 //        lineHeight = 16.sp,
