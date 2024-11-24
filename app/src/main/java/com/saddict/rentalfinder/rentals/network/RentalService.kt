@@ -13,6 +13,7 @@ import com.saddict.rentalfinder.prop.Constants.SINGLE_RENTAL_URL
 import com.saddict.rentalfinder.prop.Constants.USER_PROFILE_URL
 import com.saddict.rentalfinder.rentals.model.remote.City
 import com.saddict.rentalfinder.rentals.model.remote.Country
+import com.saddict.rentalfinder.rentals.model.remote.CreateUserProfile
 import com.saddict.rentalfinder.rentals.model.remote.Neighborhood
 import com.saddict.rentalfinder.rentals.model.remote.State
 import com.saddict.rentalfinder.rentals.model.remote.UserProfile
@@ -44,13 +45,13 @@ interface RentalService {
     suspend fun getUserProfile(): UserProfile?
 
     @POST(USER_PROFILE_URL)
-    suspend fun createUserProfile(@Body user: UserProfile): Response<UserProfile>
+    suspend fun createUserProfile(@Body user: CreateUserProfile): Response<UserProfile>
 
     @PUT(USER_PROFILE_URL)
-    suspend fun updateUserProfile(@Body user: UserProfile): Response<UserProfile>
+    suspend fun updateUserProfile(@Body user: CreateUserProfile): Response<UserProfile>
 
     @PATCH(USER_PROFILE_URL)
-    suspend fun patchUserProfile(@Body user: UserProfile): Response<UserProfile>
+    suspend fun patchUserProfile(@Body user: CreateUserProfile): Response<UserProfile>
 
     @DELETE(USER_PROFILE_URL)
     suspend fun deleteUserProfile(): Response<Unit> // Usually no body for DELETE
