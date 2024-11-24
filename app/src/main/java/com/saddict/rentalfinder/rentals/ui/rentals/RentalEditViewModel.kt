@@ -9,9 +9,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
-import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
 import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
 import com.saddict.rentalfinder.utils.mapToEntity
+import com.saddict.rentalfinder.utils.toCreateRental
+import com.saddict.rentalfinder.utils.toRentalEditUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -97,30 +98,3 @@ class RentalEditViewModel @Inject constructor(
                 && entryDetails.category.isNotBlank() && entryDetails.price.isNotBlank()
     }
 }
-
-fun RentalEntity.toEntryDetails(): EntryDetails = EntryDetails(
-    image = image ?: 1,
-    price = price.toString(),
-    total_units = totalUnits.toString(),
-    title = title,
-    description = description,
-    category = category,
-//    location = location.toString(),
-    available = available,
-    isActive = isActive,
-    country = countryId,
-    state = stateId,
-    city = cityId,
-    neighborhood = neighborhoodId,
-    countryName = countryName,
-    stateName = stateName,
-    cityName = cityName,
-    neighborhoodName = neighborhoodName,
-    countryCode = countryCode
-)
-
-fun RentalEntity.toRentalEditUiState(isEntryValid: Boolean = false):
-        RenEntryUiState = RenEntryUiState(
-    renEntry = this.toEntryDetails(),
-    isEntryValid = isEntryValid
-)
