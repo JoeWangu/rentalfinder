@@ -6,14 +6,21 @@ import com.saddict.rentalfinder.rentals.model.local.rentals.RentalEntity
 import com.saddict.rentalfinder.rentals.model.local.rentals.RentalManageEntity
 import com.saddict.rentalfinder.rentals.model.remote.CityResults
 import com.saddict.rentalfinder.rentals.model.remote.CountryResults
+import com.saddict.rentalfinder.rentals.model.remote.CreateUserProfile
 import com.saddict.rentalfinder.rentals.model.remote.NeighborhoodResults
 import com.saddict.rentalfinder.rentals.model.remote.RentalUser
 import com.saddict.rentalfinder.rentals.model.remote.RentalUserProfileDetails
 import com.saddict.rentalfinder.rentals.model.remote.StateResults
 import com.saddict.rentalfinder.rentals.model.remote.UserProfile
 import com.saddict.rentalfinder.rentals.model.remote.images.RentalImageResults
+import com.saddict.rentalfinder.rentals.model.remote.rentals.CreateRental
 import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
+import com.saddict.rentalfinder.rentals.ui.profile.ProfileDetailsUiState
+import com.saddict.rentalfinder.rentals.ui.profile.ProfileState
+import com.saddict.rentalfinder.rentals.ui.rentals.EntryDetails
+import com.saddict.rentalfinder.rentals.ui.rentals.RenEntryUiState
 
+/* ----------------------------- RentalsViewModel FUNCTIONS ------------------------------ */
 fun RentalEntity.mapToResults(): RentalResults {
     return RentalResults(
         id = id,
@@ -155,6 +162,44 @@ fun ImageEntity.mapToRentalImage(): RentalImageResults {
     )
 }
 
+/* ----------------------------- ProfileScreenViewModel FUNCTIONS ------------------------------ */
+fun ProfileDetailsUiState.mapToCreateUserProfile(): CreateUserProfile =
+    CreateUserProfile(
+        first_name = userProfileState.firstName,
+        last_name = userProfileState.lastName,
+        phone_number = userProfileState.phoneNumber,
+        address = userProfileState.address,
+        dob = userProfileState.dob,
+        gender = userProfileState.gender,
+//        profile_picture = userProfileState.profilePicture,
+        bio = userProfileState.userBio,
+        country = userProfileState.country,
+        state = userProfileState.state,
+        city = userProfileState.city,
+        neighborhood = userProfileState.neighborhood,
+    )
+
+fun UserProfileEntity.mapToProfileUiState(): ProfileDetailsUiState =
+    ProfileDetailsUiState(userProfileState = this.mapToProfileState())
+
+fun UserProfileEntity.mapToProfileState(): ProfileState =
+    ProfileState(
+        id = id,
+        firstName = firstName ?: "",
+        lastName = lastName ?: "",
+        phoneNumber = phoneNumber ?: "",
+        address = address ?: "",
+        dob = dob,
+        gender = gender ?: "",
+        profilePicture = profilePicture ?: "",
+        userBio = userBio ?: "",
+        userCountry = userCountry,
+        userState = userState,
+        userCity = userCity,
+        userNeighborhood = userNeighborhood,
+    )
+
+
 fun UserProfile.mapToUserProfileEntity(): UserProfileEntity {
     return UserProfileEntity(
         id = 1,
@@ -166,7 +211,7 @@ fun UserProfile.mapToUserProfileEntity(): UserProfileEntity {
         address = address,
         profilePicture = profilePicture,
         userBio = bio,
-        userCountry = countryDetails.name,
+        userCountry = countryDetails?.name,
         userState = stateDetails?.name,
         userCity = cityDetails?.name,
         userNeighborhood = neighborhoodDetails?.name
@@ -193,3 +238,48 @@ fun UserProfileEntity.mapToUserProfile(): UserProfile {
         neighborhoodDetails = NeighborhoodResults(1, userNeighborhood, 1)
     )
 }
+
+/* ----------------------------- RentalEditViewModel FUNCTIONS ------------------------------ */
+fun RentalEntity.toEntryDetails(): EntryDetails = EntryDetails(
+    image = image ?: 1,
+    price = price.toString(),
+    total_units = totalUnits.toString(),
+    title = title,
+    description = description,
+    category = category,
+//    location = location.toString(),
+    available = available,
+    isActive = isActive,
+    country = countryId,
+    state = stateId,
+    city = cityId,
+    neighborhood = neighborhoodId,
+    countryName = countryName,
+    stateName = stateName,
+    cityName = cityName,
+    neighborhoodName = neighborhoodName,
+    countryCode = countryCode
+)
+
+fun RentalEntity.toRentalEditUiState(isEntryValid: Boolean = false):
+        RenEntryUiState = RenEntryUiState(
+    renEntry = this.toEntryDetails(),
+    isEntryValid = isEntryValid
+)
+
+/* ----------------------------- RentalEntryViewModel FUNCTIONS ------------------------------ */
+fun EntryDetails.toCreateRental(): CreateRental = CreateRental(
+    image = image,
+    price = price.toFloat(),
+    total_units = total_units.toInt(),
+    title = title,
+    description = description,
+    category = category,
+//    location = location,
+    available = available,
+    is_active = isActive,
+    country = country,
+    state = state,
+    city = city,
+    neighborhood = neighborhood,
+)
