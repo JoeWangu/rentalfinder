@@ -65,7 +65,6 @@ import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
 import com.saddict.rentalfinder.utils.toastUtil
 import com.saddict.rentalfinder.utils.toastUtilLong
 import com.saddict.rentalfinder.utils.utilscreens.RFATopBar
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.collections.set
 
@@ -136,7 +135,7 @@ fun RegisterBody(
             is RegisterUiState.Success -> {
                 launchRegisterActivity.value = false
                 ctx.toastUtilLong("successfully registered")
-                delay(2_000L)
+//                delay(2_000L)
                 navigateToHome()
             }
 
