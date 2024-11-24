@@ -20,9 +20,9 @@ data class UserProfile(
     @JsonProperty("profile_picture")
     val profilePicture: String?,
     @JsonProperty("bio")
-    val bio: String,
+    val bio: String?,
     @JsonProperty("country")
-    val country: Int,
+    val country: Int?,
     @JsonProperty("state")
     val state: Int?,
     @JsonProperty("city")
@@ -30,7 +30,7 @@ data class UserProfile(
     @JsonProperty("neighborhood")
     val neighborhood: Int?,
     @JsonProperty("countryDetails")
-    val countryDetails: CountryResults,
+    val countryDetails: CountryResults?,
     @JsonProperty("stateDetails")
     val stateDetails: StateResults?,
     @JsonProperty("cityDetails")
