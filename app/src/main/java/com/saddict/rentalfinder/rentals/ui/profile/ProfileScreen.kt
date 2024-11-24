@@ -42,10 +42,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.ImageLoader
 import coil.compose.AsyncImage
 import com.saddict.rentalfinder.R
 import com.saddict.rentalfinder.rentals.ui.navigation.NavigationDestination
+import com.saddict.rentalfinder.utils.ImageLoaderProvider
 import com.saddict.rentalfinder.utils.everyFirstLetterCapitalize
 import com.saddict.rentalfinder.utils.utilscreens.RFABottomBar
 
@@ -118,6 +118,8 @@ fun ProfileBody(
     val user by profileViewModel.profileUiState.collectAsState()
     val userProfile by profileViewModel.profileDetailsUiState.collectAsState()
     val scrollState = rememberScrollState()
+    val ctx = LocalContext.current
+    val imageLoader = ImageLoaderProvider.getInstance(ctx)
     val profileMenu = listOf(
         R.string.my_account,
         R.string.address,
@@ -151,14 +153,17 @@ fun ProfileBody(
                 .height(64.dp)
         ) {
             AsyncImage(
-                model = userProfile.userProfileEntity?.profilePicture,
+                model = userProfile.profilePicture,
+//                model = ImageRequest.Builder(ctx)
+//                    .data(userProfile.profilePicture)
+//                    .memoryCachePolicy(coil.request.CachePolicy.ENABLED) // Enable memory cache
+//                    .diskCachePolicy(coil.request.CachePolicy.ENABLED)  // Enable disk cache
+//                    .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                error = painterResource(id = R.drawable.ic_broken_image),
+                error = painterResource(id = R.drawable.profile),
                 placeholder = painterResource(id = R.drawable.loading_img),
-                imageLoader = ImageLoader.Builder(LocalContext.current)
-                    .crossfade(true)
-                    .build(),
+                imageLoader = imageLoader,
                 modifier = Modifier
                     .size(64.dp)
 //                    .aspectRatio(1f)
