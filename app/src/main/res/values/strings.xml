@@ -38,12 +38,12 @@
     <string name="see_all">see all</string>
     <string name="change_picture">change picture</string>
     <!--    -->
-    <string name="name">full name</string>
+    <string name="name">Full Name</string>
     <string name="email">email</string>
     <string name="password">password</string>
     <string name="phone_number">phone number</string>
-    <string name="first_name">first name</string>
-    <string name="last_name">last name</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
     <string name="username">username</string>
     <string name="dob">dob</string>
     <string name="date_of_birth">date of birth</string>
@@ -88,4 +88,9 @@
     <string name="edit">edit</string>
     <string name="my_rentals">my rentals</string>
     <string name="total">total</string>
+
+    <!-- ACCOUNT SCREEN -->
+    <string name="account__title">Fill in your bio</string>
+    <string name="account__sub_title">fill in or update the details below</string>
+    <string name="account__bio">Your Bio</string>
 </resources>
