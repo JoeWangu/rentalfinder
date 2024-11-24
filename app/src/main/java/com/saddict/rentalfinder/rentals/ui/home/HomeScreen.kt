@@ -73,6 +73,7 @@ fun HomeScreen(
         topBar = {
             RFATopBar(
                 title = stringResource(id = R.string.app_name_2),
+                image = R.drawable.rfa_logo,
                 canNavigateBack = false,
                 scrollBehavior = scrollBehavior
             )
