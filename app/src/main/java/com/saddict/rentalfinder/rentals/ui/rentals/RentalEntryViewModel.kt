@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saddict.rentalfinder.rentals.data.local.locasitory.LocalDataSource
 import com.saddict.rentalfinder.rentals.data.remote.remository.RemoteDataSource
-import com.saddict.rentalfinder.rentals.model.remote.rentals.CreateRental
 import com.saddict.rentalfinder.rentals.model.remote.rentals.RentalResults
 import com.saddict.rentalfinder.utils.mapToEntity
+import com.saddict.rentalfinder.utils.toCreateRental
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -101,20 +101,4 @@ data class EntryDetails(
     val cityName: String? = null,
     val neighborhoodName: String? = null,
     val countryCode: String? = null,
-)
-
-fun EntryDetails.toCreateRental(): CreateRental = CreateRental(
-    image = image,
-    price = price.toFloat(),
-    total_units = total_units.toInt(),
-    title = title,
-    description = description,
-    category = category,
-//    location = location,
-    available = available,
-    is_active = isActive,
-    country = country,
-    state = state,
-    city = city,
-    neighborhood = neighborhood,
 )
