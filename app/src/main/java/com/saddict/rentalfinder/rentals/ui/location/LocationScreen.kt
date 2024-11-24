@@ -23,10 +23,10 @@ import com.saddict.rentalfinder.rentals.model.remote.StateResults
 
 @Composable
 fun LocationSelector(
-    selectCountry: (country: CountryResults) -> Unit,
-    selectState: (state: StateResults) -> Unit,
-    selectCity: (city: CityResults) -> Unit,
-    selectNeighborhood: (neighborhood: NeighborhoodResults) -> Unit,
+    selectCountry: (CountryResults) -> Unit,
+    selectState: (StateResults) -> Unit,
+    selectCity: (CityResults) -> Unit,
+    selectNeighborhood: (NeighborhoodResults) -> Unit,
 //    stateIsNotEmpty: Boolean,
     viewModel: LocationViewModel,
     modifier: Modifier = Modifier
