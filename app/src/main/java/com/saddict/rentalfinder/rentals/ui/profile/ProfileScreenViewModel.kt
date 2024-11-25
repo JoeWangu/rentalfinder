@@ -63,7 +63,9 @@ class ProfileScreenViewModel @Inject constructor(
     }
 
     val profileUiState: StateFlow<ProfileUiState> =
-        localDataSource.fetchUser().map {
+        localDataSource.fetchUser()
+            .filterNotNull()
+            .map {
             ProfileUiState(it)
         }.stateIn(
             scope = viewModelScope,
@@ -72,7 +74,9 @@ class ProfileScreenViewModel @Inject constructor(
         )
 
     val profileDetailsUiState: StateFlow<ProfileState> =
-        localDataSource.fetchUserProfile().map {
+        localDataSource.fetchUserProfile()
+            .filterNotNull()
+            .map {
             ProfileState(
                 id = it.id,
                 firstName = it.firstName ?: "",
@@ -101,19 +105,25 @@ class ProfileScreenViewModel @Inject constructor(
                 try {
                     val profile = editProfileState.mapToCreateUserProfile()
                     val isProfileNull = remoteDataSource.getUserProfile()
-                    if (isProfileNull == null) {
+                    if (!isProfileNull.isSuccessful) {
                         val response = remoteDataSource.createUserProfile(profile)
                         if (response.isSuccessful) {
                             val responseBody = response.body()?.mapToUserProfileEntity()
+                            localDataSource.deleteUserProfile()
                             localDataSource.insertUserProfile(responseBody!!)
                             _uiState.value = ProfileUiScreenState.SuccessCreating(responseBody)
+                        } else {
+                            _uiState.value = ProfileUiScreenState.Error
                         }
                     } else {
                         val response = remoteDataSource.patchUserProfile(profile)
                         if (response.isSuccessful) {
                             val responseBody = response.body()?.mapToUserProfileEntity()
+                            localDataSource.deleteUserProfile()
                             localDataSource.insertUserProfile(responseBody!!)
                             _uiState.value = ProfileUiScreenState.SuccessUpdating(responseBody)
+                        } else {
+                            _uiState.value = ProfileUiScreenState.Error
                         }
                     }
                 } catch (_: HttpException) {
