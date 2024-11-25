@@ -149,7 +149,7 @@ fun GenderTabView(
     onGenderSelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val genderOptions = listOf("Male", "Female", "Other")
+    val genderOptions = listOf("Male", "Female", "Others")
     val genderIcons = listOf(
         Icons.Default.Male,
         Icons.Default.Female,
