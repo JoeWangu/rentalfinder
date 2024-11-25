@@ -20,7 +20,7 @@ import retrofit2.Response
 
 interface RemoteDataSource {
     //    PROFILE DATA
-    suspend fun getUserProfile(): UserProfile?
+    suspend fun getUserProfile(): Response<UserProfile>
     suspend fun createUserProfile(body: CreateUserProfile): Response<UserProfile>
     suspend fun updateUserProfile(body: CreateUserProfile): Response<UserProfile>
     suspend fun patchUserProfile(body: CreateUserProfile): Response<UserProfile>

@@ -79,10 +79,11 @@ class RegisterViewModel @Inject constructor(
                             _uiState.value = RegisterUiState.Success(response!!)
                             launch {
                                 try {
-                                    val userProfile = remoteDataSource.getUserProfile()
-                                        ?.mapToUserProfileEntity()
-                                    if (userProfile != null) {
-                                        localDataSource.insertUserProfile(userProfile)
+                                    val userProfileResponse = remoteDataSource.getUserProfile()
+                                    if (userProfileResponse.isSuccessful) {
+                                        val userProfile = remoteDataSource.getUserProfile().body()
+                                            ?.mapToUserProfileEntity()
+                                        localDataSource.insertUserProfile(userProfile!!)
                                     }
                                 } catch (_: HttpException) {
                                 } catch (_: Exception) {

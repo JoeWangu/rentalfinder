@@ -24,7 +24,7 @@ class RemoteDataSourceImpl @Inject constructor(
     private val rentalService: RentalService
 ) : RemoteDataSource {
     //    PROFILE DATA
-    override suspend fun getUserProfile(): UserProfile? {
+    override suspend fun getUserProfile(): Response<UserProfile> {
         return rentalService.getUserProfile()
     }
 

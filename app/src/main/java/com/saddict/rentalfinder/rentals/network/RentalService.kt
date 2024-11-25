@@ -42,7 +42,7 @@ import retrofit2.http.Query
 interface RentalService {
     //  USER PROFILE API METHODS
     @GET(USER_PROFILE_URL)
-    suspend fun getUserProfile(): UserProfile?
+    suspend fun getUserProfile(): Response<UserProfile>
 
     @POST(USER_PROFILE_URL)
     suspend fun createUserProfile(@Body user: CreateUserProfile): Response<UserProfile>
