@@ -165,14 +165,14 @@ fun ImageEntity.mapToRentalImage(): RentalImageResults {
 /* ----------------------------- ProfileScreenViewModel FUNCTIONS ------------------------------ */
 fun ProfileDetailsUiState.mapToCreateUserProfile(): CreateUserProfile =
     CreateUserProfile(
-        first_name = userProfileState.firstName,
-        last_name = userProfileState.lastName,
-        phone_number = userProfileState.phoneNumber,
-        address = userProfileState.address,
+        first_name = userProfileState.firstName.takeIf { it.isNotBlank() },
+        last_name = userProfileState.lastName.takeIf { it.isNotBlank() },
+        phone_number = userProfileState.phoneNumber.takeIf { it.isNotBlank() },
+        address = userProfileState.address.takeIf { it.isNotBlank() },
         dob = userProfileState.dob,
-        gender = userProfileState.gender,
+        gender = userProfileState.gender.takeIf { it.isNotBlank() },
 //        profile_picture = userProfileState.profilePicture,
-        bio = userProfileState.userBio,
+        bio = userProfileState.userBio.takeIf { it.isNotBlank() },
         country = userProfileState.country,
         state = userProfileState.state,
         city = userProfileState.city,
