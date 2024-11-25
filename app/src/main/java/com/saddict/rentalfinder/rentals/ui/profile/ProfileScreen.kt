@@ -125,15 +125,15 @@ fun ProfileBody(
         R.string.address,
         R.string.settings,
         R.string.help_center,
-        R.string.contact,
+        R.string.about,
         R.string.my_rentals,
     )
     val profileIcons = listOf(
         Icons.Default.AccountCircle,
         Icons.Default.LocationOn,
         Icons.Default.Settings,
-        Icons.Default.Info,
         Icons.Default.Phone,
+        Icons.Default.Info,
         Icons.AutoMirrored.Filled.List,
     )
     Column(
